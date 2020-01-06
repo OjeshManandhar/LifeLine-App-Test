@@ -14,7 +14,17 @@ function App() {
       <Router>
         <Stack key='root'>
           <Scene key='home' component={Home} title='Home' hideNavBar={true} />
-          <Scene key='detail' component={Detail} title='Detail' />
+          <Scene
+            key='detail'
+            component={Detail}
+            title='Detail'
+            // for back button
+            navBarButtonColor='white'
+            // for title text
+            titleStyle={styles.headerTitleStyle}
+            // for header background
+            navigationBarStyle={styles.headerStyle}
+          />
         </Stack>
       </Router>
     </View>
@@ -36,6 +46,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: 'white'
+  },
+  headerTitleStyle: {
+    color: 'white'
+  },
+  headerStyle: {
+    backgroundColor: 'blueviolet'
   }
 });
 
