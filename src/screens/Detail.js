@@ -19,9 +19,17 @@ function Detail(props) {
 
 Detail.navigationOptions = () => {
   return {
-    headerShown: true
+    headerShown: true,
     // default title is same as the key used for screen in AppNavigator
-    // title: 'Detail'
+    // title: 'Detail',
+    headerStyle: {
+      backgroundColor: 'blueviolet'
+    },
+    headerTintColor: '#eee',
+    headerTitleStyle: {
+      fontFamily: 'monospace',
+      fontWeight: 'bold'
+    }
   };
 };
 
