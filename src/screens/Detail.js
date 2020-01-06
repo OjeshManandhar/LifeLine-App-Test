@@ -29,7 +29,10 @@ Detail.navigationOptions = () => {
     headerTitleStyle: {
       fontFamily: 'monospace',
       fontWeight: 'bold'
-    }
+    },
+    headerRight: () => (
+      <Button onPress={() => alert('This is a button!')} title='info' />
+    )
   };
 };
 
