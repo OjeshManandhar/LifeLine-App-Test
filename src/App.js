@@ -1,11 +1,18 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import { Router, Stack, Scene } from 'react-native-router-flux';
+
+import Home from './screens/Home';
+import Detail from './screens/Detail';
 
 function App() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.textStyle}>Hello World!</Text>
-    </View>
+    <Router>
+      <Stack key='root'>
+        <Scene key='home' component={Home} title='Home' />
+        <Scene key='detail' component={Detail} title='Detail' />
+      </Stack>
+    </Router>
   );
 }
 

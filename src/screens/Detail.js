@@ -1,10 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 
-function Detail() {
+import { Actions } from 'react-native-router-flux';
+
+function Detail(props) {
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>Detail Screen</Text>
+      <Text style={styles.textStyle}>
+        Name's {props.userName} and phone is {props.phone}
+      </Text>
+      <Button title='Go to Home' onPress={() => Actions.home()} />
     </View>
   );
 }
@@ -12,11 +18,12 @@ function Detail() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center'
   },
   textStyle: {
-    fontSize: 20
+    fontSize: 20,
+    textAlign: 'center'
   }
 });
 
