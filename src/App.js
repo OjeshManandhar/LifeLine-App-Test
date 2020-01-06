@@ -1,9 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import { Router, Stack, Scene } from 'react-native-router-flux';
 
 import Home from './screens/Home';
 import Detail from './screens/Detail';
+
+function RightButton() {
+  return <Button onPress={() => alert('This is a button!')} title='Info' />;
+}
 
 function App() {
   return (
@@ -22,6 +26,8 @@ function App() {
             navBarButtonColor='white'
             // for title text
             titleStyle={styles.headerTitleStyle}
+            // right button
+            renderRightButton={RightButton}
             // for header background
             navigationBarStyle={styles.headerStyle}
           />
