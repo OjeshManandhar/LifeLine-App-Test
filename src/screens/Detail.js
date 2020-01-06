@@ -17,6 +17,14 @@ function Detail(props) {
   );
 }
 
+Detail.navigationOptions = () => {
+  return {
+    headerShown: true
+    // default title is same as the key used for screen in AppNavigator
+    // title: 'Detail'
+  };
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
