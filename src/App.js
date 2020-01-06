@@ -17,7 +17,7 @@ function App() {
       </View>
       <Router>
         <Stack key='root'>
-          <Scene key='home' component={Home} title='Home' hideNavBar={true} />
+          <Scene key='home' component={Home} title='Home' hideNavBar initial />
           <Scene
             key='detail'
             component={Detail}
