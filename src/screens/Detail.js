@@ -1,10 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 
-function Detail() {
+function Detail(props) {
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>Detail Screen</Text>
+      <Button
+        title='Go to home'
+        onPress={() => props.navigation.navigate('Home')}
+      />
     </View>
   );
 }
