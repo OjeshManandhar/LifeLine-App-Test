@@ -7,7 +7,12 @@ function Home(props) {
       <Text style={styles.textStyle}>Home Screen</Text>
       <Button
         title='Go to Detail'
-        onPress={() => props.navigation.navigate('Detail')}
+        onPress={() =>
+          props.navigation.navigate('Detail', {
+            name: 'DeadSkull',
+            phone: '1234567890'
+          })
+        }
       />
     </View>
   );
@@ -16,11 +21,12 @@ function Home(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center'
   },
   textStyle: {
-    fontSize: 20
+    fontSize: 20,
+    textAlign: 'center'
   }
 });
 
