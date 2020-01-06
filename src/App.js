@@ -14,7 +14,10 @@ const AppNavigator = createStackNavigator(
     Detail: { screen: Detail }
   },
   {
-    initialRouteName: 'Home'
+    initialRouteName: 'Home',
+    defaultNavigationOptions: {
+      headerShown: false
+    }
   }
 );
 
