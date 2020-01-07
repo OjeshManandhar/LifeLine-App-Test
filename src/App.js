@@ -54,6 +54,8 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   headerTitleStyle: {
+    fontFamily: 'monospace',
+    fontWeight: 'bold',
     color: 'white'
   },
   headerStyle: {
