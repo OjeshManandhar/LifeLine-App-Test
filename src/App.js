@@ -1,10 +1,35 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
+import 'react-native-gesture-handler';
+
+import { createAppContainer, withOrientation } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+
+import Home from './screens/Home';
+import Detail from './screens/Detail';
+
+const AppNavigator = createStackNavigator(
+  {
+    Home: { screen: Home },
+    Detail: { screen: Detail }
+  },
+  {
+    initialRouteName: 'Home',
+    defaultNavigationOptions: {
+      headerShown: false
+    }
+  }
+);
+
+const AppContainer = createAppContainer(AppNavigator);
 
 function App() {
   return (
     <View style={styles.container}>
-      <Text style={styles.textStyle}>Hello World!</Text>
+      <View style={styles.takeSpace}>
+        <Text style={styles.text}>Just taking up space</Text>
+      </View>
+      <AppContainer />
     </View>
   );
 }
@@ -12,10 +37,17 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: 'space-around',
+    alignItems: 'stretch'
   },
-  textStyle: {
+  takeSpace: {
+    flex: 0.25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'blueviolet'
+  },
+  text: {
+    color: 'white',
     fontSize: 20
   }
 });
