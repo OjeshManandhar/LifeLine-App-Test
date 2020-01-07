@@ -14,6 +14,16 @@ function Home(props) {
           })
         }
       />
+      <Button
+        title='Go to Map'
+        onPress={() =>
+          props.navigation.navigate('Map', {
+            userId: 'lorem',
+            name: 'DeadSkull',
+            phone: '1234567890'
+          })
+        }
+      />
     </View>
   );
 }
