@@ -10,6 +10,11 @@ Testing codes for LifeLine app (MAJOR PROJECT)
   - Code to navigate between screens using [React Native Router Flux *v4.x*](https://github.com/aksonov/react-native-router-flux)
 + **mapboxMap**
   - Codes for Mapbox Map
++ **envVar**
+  - Trying to read the data stored in *.env* file using *process.env*. **FAILED**
++ **react-native-dotenv**
+  - Read data from *.env* file using a module react-native-dotenv
+  - Followed instructions this [link](https://levelup.gitconnected.com/how-to-gracefully-use-environment-variables-in-a-react-native-app-7f1600446116)
 
 ## Todo
 - [ ] SignIn and SignUp screens
