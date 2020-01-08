@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-function Map() {
+// components
+import Map from './../component/Map';
+
+function MapScreen(props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Map Screen</Text>
+      <Map userInfo={props.navigation.getParam('userInfo')} />
     </View>
   );
 }
@@ -21,4 +24,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Map;
+export default MapScreen;
