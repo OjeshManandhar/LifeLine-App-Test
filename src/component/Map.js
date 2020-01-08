@@ -8,9 +8,18 @@ function Map(props) {
   return (
     <View style={styles.container}>
       <MapboxGL.MapView
+        // A size must be provided to the MapboxGL.MapView through styles
         style={styles.container}
-        styleURL={MapboxGL.StyleURL.Street}
-      ></MapboxGL.MapView>
+        styleURL={MapboxGL.StyleURL.Outdoors}
+      >
+        <MapboxGL.UserLocation visible />
+
+        <MapboxGL.Camera
+          zoomLevel={14}
+          followUserLocation
+          followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
+        />
+      </MapboxGL.MapView>
     </View>
   );
 }
