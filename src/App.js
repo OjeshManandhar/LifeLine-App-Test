@@ -2,12 +2,16 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import 'react-native-gesture-handler';
 
-import { createAppContainer, withOrientation } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import Home from './screens/Home';
 import Detail from './screens/Detail';
 import MapScreen from './screens/MapScreen';
+
+import { MAPBOX_API_KEY } from 'react-native-dotenv';
+
+console.log('MAPBOX_API_KEY:', MAPBOX_API_KEY);
 
 const AppNavigator = createStackNavigator(
   {
