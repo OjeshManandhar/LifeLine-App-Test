@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import 'react-native-gesture-handler';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -11,7 +12,7 @@ import MapScreen from './screens/MapScreen';
 
 import { MAPBOX_API_KEY } from 'react-native-dotenv';
 
-console.log('MAPBOX_API_KEY:', MAPBOX_API_KEY);
+MapboxGL.setAccessToken(MAPBOX_API_KEY);
 
 const AppNavigator = createStackNavigator(
   {

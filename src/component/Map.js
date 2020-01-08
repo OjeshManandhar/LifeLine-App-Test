@@ -7,8 +7,10 @@ function Map(props) {
 
   return (
     <View style={styles.container}>
-      <Text>{props.userInfo}</Text>
-      {/* <MapboxGL.MapView styleURL={MapboxGL.StyleURL.Street}></MapboxGL.MapView> */}
+      <MapboxGL.MapView
+        style={styles.container}
+        styleURL={MapboxGL.StyleURL.Street}
+      ></MapboxGL.MapView>
     </View>
   );
 }
