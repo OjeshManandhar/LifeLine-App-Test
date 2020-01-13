@@ -5,11 +5,15 @@ import { View, StyleSheet } from 'react-native';
 import Map from './../component/Map';
 import SearchBox from './../component/SearchBox';
 
+function searchLocation(keyword) {
+  console.log('keyword:', keyword);
+}
+
 function MapScreen(props) {
   return (
     <View style={styles.container}>
       <View style={styles.searchArea}>
-        <SearchBox />
+        <SearchBox searchLocation={searchLocation} />
       </View>
       <Map userInfo={props.navigation.getParam('userInfo')} />
     </View>
