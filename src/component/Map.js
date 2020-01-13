@@ -8,7 +8,7 @@ function Map(props) {
   return (
     <View style={styles.container}>
       <MapboxGL.MapView
-        // A size must be provided to the MapboxGL.MapView through styles
+        // A size must be provided to the MapboxGL.MapView through style prop
         style={styles.container}
         styleURL={MapboxGL.StyleURL.Outdoors}
       >
