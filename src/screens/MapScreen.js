@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 // components
 import Map from './../component/Map';
+import SearchBox from './../component/SearchBox';
 
 function MapScreen(props) {
   return (
     <View style={styles.container}>
       <View style={styles.searchArea}>
-        <Text style={styles.text}>Search for location here</Text>
+        <SearchBox />
       </View>
       <Map userInfo={props.navigation.getParam('userInfo')} />
     </View>
@@ -24,12 +25,8 @@ const styles = StyleSheet.create({
   searchArea: {
     height: 65,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
     borderBottomWidth: 2
-  },
-  text: {
-    fontSize: 20,
-    textAlign: 'center'
   }
 });
 
