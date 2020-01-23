@@ -39,14 +39,6 @@ function geocoder(keyword) {
     });
 }
 
-function renderContent(params) {
-  if (params.isTyping) {
-    return <SearchList keyword={params.keyword} />;
-  } else {
-    return <Map userInfo={params.userInfo} />;
-  }
-}
-
 function MapScreen(props) {
   const [isTyping, setIsTyping] = useState(false);
   const [keyword, setKeyword] = useState('');
@@ -56,11 +48,12 @@ function MapScreen(props) {
       <View style={styles.searchArea}>
         <SearchBox setIsTyping={setIsTyping} setKeyword={setKeyword} />
       </View>
-      {renderContent({
-        isTyping,
-        keyword,
-        userInfo: props.navigation.getParam('userInfo')
-      })}
+
+      {isTyping ? (
+        <SearchList keyword={keyword} />
+      ) : (
+        <Map userInfo={props.navigation.getParam('userInfo')} />
+      )}
     </View>
   );
 }
