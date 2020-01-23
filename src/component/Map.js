@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+
+// packages
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 function Map(props) {
