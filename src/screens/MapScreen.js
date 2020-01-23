@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 // components
 import Map from './../component/Map';
 import SearchBox from './../component/SearchBox';
+import SearchList from './../component/SearchList';
 
 import { MAPBOX_API_KEY } from 'react-native-dotenv';
 
@@ -38,13 +39,28 @@ function geocoder(keyword) {
     });
 }
 
+function renderContent(params) {
+  if (params.isTyping) {
+    return <SearchList keyword={params.keyword} />;
+  } else {
+    return <Map userInfo={params.userInfo} />;
+  }
+}
+
 function MapScreen(props) {
+  const [isTyping, setIsTyping] = useState(false);
+  const [keyword, setKeyword] = useState('');
+
   return (
     <View style={styles.container}>
       <View style={styles.searchArea}>
-        <SearchBox searchLocation={searchLocation} />
+        <SearchBox setIsTyping={setIsTyping} setKeyword={setKeyword} />
       </View>
-      <Map userInfo={props.navigation.getParam('userInfo')} />
+      {renderContent({
+        isTyping,
+        keyword,
+        userInfo: props.navigation.getParam('userInfo')
+      })}
     </View>
   );
 }
