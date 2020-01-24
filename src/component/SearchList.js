@@ -4,6 +4,9 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 // env
 import { MAPBOX_API_KEY } from 'react-native-dotenv';
 
+const mbxGeocoder = require('@mapbox/mapbox-sdk/services/geocoding');
+const geocodingClient = mbxGeocoder({ accessToken: MAPBOX_API_KEY });
+
 function parseResponse(response) {
   console.log('parseResponse');
 
@@ -13,36 +16,65 @@ function parseResponse(response) {
 function geocoder(keyword, setResponse, setError) {
   console.log('geocoder');
 
-  const wordsList = keyword.split(' ').join('%20');
+  // const wordsList = keyword.split(' ').join(',');
 
-  console.log(wordsList);
+  // console.log(wordsList);
 
-  // GET request
-  fetch(
-    `https://api.mapbox.com/geocoding/v5/mapbox.places/${wordsList}.json?country=np&access_token=${MAPBOX_API_KEY}`,
-    {
-      method: 'GET'
-      //Request Type
-    }
-  )
-    .then(response => response.json())
-    //If response is in json then in success
-    .then(responseJson => {
-      //Success
-      console.log('response:', responseJson);
-      console.log('typeof response:', typeof responseJson);
+  // // GET request
+  // fetch(
+  //   `https://api.mapbox.com/geocoding/v5/mapbox.places/${wordsList}.json?country=np&access_token=${MAPBOX_API_KEY}`,
+  //   {
+  //     method: 'GET'
+  //     //Request Type
+  //   }
+  // )
+  //   .then(response => response.json())
+  //   //If response is in json then in success
+  //   .then(responseJson => {
+  //     //Success
+  //     console.log('response:', responseJson);
+  //     console.log('typeof response:', typeof responseJson);
 
-      var response = parseResponse(responseJson);
+  //     var response = parseResponse(responseJson);
 
-      setResponse(response);
+  //     setResponse(response);
+  //   })
+  //   //If response is not in json then in error
+  //   .catch(error => {
+  //     //Error
+  //     console.error('error:', error);
+  //     console.error('typeof error:', typeof error);
+  //     setError(error);
+  //   });
+
+  geocodingClient
+    .forwardGeocode({
+      query: keyword,
+      countries: ['np']
     })
-    //If response is not in json then in error
-    .catch(error => {
-      //Error
-      console.error('error:', error);
-      console.error('typeof error:', typeof error);
-      setError(error);
-    });
+    .send()
+    .then(response => {
+      const match = response.body;
+
+      console.log('response:', response);
+      console.log('typeof response:', typeof response);
+
+      console.log('match:', match);
+      console.log('typeof match:', typeof match);
+
+      setResponse(JSON.stringify(match));
+    }),
+    error => {
+      const match = error.body;
+
+      console.log('error:', error);
+      console.log('typeof error:', typeof error);
+
+      console.log('match:', match);
+      console.log('typeof match:', typeof match);
+
+      setError(JSON.stringify(match));
+    };
 }
 
 function SearchList(props) {
