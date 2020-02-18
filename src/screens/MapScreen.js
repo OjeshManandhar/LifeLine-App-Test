@@ -6,6 +6,10 @@ import Map from './../component/Map';
 import SearchBox from './../component/SearchBox';
 import SearchList from './../component/SearchList';
 
+function handleBackButton(isTyping, setIsTyping) {
+  if (isTyping) setIsTyping(false);
+}
+
 function MapScreen(props) {
   const [isTyping, setIsTyping] = useState(false);
   const [keyword, setKeyword] = useState('');
