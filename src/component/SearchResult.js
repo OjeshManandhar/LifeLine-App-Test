@@ -1,21 +1,24 @@
 import React from 'react';
-import { View, Text, StylesSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
-function SearchResult(props) {
+function SearchResult({ data }) {
+  console.log('data:', data);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.name}>{props.name}</Text>
+      <Text style={styles.name}>{data.name}</Text>
       <Text style={styles.coordinate}>
-        {props.latitude}, {props.longitude}
+        {data.latitude}, {data.longitude}
       </Text>
     </View>
   );
 }
 
-const styles = StylesSheet.create({
+const styles = StyleSheet.create({
   container: {
     padding: 10,
-    border: 2,
+    margin: 5,
+    borderWidth: 2,
     borderColor: 'black'
   },
   name: {

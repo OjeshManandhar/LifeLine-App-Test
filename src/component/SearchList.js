@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 
+// components
+import SearchResult from './SearchResult';
+
 // env
 import { MAPBOX_API_KEY } from 'react-native-dotenv';
 
@@ -45,9 +48,13 @@ function geocoder(keyword, setResponse, setError) {
 }
 
 function renderSearchResults(locations) {
+  const searchResult = [];
+
   for (let i = 0; i < locations.length; i++) {
-    console.log(`${i}: ${locations[i]}`);
+    searchResult.push(<SearchResult data={locations[i]} />);
   }
+
+  return searchResult;
 }
 
 function SearchList(props) {
