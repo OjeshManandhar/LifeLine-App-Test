@@ -14,39 +14,6 @@ function parseResponse(response) {
 }
 
 function geocoder(keyword, setResponse, setError) {
-  console.log('geocoder');
-
-  // const wordsList = keyword.split(' ').join(',');
-
-  // console.log(wordsList);
-
-  // // GET request
-  // fetch(
-  //   `https://api.mapbox.com/geocoding/v5/mapbox.places/${wordsList}.json?country=np&access_token=${MAPBOX_API_KEY}`,
-  //   {
-  //     method: 'GET'
-  //     //Request Type
-  //   }
-  // )
-  //   .then(response => response.json())
-  //   //If response is in json then in success
-  //   .then(responseJson => {
-  //     //Success
-  //     console.log('response:', responseJson);
-  //     console.log('typeof response:', typeof responseJson);
-
-  //     var response = parseResponse(responseJson);
-
-  //     setResponse(response);
-  //   })
-  //   //If response is not in json then in error
-  //   .catch(error => {
-  //     //Error
-  //     console.error('error:', error);
-  //     console.error('typeof error:', typeof error);
-  //     setError(error);
-  //   });
-
   geocodingClient
     .forwardGeocode({
       query: keyword,
@@ -77,15 +44,37 @@ function geocoder(keyword, setResponse, setError) {
     };
 }
 
+function renderSearchResults(locations) {
+  for (let i = 0; i < locations.length; i++) {
+    console.log(`${i}: ${locations[i]}`);
+  }
+}
+
 function SearchList(props) {
   const [response, setResponse] = useState('');
   const [error, setError] = useState('');
 
-  console.log('keyword:', props.keyword);
+  // if (props.keyword !== '') {
+  //   geocoder(props.keyword, setResponse, setError);
+  // }
 
-  if (props.keyword !== '') {
-    geocoder(props.keyword, setResponse, setError);
-  }
+  const locations = [
+    {
+      name: 'Kathmandu',
+      latitude: 1,
+      longitude: 1
+    },
+    {
+      name: 'Lalitpur',
+      latitude: 2,
+      longitude: 2
+    },
+    {
+      name: 'Bhaktapur',
+      latitude: 3,
+      longitude: 4
+    }
+  ];
 
   return (
     <View style={styles.container}>
@@ -94,6 +83,8 @@ function SearchList(props) {
         <Text>keyword => {props.keyword}</Text>
         <Text>response => {response}</Text>
         <Text>error => {error}</Text>
+
+        {renderSearchResults(locations)}
       </ScrollView>
     </View>
   );
