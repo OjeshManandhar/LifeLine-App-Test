@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, BackHandler } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  BackHandler,
+  Keyboard
+} from 'react-native';
 
 // components
 import SearchResult from './SearchResult';
@@ -68,6 +75,8 @@ function SearchList(props) {
   function handleBackButton() {
     console.log('Back button handler');
     props.setIsSearching(false);
+    // to blur the InutText
+    Keyboard.dismiss();
     return true;
   }
 

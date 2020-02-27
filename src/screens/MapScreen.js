@@ -16,8 +16,8 @@ import SearchList from './../component/SearchList';
 import back from './../assets/images/back.png';
 
 function MapScreen(props) {
-  const [isSearching, setIsSearching] = useState(false);
   const [keyword, setKeyword] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -58,8 +58,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2
   },
   backIcon: {
-    width: 35,
-    height: 35
+    width: 30,
+    height: 30,
+    marginLeft: 5
   }
 });
 
