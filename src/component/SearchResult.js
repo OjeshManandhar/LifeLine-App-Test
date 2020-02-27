@@ -19,7 +19,9 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     borderWidth: 2,
-    borderColor: 'black'
+    borderColor: '#ededed',
+    borderRadius: 5,
+    backgroundColor: '#eeeeee'
   },
   name: {
     fontSize: 20
