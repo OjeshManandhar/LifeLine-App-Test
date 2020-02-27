@@ -1,11 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-function SearchResult({ data }) {
-  console.log('data:', data);
-
+function SearchResult({ data, last }) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { borderBottomWidth: last ? 0 : 1 }]}>
       <Text style={styles.name}>{data.name}</Text>
       <Text style={styles.coordinate}>
         {data.latitude}, {data.longitude}
@@ -17,17 +15,13 @@ function SearchResult({ data }) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    margin: 5,
-    borderWidth: 2,
-    borderColor: '#ededed',
-    borderRadius: 5,
-    backgroundColor: '#eeeeee'
+    borderColor: '#cccccc'
   },
   name: {
-    fontSize: 20
+    fontSize: 18
   },
   coordinate: {
-    fontSize: 10
+    fontSize: 12
   }
 });
 

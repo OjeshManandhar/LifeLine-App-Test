@@ -54,41 +54,9 @@ function geocoder(keyword, setResponse, setError) {
     };
 }
 
-function renderSearchResults(locations) {
-  const searchResult = [];
-
-  for (let i = 0; i < locations.length; i++) {
-    searchResult.push(<SearchResult key={i} data={locations[i]} />);
-  }
-
-  return searchResult;
-}
-
 function SearchList(props) {
-  const [response, setResponse] = useState('');
   const [error, setError] = useState('');
-
-  // if (props.keyword !== '') {
-  //   geocoder(props.keyword, setResponse, setError);
-  // }
-
-  function handleBackButton() {
-    console.log('Back button handler');
-    props.setIsSearching(false);
-    // to blur the InutText
-    Keyboard.dismiss();
-    return true;
-  }
-
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
-
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
-    };
-  }, []);
-
-  const locations = [
+  const [locations, setLocations] = useState([
     {
       name: 'Kathmandu',
       latitude: 1,
@@ -104,7 +72,44 @@ function SearchList(props) {
       latitude: 3,
       longitude: 4
     }
-  ];
+  ]);
+  const [response, setResponse] = useState('');
+
+  // if (props.keyword !== '') {
+  //   geocoder(props.keyword, setResponse, setError);
+  // }
+
+  function handleBackButton() {
+    console.log('Back button handler');
+    props.setIsSearching(false);
+    // to blur the InutText
+    Keyboard.dismiss();
+    return true;
+  }
+
+  function renderSearchResults() {
+    let last = false;
+    const searchResult = [];
+
+    for (let i = 0; i < locations.length; i++) {
+      if (i === locations.length - 1) {
+        last = true;
+      }
+      searchResult.push(
+        <SearchResult key={i} data={locations[i]} last={last} />
+      );
+    }
+
+    return <View style={styles.searchResultGroup}>{searchResult}</View>;
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -115,6 +120,12 @@ function SearchList(props) {
         <Text>error => {error}</Text>
 
         {renderSearchResults(locations)}
+
+        <View style={styles.searchResultGroup}>
+          <View style={styles.pickContainer}>
+            <Text style={styles.pickText}>Choose on map</Text>
+          </View>
+        </View>
       </ScrollView>
     </View>
   );
@@ -127,6 +138,20 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     backgroundColor: '#dddddd'
+  },
+  searchResultGroup: {
+    margin: 10,
+    padding: 2,
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: '#efefef',
+    backgroundColor: '#eeeeee'
+  },
+  pickContainer: {
+    padding: 10
+  },
+  pickText: {
+    fontSize: 15
   }
 });
 
