@@ -71,6 +71,21 @@ function SearchList(props) {
       name: 'Bhaktapur',
       latitude: 3,
       longitude: 4
+    },
+    {
+      name: 'Kathmandu',
+      latitude: 1,
+      longitude: 1
+    },
+    {
+      name: 'Lalitpur',
+      latitude: 2,
+      longitude: 2
+    },
+    {
+      name: 'Bhaktapur',
+      latitude: 3,
+      longitude: 4
     }
   ]);
   const [response, setResponse] = useState('');
@@ -103,6 +118,7 @@ function SearchList(props) {
           setDestination={data => {
             props.setDestination(data);
             props.setIsSearching(false);
+            Keyboard.dismiss();
           }}
         />
       );
@@ -121,7 +137,7 @@ function SearchList(props) {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps='always'>
         <Text>SearchList</Text>
         <Text>keyword => {props.keyword}</Text>
         <Text>response => {response}</Text>

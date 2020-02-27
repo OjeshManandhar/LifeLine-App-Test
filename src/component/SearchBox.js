@@ -13,9 +13,7 @@ function SearchBox(props) {
         returnKeyType='search'
         onChangeText={text => setKeyword(text)}
         onFocus={() => props.setIsSearching(true)}
-        onSubmitEditing={() => {
-          props.setKeyword(keyword);
-        }}
+        onSubmitEditing={() => props.setKeyword(keyword)}
         // onBlur={() => props.setIsSearching(false)}
       />
     </View>
