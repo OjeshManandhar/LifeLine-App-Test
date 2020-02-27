@@ -1,26 +1,38 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, TouchableNativeFeedback } from 'react-native';
 
 // components
 import Map from './../component/Map';
 import SearchBox from './../component/SearchBox';
 import SearchList from './../component/SearchList';
 
+// assets
+import back from './../assets/images/back.png';
+
 function handleBackButton(isTyping, setIsTyping) {
   if (isTyping) setIsTyping(false);
 }
 
 function MapScreen(props) {
-  const [isTyping, setIsTyping] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [keyword, setKeyword] = useState('');
 
   return (
     <View style={styles.container}>
       <View style={styles.searchArea}>
-        <SearchBox setIsTyping={setIsTyping} setKeyword={setKeyword} />
+        {isSearching && (
+          <TouchableNativeFeedback
+            onPress={() => {
+              setIsSearching(false);
+            }}
+          >
+            <Image source={back} style={styles.backIcon} />
+          </TouchableNativeFeedback>
+        )}
+        <SearchBox setIsSearching={setIsSearching} setKeyword={setKeyword} />
       </View>
 
-      {isTyping ? (
+      {isSearching ? (
         <SearchList keyword={keyword} />
       ) : (
         <Map userInfo={props.navigation.getParam('userInfo')} />
@@ -37,9 +49,14 @@ const styles = StyleSheet.create({
   },
   searchArea: {
     height: 65,
+    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'stretch',
+    alignItems: 'center',
     borderBottomWidth: 2
+  },
+  backIcon: {
+    width: 35,
+    height: 35
   }
 });
 

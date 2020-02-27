@@ -20,8 +20,8 @@ function SearchBox(props) {
         placeholder='Search for...'
         value={keyword}
         onChangeText={text => setKeyword(text)}
-        onFocus={() => props.setIsTyping(true)}
-        onBlur={() => props.setIsTyping(false)}
+        onFocus={() => props.setIsSearching(true)}
+        // onBlur={() => props.setIsSearching(false)}
       />
       <TouchableNativeFeedback onPress={() => props.setKeyword(keyword)}>
         <Image source={searchIcon} style={styles.button} />
