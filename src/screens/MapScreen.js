@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, TouchableNativeFeedback } from 'react-native';
+import {
+  View,
+  Image,
+  Keyboard,
+  StyleSheet,
+  TouchableNativeFeedback
+} from 'react-native';
 
 // components
 import Map from './../component/Map';
@@ -8,10 +14,6 @@ import SearchList from './../component/SearchList';
 
 // assets
 import back from './../assets/images/back.png';
-
-function handleBackButton(isTyping, setIsTyping) {
-  if (isTyping) setIsTyping(false);
-}
 
 function MapScreen(props) {
   const [isSearching, setIsSearching] = useState(false);
@@ -24,6 +26,7 @@ function MapScreen(props) {
           <TouchableNativeFeedback
             onPress={() => {
               setIsSearching(false);
+              Keyboard.dismiss();
             }}
           >
             <Image source={back} style={styles.backIcon} />
@@ -33,7 +36,7 @@ function MapScreen(props) {
       </View>
 
       {isSearching ? (
-        <SearchList keyword={keyword} />
+        <SearchList keyword={keyword} setIsSearching={setIsSearching} />
       ) : (
         <Map userInfo={props.navigation.getParam('userInfo')} />
       )}

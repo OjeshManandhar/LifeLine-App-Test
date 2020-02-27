@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, BackHandler } from 'react-native';
 
 // components
 import SearchResult from './SearchResult';
@@ -51,7 +51,7 @@ function renderSearchResults(locations) {
   const searchResult = [];
 
   for (let i = 0; i < locations.length; i++) {
-    searchResult.push(<SearchResult data={locations[i]} />);
+    searchResult.push(<SearchResult key={i} data={locations[i]} />);
   }
 
   return searchResult;
@@ -64,6 +64,20 @@ function SearchList(props) {
   // if (props.keyword !== '') {
   //   geocoder(props.keyword, setResponse, setError);
   // }
+
+  function handleBackButton() {
+    console.log('Back button handler');
+    props.setIsSearching(false);
+    return true;
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, []);
 
   const locations = [
     {
