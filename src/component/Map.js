@@ -6,6 +6,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 
 function Map(props) {
   console.log('userInfo:', JSON.parse(props.userInfo));
+  console.log('destination:', props.destination);
 
   return (
     <View style={styles.container}>

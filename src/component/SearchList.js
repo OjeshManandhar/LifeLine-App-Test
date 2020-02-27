@@ -96,7 +96,15 @@ function SearchList(props) {
         last = true;
       }
       searchResult.push(
-        <SearchResult key={i} data={locations[i]} last={last} />
+        <SearchResult
+          key={i}
+          data={locations[i]}
+          last={last}
+          setDestination={data => {
+            props.setDestination(data);
+            props.setIsSearching(false);
+          }}
+        />
       );
     }
 
@@ -121,11 +129,11 @@ function SearchList(props) {
 
         {renderSearchResults(locations)}
 
-        <View style={styles.searchResultGroup}>
+        {/* <View style={styles.searchResultGroup}>
           <View style={styles.pickContainer}>
             <Text style={styles.pickText}>Choose on map</Text>
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );
@@ -137,7 +145,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#dddddd'
+    backgroundColor: '#e5e5e5'
   },
   searchResultGroup: {
     margin: 10,

@@ -17,7 +17,8 @@ import back from './../assets/images/back.png';
 
 function MapScreen(props) {
   const [keyword, setKeyword] = useState('');
-  const [isSearching, setIsSearching] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
+  const [destination, setDestination] = useState({});
 
   return (
     <View style={styles.container}>
@@ -36,9 +37,16 @@ function MapScreen(props) {
       </View>
 
       {isSearching ? (
-        <SearchList keyword={keyword} setIsSearching={setIsSearching} />
+        <SearchList
+          keyword={keyword}
+          setIsSearching={setIsSearching}
+          setDestination={setDestination}
+        />
       ) : (
-        <Map userInfo={props.navigation.getParam('userInfo')} />
+        <Map
+          userInfo={props.navigation.getParam('userInfo')}
+          destination={destination}
+        />
       )}
     </View>
   );

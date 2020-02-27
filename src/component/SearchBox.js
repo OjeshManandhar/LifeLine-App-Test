@@ -10,8 +10,12 @@ function SearchBox(props) {
         style={styles.inputBox}
         placeholder='Search for...'
         value={keyword}
+        returnKeyType='search'
         onChangeText={text => setKeyword(text)}
         onFocus={() => props.setIsSearching(true)}
+        onSubmitEditing={() => {
+          props.setKeyword(keyword);
+        }}
         // onBlur={() => props.setIsSearching(false)}
       />
     </View>
