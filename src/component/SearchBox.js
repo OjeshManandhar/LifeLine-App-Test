@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Image,
-  TextInput,
-  StyleSheet,
-  TouchableNativeFeedback
-} from 'react-native';
-
-// assets
-import searchIcon from './../assets/images/search.png';
+import { View, TextInput, StyleSheet } from 'react-native';
 
 function SearchBox(props) {
   const [keyword, setKeyword] = useState('');
@@ -23,9 +14,6 @@ function SearchBox(props) {
         onFocus={() => props.setIsSearching(true)}
         // onBlur={() => props.setIsSearching(false)}
       />
-      <TouchableNativeFeedback onPress={() => props.setKeyword(keyword)}>
-        <Image source={searchIcon} style={styles.button} />
-      </TouchableNativeFeedback>
     </View>
   );
 }
@@ -42,19 +30,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     fontSize: 18,
-    paddingTop: 5,
-    paddingRight: 20,
-    paddingLeft: 20,
-    borderRadius: 20,
-    paddingBottom: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 20,
     borderWidth: 2,
+    borderRadius: 20,
     borderColor: 'gray'
-  },
-  button: {
-    width: 35,
-    height: 35,
-    padding: 10,
-    margin: 10
   }
 });
 
