@@ -17,46 +17,10 @@ import { MAPBOX_API_KEY } from 'react-native-dotenv';
 const mbxGeocoder = require('@mapbox/mapbox-sdk/services/geocoding');
 const geocodingClient = mbxGeocoder({ accessToken: MAPBOX_API_KEY });
 
-function parseResponse(response) {
-  console.log('parseResponse');
-
-  return JSON.stringify(response);
-}
-
-function geocoder(keyword, setResponse, setError) {
-  geocodingClient
-    .forwardGeocode({
-      query: keyword,
-      countries: ['np']
-    })
-    .send()
-    .then(response => {
-      const match = response.body;
-
-      console.log('response:', response);
-      console.log('typeof response:', typeof response);
-
-      console.log('match:', match);
-      console.log('typeof match:', typeof match);
-
-      setResponse(JSON.stringify(match));
-    }),
-    error => {
-      const match = error.body;
-
-      console.log('error:', error);
-      console.log('typeof error:', typeof error);
-
-      console.log('match:', match);
-      console.log('typeof match:', typeof match);
-
-      setError(JSON.stringify(match));
-    };
-}
-
 function SearchList(props) {
   const [error, setError] = useState('');
-  const [locations, setLocations] = useState([
+  const [response, setResponse] = useState('');
+  const locations = [
     {
       name: 'Kathmandu',
       latitude: 1,
@@ -87,12 +51,44 @@ function SearchList(props) {
       latitude: 3,
       longitude: 4
     }
-  ]);
-  const [response, setResponse] = useState('');
+  ];
 
-  // if (props.keyword !== '') {
-  //   geocoder(props.keyword, setResponse, setError);
-  // }
+  function parseResponse() {
+    console.log('parseResponse');
+
+    return JSON.stringify(response);
+  }
+
+  function geocoder() {
+    geocodingClient
+      .forwardGeocode({
+        query: props.keyword,
+        countries: ['np']
+      })
+      .send()
+      .then(response => {
+        const match = response.body;
+
+        console.log('response:', response);
+        console.log('typeof response:', typeof response);
+
+        console.log('match:', match);
+        console.log('typeof match:', typeof match);
+
+        setResponse(JSON.stringify(match));
+      }),
+      error => {
+        const match = error.body;
+
+        console.log('error:', error);
+        console.log('typeof error:', typeof error);
+
+        console.log('match:', match);
+        console.log('typeof match:', typeof match);
+
+        setError(JSON.stringify(match));
+      };
+  }
 
   function handleBackButton() {
     console.log('Back button handler');
@@ -128,12 +124,16 @@ function SearchList(props) {
   }
 
   useEffect(() => {
+    if (props.keyword !== '') {
+      geocoder();
+    }
+
     BackHandler.addEventListener('hardwareBackPress', handleBackButton);
 
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
     };
-  }, []);
+  }, [props.keyword]);
 
   return (
     <View style={styles.container}>
