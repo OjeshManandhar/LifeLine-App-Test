@@ -18,7 +18,7 @@ import back from './../assets/images/back.png';
 function MapScreen(props) {
   const [keyword, setKeyword] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [destination, setDestination] = useState({});
+  const [destination, setDestination] = useState(null);
 
   return (
     <View style={styles.container}>

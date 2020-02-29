@@ -4,9 +4,25 @@ import { View, Text, StyleSheet } from 'react-native';
 // packages
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
-function Map(props) {
-  console.log('userInfo:', JSON.parse(props.userInfo));
-  console.log('destination:', props.destination);
+function Map({ userInfo, destination }) {
+  console.log('userInfo:', JSON.parse(userInfo));
+  console.log('destination:', destination);
+
+  function renderPointAnnotation() {
+    return (
+      <MapboxGL.PointAnnotation
+        key={destination.id}
+        id={destination.id}
+        coordinate={destination.coordinate}
+        title={destination.name}
+      >
+        <View style={styles.annotationContainer} />
+        <MapboxGL.Callout
+          title={`${destination.name}\n${destination.location}`}
+        />
+      </MapboxGL.PointAnnotation>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -22,6 +38,8 @@ function Map(props) {
           followUserLocation
           followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
         />
+
+        {destination && renderPointAnnotation()}
       </MapboxGL.MapView>
     </View>
   );

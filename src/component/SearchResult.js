@@ -8,7 +8,7 @@ function SearchResult({ data, last, setDestination }) {
         <Text style={styles.name}>{data.name}</Text>
         <Text style={styles.location}>{data.location}</Text>
         <Text style={styles.coordinate}>
-          {data.coordinate.lat.toFixed(2)}, {data.coordinate.long.toFixed(2)}
+          {data.coordinate[1].toFixed(2)}, {data.coordinate[0].toFixed(2)}
         </Text>
       </View>
     </TouchableNativeFeedback>

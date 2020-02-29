@@ -26,13 +26,13 @@ function SearchList(props) {
     const locations = [];
     const features = match.features;
 
+    console.log('features:', features);
+
     for (let key in features) {
       const data = {
+        id: features[key].id,
         name: features[key].text,
-        coordinate: {
-          lat: features[key].center[1],
-          long: features[key].center[0]
-        },
+        coordinate: features[key].center,
         location: features[key].place_name
       };
 
