@@ -18,7 +18,6 @@ const mbxGeocoder = require('@mapbox/mapbox-sdk/services/geocoding');
 const geocodingClient = mbxGeocoder({ accessToken: MAPBOX_API_KEY });
 
 function SearchList(props) {
-  const [error, setError] = useState('');
   const [response, setResponse] = useState('');
 
   function parseResponse(match) {
@@ -57,7 +56,7 @@ function SearchList(props) {
       error => {
         const match = error.body;
 
-        setError(JSON.stringify(match));
+        console.log('error:', match);
       };
   }
 
@@ -90,7 +89,17 @@ function SearchList(props) {
       );
     }
 
-    return <View style={styles.searchResultGroup}>{searchResult}</View>;
+    if (response.length !== 0) {
+      return <View style={styles.searchResultGroup}>{searchResult}</View>;
+    } else {
+      return (
+        <View style={styles.searchResultGroup}>
+          <View style={styles.blockContainer}>
+            <Text style={styles.blockText}>Sorry no result found</Text>
+          </View>
+        </View>
+      );
+    }
   }
 
   useEffect(() => {
@@ -111,8 +120,8 @@ function SearchList(props) {
         {renderSearchResults()}
 
         {/* <View style={styles.searchResultGroup}>
-          <View style={styles.pickContainer}>
-            <Text style={styles.pickText}>Choose on map</Text>
+          <View style={styles.blockContainer}>
+            <Text style={styles.blockText}>Choose on map</Text>
           </View>
         </View> */}
       </ScrollView>
@@ -136,10 +145,10 @@ const styles = StyleSheet.create({
     borderColor: '#efefef',
     backgroundColor: '#eeeeee'
   },
-  pickContainer: {
+  blockContainer: {
     padding: 10
   },
-  pickText: {
+  blockText: {
     fontSize: 15
   }
 });
