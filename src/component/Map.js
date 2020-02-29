@@ -35,8 +35,11 @@ function Map({ userInfo, destination }) {
 
         <MapboxGL.Camera
           zoomLevel={14}
-          followUserLocation
+          followUserLocation={!destination}
           followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
+          animationMode={'flyTo'}
+          animationDuration={6000}
+          centerCoordinate={destination && destination.coordinate}
         />
 
         {destination && renderPointAnnotation()}
