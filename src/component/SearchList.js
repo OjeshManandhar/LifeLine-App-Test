@@ -20,43 +20,26 @@ const geocodingClient = mbxGeocoder({ accessToken: MAPBOX_API_KEY });
 function SearchList(props) {
   const [error, setError] = useState('');
   const [response, setResponse] = useState('');
-  const locations = [
-    {
-      name: 'Kathmandu',
-      latitude: 1,
-      longitude: 1
-    },
-    {
-      name: 'Lalitpur',
-      latitude: 2,
-      longitude: 2
-    },
-    {
-      name: 'Bhaktapur',
-      latitude: 3,
-      longitude: 4
-    },
-    {
-      name: 'Kathmandu',
-      latitude: 1,
-      longitude: 1
-    },
-    {
-      name: 'Lalitpur',
-      latitude: 2,
-      longitude: 2
-    },
-    {
-      name: 'Bhaktapur',
-      latitude: 3,
-      longitude: 4
-    }
-  ];
 
-  function parseResponse() {
+  function parseResponse(match) {
     console.log('parseResponse');
+    const locations = [];
+    const features = match.features;
 
-    return JSON.stringify(response);
+    for (let key in features) {
+      const data = {
+        name: features[key].text,
+        coordinate: {
+          lat: features[key].center[1],
+          long: features[key].center[0]
+        },
+        location: features[key].place_name
+      };
+
+      locations.push(data);
+    }
+
+    return locations;
   }
 
   function geocoder() {
@@ -69,29 +52,16 @@ function SearchList(props) {
       .then(response => {
         const match = response.body;
 
-        console.log('response:', response);
-        console.log('typeof response:', typeof response);
-
-        console.log('match:', match);
-        console.log('typeof match:', typeof match);
-
-        setResponse(JSON.stringify(match));
+        setResponse(parseResponse(match));
       }),
       error => {
         const match = error.body;
-
-        console.log('error:', error);
-        console.log('typeof error:', typeof error);
-
-        console.log('match:', match);
-        console.log('typeof match:', typeof match);
 
         setError(JSON.stringify(match));
       };
   }
 
   function handleBackButton() {
-    console.log('Back button handler');
     props.setIsSearching(false);
     // to blur the InutText
     Keyboard.dismiss();
@@ -102,14 +72,14 @@ function SearchList(props) {
     let last = false;
     const searchResult = [];
 
-    for (let i = 0; i < locations.length; i++) {
-      if (i === locations.length - 1) {
+    for (let i = 0; i < response.length; i++) {
+      if (i === response.length - 1) {
         last = true;
       }
       searchResult.push(
         <SearchResult
           key={i}
-          data={locations[i]}
+          data={response[i]}
           last={last}
           setDestination={data => {
             props.setDestination(data);
@@ -138,12 +108,7 @@ function SearchList(props) {
   return (
     <View style={styles.container}>
       <ScrollView keyboardShouldPersistTaps='always'>
-        <Text>SearchList</Text>
-        <Text>keyword => {props.keyword}</Text>
-        <Text>response => {response}</Text>
-        <Text>error => {error}</Text>
-
-        {renderSearchResults(locations)}
+        {renderSearchResults()}
 
         {/* <View style={styles.searchResultGroup}>
           <View style={styles.pickContainer}>
