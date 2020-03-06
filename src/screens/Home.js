@@ -2,6 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
 function Home(props) {
+  const userInfo = {
+    userId: 'lorem',
+    userName: 'DeadSkull',
+    phone: '1234567890'
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>Home Screen</Text>
@@ -11,6 +17,14 @@ function Home(props) {
           props.navigation.navigate('Detail', {
             name: 'DeadSkull',
             phone: '1234567890'
+          })
+        }
+      />
+      <Button
+        title='Go to Map'
+        onPress={() =>
+          props.navigation.navigate('Map', {
+            userInfo: JSON.stringify(userInfo)
           })
         }
       />
