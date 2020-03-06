@@ -21,11 +21,8 @@ function SearchList(props) {
   const [response, setResponse] = useState('');
 
   function parseResponse(match) {
-    console.log('parseResponse');
     const locations = [];
     const features = match.features;
-
-    console.log('features:', features);
 
     for (let key in features) {
       const data = {
@@ -91,7 +88,7 @@ function SearchList(props) {
 
     if (response.length !== 0) {
       return <View style={styles.searchResultGroup}>{searchResult}</View>;
-    } else {
+    } else if (props.keyword.length !== 0) {
       return (
         <View style={styles.searchResultGroup}>
           <View style={styles.blockContainer}>
