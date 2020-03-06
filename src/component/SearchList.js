@@ -116,11 +116,11 @@ function SearchList(props) {
       <ScrollView keyboardShouldPersistTaps='always'>
         {renderSearchResults()}
 
-        {/* <View style={styles.searchResultGroup}>
+        <View style={styles.searchResultGroup}>
           <View style={styles.blockContainer}>
-            <Text style={styles.blockText}>Choose on map</Text>
+            <Text style={styles.blockText}>Pick a location on map</Text>
           </View>
-        </View> */}
+        </View>
       </ScrollView>
     </View>
   );
