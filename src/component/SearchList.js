@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
+  Keyboard,
   ScrollView,
   StyleSheet,
   BackHandler,
-  Keyboard
+  TouchableNativeFeedback
 } from 'react-native';
 
 // components
@@ -116,11 +117,19 @@ function SearchList(props) {
       <ScrollView keyboardShouldPersistTaps='always'>
         {renderSearchResults()}
 
-        <View style={styles.searchResultGroup}>
-          <View style={styles.blockContainer}>
-            <Text style={styles.blockText}>Pick a location on map</Text>
+        <TouchableNativeFeedback
+          onPress={() => {
+            props.setIsPicking(true);
+            props.setIsSearching(false);
+            Keyboard.dismiss();
+          }}
+        >
+          <View style={styles.searchResultGroup}>
+            <View style={styles.blockContainer}>
+              <Text style={styles.blockText}>Pick a location on map</Text>
+            </View>
           </View>
-        </View>
+        </TouchableNativeFeedback>
       </ScrollView>
     </View>
   );

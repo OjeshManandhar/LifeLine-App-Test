@@ -22,14 +22,9 @@ function SearchBox(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 10
+    flex: 1
   },
   inputBox: {
-    flex: 1,
     height: 40,
     fontSize: 18,
     paddingVertical: 5,
