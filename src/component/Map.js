@@ -7,18 +7,16 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 function Map({ userInfo, destination, ...props }) {
   const mapRef = React.createRef();
 
-  const [centerCoordinate, setCenterCoordinate] = useState(null);
+  const [pickedCoordinate, setPickedCoordinate] = useState(null);
 
   function handlePress(event) {
     const pointInView = event.geometry.coordinates;
 
-    console.log('clicked point:', pointInView);
-
-    setCenterCoordinate(pointInView);
+    setPickedCoordinate(pointInView);
     props.setPickedLocation(pointInView);
   }
 
-  function renderPointAnnotation() {
+  function renderDestination() {
     return (
       <MapboxGL.PointAnnotation
         key={destination.id}
@@ -26,10 +24,20 @@ function Map({ userInfo, destination, ...props }) {
         coordinate={destination.coordinate}
         title={destination.name}
       >
-        <View style={styles.annotationContainer} />
         <MapboxGL.Callout
           title={`${destination.name}\n${destination.location}`}
         />
+      </MapboxGL.PointAnnotation>
+    );
+  }
+
+  function renderPickedLocation() {
+    return (
+      <MapboxGL.PointAnnotation
+        id='pickedLocation'
+        coordinate={pickedCoordinate}
+      >
+        <MapboxGL.Callout title='Picked destination' />
       </MapboxGL.PointAnnotation>
     );
   }
@@ -54,7 +62,9 @@ function Map({ userInfo, destination, ...props }) {
           centerCoordinate={destination && destination.coordinate}
         />
 
-        {destination && renderPointAnnotation()}
+        {destination && renderDestination()}
+
+        {pickedCoordinate != null && renderPickedLocation()}
       </MapboxGL.MapView>
     </View>
   );

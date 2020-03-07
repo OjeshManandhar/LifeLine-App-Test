@@ -16,11 +16,17 @@ import SearchList from './../component/SearchList';
 // assets
 import back from './../assets/images/back.png';
 
+// env
+import { MAPBOX_API_KEY } from 'react-native-dotenv';
+
+const mbxGeocoder = require('@mapbox/mapbox-sdk/services/geocoding');
+const geocodingClient = mbxGeocoder({ accessToken: MAPBOX_API_KEY });
+
 function MapScreen(props) {
   const [keyword, setKeyword] = useState('');
-  const [isPicking, _setIsPicking] = useState(false);
+  const [isPicking, _setIsPicking] = useState(true);
   const [destination, setDestination] = useState(null);
-  const [mapStatus, _setMapStatus] = useState('normal');
+  const [mapStatus, _setMapStatus] = useState('picking');
   const [isSearching, _setIsSearching] = useState(false);
   const [pickedLocation, setPickedLocation] = useState(null);
 
@@ -46,6 +52,53 @@ function MapScreen(props) {
     }
   }
 
+  function reverseGeocoder() {
+    console.log('reverseGeocoder');
+
+    geocodingClient
+      .reverseGeocode({
+        query: pickedLocation,
+        countries: ['np']
+      })
+      .send()
+      .then(response => {
+        // GeoJSON document with geocoding matches
+        const match = response.body.features[0];
+        let data = null;
+
+        if (match) {
+          data = {
+            id: match.id,
+            name: match.text,
+            coordinate: match.coordinate,
+            location: match.place_name
+          };
+        } else {
+          data = {
+            id: 'pickedDestination',
+            name: 'Picked Destination',
+            coordinate: pickedLocation,
+            location: 'Picked Destination'
+          };
+        }
+
+        console.log('response:', data);
+      })
+      .catch(error => {
+        const match = error.body;
+        console.log('error:', match);
+
+        const data = {
+          id: 'pickedDestination',
+          name: 'Picked Destination',
+          coordinate: pickedLocation,
+          location: 'Picked Destination'
+        };
+
+        console.log('error:', data);
+      });
+  }
+
   useEffect(() => {}, []);
 
   return (
@@ -65,7 +118,9 @@ function MapScreen(props) {
           <TouchableNativeFeedback
             onPress={() => {
               setIsPicking(false);
-              setDestination(pickedLocation);
+              console.log('picked destination:', pickedLocation);
+              reverseGeocoder();
+              // setDestination(pickedLocation);
             }}
           >
             <View style={styles.ok}>

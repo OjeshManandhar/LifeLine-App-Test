@@ -46,16 +46,18 @@ function SearchList(props) {
         countries: ['np']
       })
       .send()
-      .then(response => {
-        const match = response.body;
+      .then(
+        response => {
+          const match = response.body;
 
-        setResponse(parseResponse(match));
-      }),
-      error => {
-        const match = error.body;
+          setResponse(parseResponse(match));
+        },
+        error => {
+          const match = error.body;
 
-        console.log('error:', match);
-      };
+          console.log('error:', match);
+        }
+      );
   }
 
   function handleBackButton() {
@@ -80,8 +82,8 @@ function SearchList(props) {
           last={last}
           setDestination={data => {
             props.setDestination(data);
+            console.log('list data:', data);
             props.setIsSearching(false);
-            Keyboard.dismiss();
           }}
         />
       );
