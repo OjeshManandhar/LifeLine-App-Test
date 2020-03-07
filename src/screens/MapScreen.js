@@ -8,6 +8,9 @@ import {
   TouchableNativeFeedback
 } from 'react-native';
 
+// packages
+import Geolocation from '@react-native-community/geolocation';
+
 // components
 import Map from './../component/Map';
 import SearchBox from './../component/SearchBox';
@@ -16,17 +19,19 @@ import SearchList from './../component/SearchList';
 // assets
 import back from './../assets/images/back.png';
 
+/*
 // env
 import { MAPBOX_API_KEY } from 'react-native-dotenv';
 
 const mbxGeocoder = require('@mapbox/mapbox-sdk/services/geocoding');
 const geocodingClient = mbxGeocoder({ accessToken: MAPBOX_API_KEY });
+*/
 
 function MapScreen(props) {
   const [keyword, setKeyword] = useState('');
-  const [isPicking, _setIsPicking] = useState(true);
+  const [isPicking, _setIsPicking] = useState(false);
   const [destination, setDestination] = useState(null);
-  const [mapStatus, _setMapStatus] = useState('picking');
+  const [mapStatus, _setMapStatus] = useState('normal');
   const [isSearching, _setIsSearching] = useState(false);
   const [pickedLocation, setPickedLocation] = useState(null);
 
@@ -111,6 +116,17 @@ function MapScreen(props) {
       */
   }
 
+  function getUserLocation() {
+    const startLocation = [];
+
+    Geolocation.getCurrentPosition(info => {
+      startLocation.push(info.coords.longitude);
+      startLocation.push(info.coords.latitude);
+    });
+
+    return startLocation;
+  }
+
   useEffect(() => {}, []);
 
   return (
@@ -162,10 +178,11 @@ function MapScreen(props) {
         />
       ) : (
         <Map
-          userInfo={props.navigation.getParam('userInfo')}
           mapStatus={mapStatus}
           destination={destination}
+          startLocation={getUserLocation()}
           setPickedLocation={setPickedLocation}
+          userInfo={props.navigation.getParam('userInfo')}
         />
       )}
     </View>

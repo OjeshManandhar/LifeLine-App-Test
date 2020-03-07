@@ -82,7 +82,6 @@ function SearchList(props) {
           last={last}
           setDestination={data => {
             props.setDestination(data);
-            console.log('list data:', data);
             props.setIsSearching(false);
           }}
         />
