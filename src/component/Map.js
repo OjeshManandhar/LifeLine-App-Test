@@ -7,8 +7,6 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 function Map({ userInfo, destination, ...props }) {
   const mapRef = React.createRef();
 
-  console.log('destination:', destination);
-
   const [pickedCoordinate, setPickedCoordinate] = useState(null);
 
   function handlePress(event) {
@@ -19,12 +17,10 @@ function Map({ userInfo, destination, ...props }) {
   }
 
   function renderDestination() {
-    const title = destination.name;
+    let title = destination.name;
     if (destination.location) {
       title += '\n' + destination.location;
     }
-
-    console.log('title:', title);
 
     return (
       <MapboxGL.PointAnnotation
@@ -71,7 +67,7 @@ function Map({ userInfo, destination, ...props }) {
           followUserLocation={!destination}
           followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
           animationMode={props.mapStatus === 'picking' ? null : 'flyTo'}
-          animationDuration={6000}
+          animationDuration={3000}
           centerCoordinate={destination && destination.coordinate}
         />
 
