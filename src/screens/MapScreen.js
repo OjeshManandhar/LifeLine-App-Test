@@ -19,18 +19,30 @@ import back from './../assets/images/back.png';
 function MapScreen(props) {
   const [keyword, setKeyword] = useState('');
   const [isPicking, _setIsPicking] = useState(false);
-  const [mapStatus, setMapStatus] = useState('normal');
   const [destination, setDestination] = useState(null);
-  const [isSearching, setIsSearching] = useState(false);
+  const [mapStatus, _setMapStatus] = useState('normal');
+  const [isSearching, _setIsSearching] = useState(false);
   const [pickedLocation, setPickedLocation] = useState(null);
 
   function setIsPicking(val) {
+    _setIsSearching(false);
+
     _setIsPicking(val);
-    setIsSearching(false);
     if (val) {
-      setMapStatus('picking');
+      _setMapStatus('picking');
     } else {
-      setMapStatus('normal');
+      _setMapStatus('normal');
+    }
+  }
+
+  function setIsSearching(val) {
+    _setIsPicking(false);
+
+    _setIsSearching(val);
+    _setMapStatus('normal');
+
+    if (!val) {
+      Keyboard.dismiss();
     }
   }
 
@@ -67,7 +79,6 @@ function MapScreen(props) {
             <TouchableNativeFeedback
               onPress={() => {
                 setIsSearching(false);
-                Keyboard.dismiss();
               }}
             >
               <Image source={back} style={styles.backIcon} />

@@ -120,7 +120,6 @@ function SearchList(props) {
         <TouchableNativeFeedback
           onPress={() => {
             props.setIsPicking(true);
-            props.setIsSearching(false);
             Keyboard.dismiss();
           }}
         >
