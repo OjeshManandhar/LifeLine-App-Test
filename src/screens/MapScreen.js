@@ -53,8 +53,20 @@ function MapScreen(props) {
   }
 
   function reverseGeocoder() {
-    console.log('reverseGeocoder');
+    let data = null;
 
+    data = {
+      id: 'pickedDestination',
+      name: 'Picked Destination',
+      coordinate: pickedLocation,
+      location: undefined
+    };
+
+    setDestination(data);
+
+    // The following is the reverse geocoing code, it gives coordinate of nearest landmark
+    // NOT the place the user clicked
+    /*
     geocodingClient
       .reverseGeocode({
         query: pickedLocation,
@@ -64,13 +76,12 @@ function MapScreen(props) {
       .then(response => {
         // GeoJSON document with geocoding matches
         const match = response.body.features[0];
-        let data = null;
 
         if (match) {
           data = {
             id: match.id,
             name: match.text,
-            coordinate: match.coordinate,
+            coordinate: match.center,
             location: match.place_name
           };
         } else {
@@ -82,21 +93,22 @@ function MapScreen(props) {
           };
         }
 
-        console.log('response:', data);
+        setDestination(data);
       })
       .catch(error => {
         const match = error.body;
         console.log('error:', match);
 
-        const data = {
+        data = {
           id: 'pickedDestination',
           name: 'Picked Destination',
           coordinate: pickedLocation,
           location: 'Picked Destination'
         };
 
-        console.log('error:', data);
+        setDestination(data);
       });
+      */
   }
 
   useEffect(() => {}, []);
@@ -118,9 +130,7 @@ function MapScreen(props) {
           <TouchableNativeFeedback
             onPress={() => {
               setIsPicking(false);
-              console.log('picked destination:', pickedLocation);
               reverseGeocoder();
-              // setDestination(pickedLocation);
             }}
           >
             <View style={styles.ok}>

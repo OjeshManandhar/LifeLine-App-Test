@@ -7,6 +7,8 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 function Map({ userInfo, destination, ...props }) {
   const mapRef = React.createRef();
 
+  console.log('destination:', destination);
+
   const [pickedCoordinate, setPickedCoordinate] = useState(null);
 
   function handlePress(event) {
@@ -17,6 +19,13 @@ function Map({ userInfo, destination, ...props }) {
   }
 
   function renderDestination() {
+    const title = destination.name;
+    if (destination.location) {
+      title += '\n' + destination.location;
+    }
+
+    console.log('title:', title);
+
     return (
       <MapboxGL.PointAnnotation
         key={destination.id}
@@ -24,9 +33,7 @@ function Map({ userInfo, destination, ...props }) {
         coordinate={destination.coordinate}
         title={destination.name}
       >
-        <MapboxGL.Callout
-          title={`${destination.name}\n${destination.location}`}
-        />
+        <MapboxGL.Callout title={title} />
       </MapboxGL.PointAnnotation>
     );
   }
@@ -41,6 +48,12 @@ function Map({ userInfo, destination, ...props }) {
       </MapboxGL.PointAnnotation>
     );
   }
+
+  useEffect(() => {
+    if (destination) {
+      setPickedCoordinate(null);
+    }
+  });
 
   return (
     <View style={styles.container}>
@@ -57,7 +70,7 @@ function Map({ userInfo, destination, ...props }) {
           zoomLevel={14}
           followUserLocation={!destination}
           followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
-          animationMode={'flyTo'}
+          animationMode={props.mapStatus === 'picking' ? null : 'flyTo'}
           animationDuration={6000}
           centerCoordinate={destination && destination.coordinate}
         />
