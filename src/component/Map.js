@@ -68,7 +68,6 @@ function Map({ userInfo, destination, ...props }) {
 
     return (
       <MapboxGL.ShapeSource id='routeSource' shape={route}>
-        {console.log('route inside:', route)}
         <MapboxGL.LineLayer id='routeFill' style={layerStyles.route} />
       </MapboxGL.ShapeSource>
     );
@@ -79,7 +78,11 @@ function Map({ userInfo, destination, ...props }) {
       setPickedCoordinate(null);
     }
 
-    if (props.mapStatus !== 'picking' && props.startLocation && destination) {
+    if (
+      props.mapStatus !== 'picking' &&
+      props.startLocation != [] &&
+      destination
+    ) {
       console.log('startLocation:', props.startLocation);
       console.log('destination:', destination.coordinate);
 
@@ -100,6 +103,7 @@ function Map({ userInfo, destination, ...props }) {
               makeLineString(
                 response.body.routes[0].geometry.coordinates
                 // polyline.decode(response.body.routes[0].geometry, 6)
+                // polyline.toGeoJSON(response.body.routes[0].geometry, 6)
               )
             );
           },
