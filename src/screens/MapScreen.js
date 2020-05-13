@@ -4,10 +4,11 @@ import { View, Image, StyleSheet, TouchableNativeFeedback } from 'react-native';
 // components
 import Map from 'component/Map';
 import SearchBox from 'component/SearchBox';
+import AnimatedButton from 'component/AnimatedButton';
 
 // global
 import ZIndex from 'global/zIndex';
-import MapScreenHeaderStatus from 'global/headerStatus';
+import { MapScreenHeaderStatus } from 'global/enum';
 
 // assets
 import back from './../assets/images/back.png';
@@ -22,7 +23,28 @@ function MapScreen(props) {
       {(headerStatus === MapScreenHeaderStatus.mapView ||
         headerStatus === MapScreenHeaderStatus.searching) && (
         <View style={styles.searchContainer}>
-          {headerStatus === MapScreenHeaderStatus.searching && (
+          <AnimatedButton
+            in={headerStatus === MapScreenHeaderStatus.searching}
+            image={back}
+            timeout={2000}
+            imageStyle={styles.backIcon}
+            animationStyle={{
+              enter: {
+                opacity: [0, 1],
+                marginLeft: [-40, 0]
+              },
+              exit: {
+                opacity: [1, 0],
+                marginLeft: [0, -40]
+              }
+            }}
+            onPress={() => {
+              console.log('Header Back');
+              setHeaderStatus(MapScreenHeaderStatus.mapView);
+            }}
+          />
+
+          {/* {headerStatus === MapScreenHeaderStatus.searching && (
             <TouchableNativeFeedback
               onPress={() => {
                 console.log('Header Back');
@@ -31,7 +53,7 @@ function MapScreen(props) {
             >
               <Image source={back} style={styles.backIcon} />
             </TouchableNativeFeedback>
-          )}
+          )} */}
 
           {/* <TouchableNativeFeedback
             onPress={() => {

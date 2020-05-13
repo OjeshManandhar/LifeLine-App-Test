@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 // global
-import MapScreenHeaderStatus from 'global/headerStatus';
+import { MapScreenHeaderStatus } from 'global/enum';
 
 // assets
 import cross from './../assets/images/cross.png';
