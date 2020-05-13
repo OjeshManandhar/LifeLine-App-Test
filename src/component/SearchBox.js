@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import {
+  View,
+  Image,
+  TextInput,
+  StyleSheet,
+  TouchableNativeFeedback
+} from 'react-native';
+
+// global
+import MapScreenHeaderStatus from 'global/headerStatus';
+
+// assets
+import cross from './../assets/images/cross.png';
 
 function SearchBox(props) {
   const [keyword, setKeyword] = useState('');
@@ -12,26 +24,40 @@ function SearchBox(props) {
         value={keyword}
         returnKeyType='search'
         onChangeText={text => setKeyword(text)}
-        onFocus={() => props.setIsSearching(true)}
-        onSubmitEditing={() => props.setKeyword(keyword)}
-        // onBlur={() => props.setIsSearching(false)}
+        onFocus={() => props.setHeaderStatus(MapScreenHeaderStatus.searching)}
+        // onSubmitEditing={() => props.setKeyword(keyword)}
+        onBlur={() => props.setHeaderStatus(MapScreenHeaderStatus.mapView)}
       />
+
+      {keyword.length > 0 && (
+        <TouchableNativeFeedback
+          onPress={() => {
+            console.log('Clear Back');
+            setKeyword('');
+          }}
+        >
+          <Image source={cross} style={styles.crossIcon} />
+        </TouchableNativeFeedback>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    flexDirection: 'row'
   },
   inputBox: {
-    height: 40,
-    fontSize: 18,
-    paddingVertical: 5,
-    paddingHorizontal: 20,
-    borderWidth: 2,
-    borderRadius: 20,
-    borderColor: 'gray'
+    flex: 1,
+    padding: 5,
+    fontSize: 18
+  },
+  crossIcon: {
+    alignSelf: 'center',
+    width: 20,
+    height: 20,
+    marginLeft: 20
   }
 });
 

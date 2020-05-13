@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, TouchableNativeFeedback } from 'react-native';
 
 // components
 import Map from 'component/Map';
@@ -9,6 +9,9 @@ import SearchBox from 'component/SearchBox';
 import ZIndex from 'global/zIndex';
 import MapScreenHeaderStatus from 'global/headerStatus';
 
+// assets
+import back from './../assets/images/back.png';
+
 function MapScreen(props) {
   const [headerStatus, setHeaderStatus] = useState(
     MapScreenHeaderStatus.mapView
@@ -17,9 +20,19 @@ function MapScreen(props) {
   return (
     <View style={styles.container}>
       {(headerStatus === MapScreenHeaderStatus.mapView ||
-        headerStatus === MapScreenHeaderStatus.seaerching) && (
+        headerStatus === MapScreenHeaderStatus.searching) && (
         <View style={styles.searchContainer}>
-          <SearchBox />
+          {headerStatus == MapScreenHeaderStatus.searching && (
+            <TouchableNativeFeedback
+              onPress={() => {
+                console.log('Header Back');
+              }}
+            >
+              <Image source={back} style={styles.backIcon} />
+            </TouchableNativeFeedback>
+          )}
+
+          <SearchBox setHeaderStatus={setHeaderStatus} />
         </View>
       )}
 
@@ -60,6 +73,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 1,
     elevation: 5
+  },
+  backIcon: {
+    alignSelf: 'center',
+    width: 20,
+    height: 20,
+    marginRight: 20
   }
 });
 
