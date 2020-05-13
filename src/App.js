@@ -8,9 +8,9 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 // screens
-import Home from './screens/Home';
-import Detail from './screens/Detail';
-import MapScreen from './screens/MapScreen';
+import Home from 'screens/Home';
+import Detail from 'screens/Detail';
+import MapScreen from 'screens/MapScreen';
 
 // env
 import { MAPBOX_API_KEY } from 'react-native-dotenv';

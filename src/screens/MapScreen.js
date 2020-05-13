@@ -5,7 +5,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Map from 'component/Map';
 
 // utils
-import zIndex from './../utils/zIndex';
+import zIndex from 'utils/zIndex';
 
 function MapScreen(props) {
   return (

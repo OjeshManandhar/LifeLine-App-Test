@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 // components
-import SearchResult from './SearchResult';
+import SearchResult from 'components/SearchResult';
 
 // env
 import { MAPBOX_API_KEY } from 'react-native-dotenv';
