@@ -25,10 +25,10 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     position: 'absolute',
-    top: 20,
-    left: '10%',
-    height: 30,
-    width: '90%',
+    top: 10,
+    left: '5%',
+    right: '5%',
+    height: 50,
     borderWidth: 2,
     zIndex: zIndex.searchBox
   }
