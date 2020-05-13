@@ -22,15 +22,49 @@ function MapScreen(props) {
       {(headerStatus === MapScreenHeaderStatus.mapView ||
         headerStatus === MapScreenHeaderStatus.searching) && (
         <View style={styles.searchContainer}>
-          {headerStatus == MapScreenHeaderStatus.searching && (
+          {headerStatus === MapScreenHeaderStatus.searching && (
             <TouchableNativeFeedback
               onPress={() => {
                 console.log('Header Back');
+                setHeaderStatus(MapScreenHeaderStatus.mapView);
               }}
             >
               <Image source={back} style={styles.backIcon} />
             </TouchableNativeFeedback>
           )}
+
+          {/* <TouchableNativeFeedback
+            onPress={() => {
+              console.log('Header Back');
+              setHeaderStatus(MapScreenHeaderStatus.mapView);
+            }}
+          >
+            {headerStatus === MapScreenHeaderStatus.searching ? (
+              <Image source={back} style={styles.backIcon} />
+            ) : (
+              <React.Fragment />
+            )}
+          </TouchableNativeFeedback> */}
+
+          {/* <TouchableNativeFeedback
+            onPress={() => {
+              console.log('Header Back');
+              setHeaderStatus(MapScreenHeaderStatus.mapView);
+            }}
+          >
+            <Image
+              source={back}
+              style={[
+                styles.backIcon,
+                {
+                  marginLeft:
+                    headerStatus === MapScreenHeaderStatus.searching ? 0 : -40,
+                  opacity:
+                    headerStatus === MapScreenHeaderStatus.searching ? 1 : 0
+                }
+              ]}
+            />
+          </TouchableNativeFeedback> */}
 
           <SearchBox setHeaderStatus={setHeaderStatus} />
         </View>
@@ -78,7 +112,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 20,
     height: 20,
-    marginRight: 20
+    marginRight: 20,
+
+    borderWidth: 1,
+    borderColor: 'black'
   }
 });
 

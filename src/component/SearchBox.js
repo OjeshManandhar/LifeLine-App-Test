@@ -20,7 +20,7 @@ function SearchBox(props) {
     <View style={styles.container}>
       <TextInput
         style={styles.inputBox}
-        placeholder='Search for...'
+        placeholder='Search here'
         value={keyword}
         returnKeyType='search'
         onChangeText={text => setKeyword(text)}
@@ -46,7 +46,10 @@ function SearchBox(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
+
+    borderWidth: 1,
+    borderColor: 'black'
   },
   inputBox: {
     flex: 1,
