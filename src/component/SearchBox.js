@@ -54,13 +54,19 @@ const styles = StyleSheet.create({
   inputBox: {
     flex: 1,
     padding: 5,
-    fontSize: 18
+    fontSize: 18,
+
+    borderWidth: 1,
+    borderColor: 'black'
   },
   crossIcon: {
     alignSelf: 'center',
     width: 20,
     height: 20,
-    marginLeft: 20
+    marginLeft: 20,
+
+    borderWidth: 1,
+    borderColor: 'black'
   }
 });
 

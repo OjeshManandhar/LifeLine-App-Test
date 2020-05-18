@@ -4,7 +4,8 @@ import { View, Image, StyleSheet, TouchableNativeFeedback } from 'react-native';
 // components
 import Map from 'component/Map';
 import SearchBox from 'component/SearchBox';
-import AnimatedButton from 'component/AnimatedButton';
+// import AnimatedButton from 'component/AnimatedButton';
+import TestAnimatedButton from 'component/TestAnimatedButton';
 
 // global
 import ZIndex from 'global/zIndex';
@@ -23,10 +24,10 @@ function MapScreen(props) {
       {(headerStatus === MapScreenHeaderStatus.mapView ||
         headerStatus === MapScreenHeaderStatus.searching) && (
         <View style={styles.searchContainer}>
-          <AnimatedButton
+          <TestAnimatedButton
             in={headerStatus === MapScreenHeaderStatus.searching}
             image={back}
-            timeout={2000}
+            timeout={5 * 1000}
             imageStyle={styles.backIcon}
             animationStyle={{
               enter: {
