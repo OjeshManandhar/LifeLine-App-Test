@@ -20,14 +20,15 @@ function useStateWithCallback(initialState = null) {
     if (_callback) {
       callCallback.current = true;
       _setState(newState.current);
-      newState.current = null;
     }
   }, [_callback]);
 
   useEffect(() => {
     if (callCallback.current && _callback) {
-      _callback();
+      _callback(newState.current);
+
       _setCallback(null);
+      newState.current = null;
       callCallback.current = false;
     }
   }, [_state, _callback]);
