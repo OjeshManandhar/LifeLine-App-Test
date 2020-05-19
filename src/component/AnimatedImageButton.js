@@ -1,11 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Image,
-  Animated,
-  StyleSheet,
-  TouchableNativeFeedback
-} from 'react-native';
+import { Animated, TouchableNativeFeedback } from 'react-native';
 
 // global
 import { AnimationState as AS } from 'global/enum';
@@ -169,7 +164,5 @@ AnimatedImageButton.propTypes = {
   imageStyle: PropTypes.object.isRequired,
   animationStyle: PropTypes.object.isRequired
 };
-
-const styles = StyleSheet.create({});
 
 export default AnimatedImageButton;
