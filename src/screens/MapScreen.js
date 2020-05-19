@@ -26,7 +26,7 @@ function MapScreen(props) {
           <AnimatedImageButton
             in={headerStatus === MapScreenHeaderStatus.searching}
             image={back}
-            timeout={5 * 1000}
+            timeout={0.5 * 1000}
             imageStyle={styles.backIcon}
             animationStyle={{
               enter: {
@@ -38,10 +38,10 @@ function MapScreen(props) {
                 marginLeft: [0, -40]
               }
             }}
-            // onEnter={() => console.log('ON ENTER')}
+            onEnter={() => console.log('ON ENTER')}
             onEntered={() => console.log('ON ENTERED')}
             onExit={() => console.log('ON EXIT')}
-            // onExited={() => console.log('ON EXITED')}
+            onExited={() => console.log('ON EXITED')}
             onPress={() => {
               console.log('Header Back');
               setHeaderStatus(MapScreenHeaderStatus.mapView);
@@ -94,10 +94,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 20,
     height: 20,
-    marginRight: 20,
-
-    borderWidth: 1,
-    borderColor: 'black'
+    marginRight: 20
   }
 });
 

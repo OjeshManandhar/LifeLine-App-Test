@@ -14,8 +14,6 @@ import { AnimationState as AS } from 'global/enum';
 import useStateWithCallback from 'hooks/useStateWithCallback';
 
 function AnimatedImageButton(props) {
-  // console.log('AnimatedButton props:', props);
-
   const currentState = useRef(AS.initialRender);
 
   const [mount, setMount] = useStateWithCallback(null);
@@ -80,41 +78,36 @@ function AnimatedImageButton(props) {
     [props.timeout, props.animationStyle]
   );
 
-  // handle animation state change
   useEffect(() => {
     if (currentState.current === AS.initialRender) {
       if (props.in === true) {
-        setMount(true);
+        setMount(true, () => {
+          startAnimation({
+            animType: 'appear',
+            onStart: props.onAppear ? props.onAppear : undefined,
+            onComplete: props.onAppeared ? props.onAppeared : undefined
+          });
 
-        // console.log('Start APPEAR animation');
-
-        startAnimation({
-          animType: 'appear',
-          onStart: props.onAppear ? props.onAppear : undefined,
-          onComplete: props.onAppeared ? props.onAppeared : undefined
+          currentState.current = AS.in;
         });
-
-        currentState.current = AS.in;
       } else if (props.in === false) {
-        setMount(false);
+        // No APPEAR animation
 
-        // console.log('No APPEAR animation');
-
-        currentState.current = AS.out;
+        setMount(false, () => {
+          currentState.current = AS.out;
+        });
       }
     } else {
       if (
         (props.in === true && currentState.current === AS.in) ||
         (props.in === false && currentState.current === AS.out)
       ) {
-        // console.log("Don't execute enter/exit animation");
-        // console.log('No change in animation state');
+        // Don't execute ENTER/EXIT animation
+        // No change in animation state
       }
 
       if (props.in === true && currentState.current === AS.out) {
         setMount(true, mount => {
-          // console.log('Start ENTER animation');
-
           startAnimation({
             animType: 'enter',
             onStart: props.onEnter ? props.onEnter : undefined,
@@ -124,16 +117,15 @@ function AnimatedImageButton(props) {
           currentState.current = AS.in;
         });
       } else if (props.in === false && currentState.current === AS.in) {
-        // console.log('Start EXIT animation');
-
         startAnimation({
           animType: 'exit',
           onStart: props.onExit ? props.onExit : undefined,
           onComplete: () => {
-            setMount(false);
-            currentState.current = AS.out;
-
             props.onExited && props.onExited();
+
+            setMount(false, () => {
+              currentState.current = AS.out;
+            });
           }
         });
       }

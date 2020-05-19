@@ -46,27 +46,18 @@ function SearchBox(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
-
-    borderWidth: 1,
-    borderColor: 'black'
+    flexDirection: 'row'
   },
   inputBox: {
     flex: 1,
     padding: 5,
-    fontSize: 18,
-
-    borderWidth: 1,
-    borderColor: 'black'
+    fontSize: 18
   },
   crossIcon: {
     alignSelf: 'center',
     width: 20,
     height: 20,
-    marginLeft: 20,
-
-    borderWidth: 1,
-    borderColor: 'black'
+    marginLeft: 20
   }
 });
 
