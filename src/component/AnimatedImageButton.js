@@ -22,13 +22,14 @@ function AnimatedImageButton(props) {
   const [animationStyle, setAnimationStyle] = useStateWithCallback({});
 
   const startAnimation = useCallback(
-    animType => {
+    ({ animType, onStart, onComplete }) => {
       const anim = props.animationStyle[animType];
 
       if (anim) {
         const animInit = {};
         const animEcex = {};
         const animStyle = {};
+        const animFinish = {};
 
         for (let property in anim) {
           if (anim.hasOwnProperty(property)) {
@@ -41,16 +42,39 @@ function AnimatedImageButton(props) {
             });
 
             animStyle[property] = animInit[property];
+
+            animFinish[property] = false;
           }
         }
 
         setAnimationStyle(animStyle, animationStyle => {
+          if (onStart && typeof onStart === 'function') {
+            onStart();
+          }
+
           for (let key in animEcex) {
             if (animEcex.hasOwnProperty(key)) {
-              animEcex[key].start();
+              animEcex[key].start(({ finished }) => {
+                animFinish[key] = true;
+              });
             }
           }
         });
+
+        if (onComplete && typeof onComplete === 'function') {
+          const checkFinish = setInterval(() => {
+            for (let key in animFinish) {
+              if (animFinish.hasOwnProperty(key)) {
+                if (animFinish[key] === false) {
+                  return;
+                }
+              }
+            }
+
+            onComplete();
+            clearInterval(checkFinish);
+          }, 100);
+        }
       }
     },
     [props.timeout, props.animationStyle]
@@ -64,7 +88,11 @@ function AnimatedImageButton(props) {
 
         console.log('Start APPEAR animation');
 
-        startAnimation('appear');
+        startAnimation({
+          animType: 'appear',
+          onStart: () => console.log('APPEAR start'),
+          onComplete: () => console.log('APPEAR Complete')
+        });
 
         currentState.current = AS.in;
       } else if (props.in === false) {
@@ -85,12 +113,14 @@ function AnimatedImageButton(props) {
 
       if (props.in === true && currentState.current === AS.out) {
         setMount(true, mount => {
-          console.log('mount:', mount);
-
           // start enter animation
           console.log('Start ENTER animation');
 
-          startAnimation('enter');
+          startAnimation({
+            animType: 'enter',
+            onStart: () => console.log('ENTER start'),
+            onComplete: () => console.log('ENTER Complete')
+          });
 
           currentState.current = AS.in;
         });
@@ -98,11 +128,17 @@ function AnimatedImageButton(props) {
         // start exit animation
         console.log('start exit animation');
 
-        startAnimation('exit');
-
-        setMount(false);
-
-        currentState.current = AS.out;
+        startAnimation({
+          animType: 'exit',
+          onStart: () => console.log('EXIT start'),
+          onComplete: () => {
+            console.log('EXIT Complete');
+            setMount(false);
+            currentState.current = AS.out;
+          }
+        });
+        // setMount(false);
+        // currentState.current = AS.out;
       }
     }
   }, [props.in, startAnimation]);
