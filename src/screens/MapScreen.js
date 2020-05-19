@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
     height: 50,
     zIndex: ZIndex.searchBox,
 
+    overflow: 'hidden',
+
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
