@@ -48,6 +48,7 @@ function Map() {
         // A size must be provided to the MapboxGL.MapView through style prop
         style={styles.container}
         styleURL={MapboxGL.StyleURL.Outdoors}
+        compassViewMargins={{ x: 10, y: 90 }}
       >
         <MapboxGL.UserLocation visible />
 

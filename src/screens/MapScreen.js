@@ -1,30 +1,29 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 // components
 import Map from 'component/Map';
 import SearchBox from 'component/SearchBox';
+// import SearchList from 'component/SearchList';
 import AnimatedImageButton from 'component/AnimatedImageButton';
 
 // global
 import ZIndex from 'global/zIndex';
-import { MapScreenHeaderStatus } from 'global/enum';
+import { MapScreenStatus } from 'global/enum';
 
 // assets
 import back from './../assets/images/back.png';
 
 function MapScreen(props) {
-  const [headerStatus, setHeaderStatus] = useState(
-    MapScreenHeaderStatus.mapView
-  );
+  const [headerStatus, setHeaderStatus] = useState(MapScreenStatus.mapView);
 
   return (
     <View style={styles.container}>
-      {(headerStatus === MapScreenHeaderStatus.mapView ||
-        headerStatus === MapScreenHeaderStatus.searching) && (
+      {(headerStatus === MapScreenStatus.mapView ||
+        headerStatus === MapScreenStatus.searching) && (
         <View style={styles.searchContainer}>
           <AnimatedImageButton
-            in={headerStatus === MapScreenHeaderStatus.searching}
+            in={headerStatus === MapScreenStatus.searching}
             image={back}
             timeout={0.25 * 1000}
             imageStyle={styles.backIcon}
@@ -38,13 +37,13 @@ function MapScreen(props) {
                 marginLeft: [0, -40]
               }
             }}
-            onEnter={() => console.log('ON ENTER')}
-            onEntered={() => console.log('ON ENTERED')}
-            onExit={() => console.log('ON EXIT')}
-            onExited={() => console.log('ON EXITED')}
+            // onEnter={() => console.log('ON ENTER')}
+            // onEntered={() => console.log('ON ENTERED')}
+            // onExit={() => console.log('ON EXIT')}
+            // onExited={() => console.log('ON EXITED')}
             onPress={() => {
               console.log('Header Back');
-              setHeaderStatus(MapScreenHeaderStatus.mapView);
+              setHeaderStatus(MapScreenStatus.mapView);
             }}
           />
 
@@ -52,7 +51,9 @@ function MapScreen(props) {
         </View>
       )}
 
-      <Map />
+      <View style={styles.container}>
+        <Map />
+      </View>
     </View>
   );
 }
@@ -64,8 +65,8 @@ const styles = StyleSheet.create({
   searchContainer: {
     position: 'absolute',
     top: 5,
-    left: '2.5%',
-    right: '2.5%',
+    left: 10,
+    right: 10,
     height: 50,
     zIndex: ZIndex.searchBox,
 
