@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Keyboard, StyleSheet } from 'react-native';
 
 // components
 import Map from 'component/Map';
 import SearchBox from 'component/SearchBox';
-// import SearchList from 'component/SearchList';
+import SearchList from 'component/SearchList';
 import AnimatedImageButton from 'component/AnimatedImageButton';
 
 // global
@@ -15,15 +15,24 @@ import { MapScreenStatus } from 'global/enum';
 import back from './../assets/images/back.png';
 
 function MapScreen(props) {
-  const [headerStatus, setHeaderStatus] = useState(MapScreenStatus.mapView);
+  const [screenStatus, _setScreenStatus] = useState(MapScreenStatus.mapView);
+
+  function setScreenStatus(val) {
+    if (val === MapScreenStatus.mapView || val === MapScreenStatus.picking) {
+      // Also blurs out of the Text Input
+      Keyboard.dismiss();
+    }
+
+    _setScreenStatus(val);
+  }
 
   return (
     <View style={styles.container}>
-      {(headerStatus === MapScreenStatus.mapView ||
-        headerStatus === MapScreenStatus.searching) && (
+      {(screenStatus === MapScreenStatus.mapView ||
+        screenStatus === MapScreenStatus.searching) && (
         <View style={styles.searchContainer}>
           <AnimatedImageButton
-            in={headerStatus === MapScreenStatus.searching}
+            in={screenStatus === MapScreenStatus.searching}
             image={back}
             timeout={0.25 * 1000}
             imageStyle={styles.backIcon}
@@ -42,17 +51,17 @@ function MapScreen(props) {
             // onExit={() => console.log('ON EXIT')}
             // onExited={() => console.log('ON EXITED')}
             onPress={() => {
-              console.log('Header Back');
-              setHeaderStatus(MapScreenStatus.mapView);
+              setScreenStatus(MapScreenStatus.mapView);
             }}
           />
 
-          <SearchBox setHeaderStatus={setHeaderStatus} />
+          <SearchBox setScreenStatus={setScreenStatus} />
         </View>
       )}
 
       <View style={styles.container}>
         <Map />
+        {screenStatus === MapScreenStatus.searching && <SearchList />}
       </View>
     </View>
   );

@@ -27,9 +27,9 @@ function SearchBox(props) {
         value={keyword}
         returnKeyType='search'
         onChangeText={text => setKeyword(text)}
-        onFocus={() => props.setHeaderStatus(MapScreenStatus.searching)}
+        onFocus={() => props.setScreenStatus(MapScreenStatus.searching)}
         // onSubmitEditing={() => props.setKeyword(keyword)}
-        onBlur={() => props.setHeaderStatus(MapScreenStatus.mapView)}
+        onBlur={() => props.setScreenStatus(MapScreenStatus.mapView)}
       />
 
       <AnimatedImageButton
@@ -46,7 +46,6 @@ function SearchBox(props) {
           }
         }}
         onPress={() => {
-          console.log('Clear Back');
           setKeyword('');
         }}
       />
