@@ -86,19 +86,19 @@ function AnimatedImageButton(props) {
       if (props.in === true) {
         setMount(true);
 
-        console.log('Start APPEAR animation');
+        // console.log('Start APPEAR animation');
 
         startAnimation({
           animType: 'appear',
-          onStart: () => console.log('APPEAR start'),
-          onComplete: () => console.log('APPEAR Complete')
+          onStart: props.onAppear ? props.onAppear : undefined,
+          onComplete: props.onAppeared ? props.onAppeared : undefined
         });
 
         currentState.current = AS.in;
       } else if (props.in === false) {
         setMount(false);
 
-        console.log('No APPEAR animation');
+        // console.log('No APPEAR animation');
 
         currentState.current = AS.out;
       }
@@ -107,41 +107,47 @@ function AnimatedImageButton(props) {
         (props.in === true && currentState.current === AS.in) ||
         (props.in === false && currentState.current === AS.out)
       ) {
-        console.log("Don't execute enter/exit animation");
-        console.log('No change in animation state');
+        // console.log("Don't execute enter/exit animation");
+        // console.log('No change in animation state');
       }
 
       if (props.in === true && currentState.current === AS.out) {
         setMount(true, mount => {
-          // start enter animation
-          console.log('Start ENTER animation');
+          // console.log('Start ENTER animation');
 
           startAnimation({
             animType: 'enter',
-            onStart: () => console.log('ENTER start'),
-            onComplete: () => console.log('ENTER Complete')
+            onStart: props.onEnter ? props.onEnter : undefined,
+            onComplete: props.onEntered ? props.onEntered : undefined
           });
 
           currentState.current = AS.in;
         });
       } else if (props.in === false && currentState.current === AS.in) {
-        // start exit animation
-        console.log('start exit animation');
+        // console.log('Start EXIT animation');
 
         startAnimation({
           animType: 'exit',
-          onStart: () => console.log('EXIT start'),
+          onStart: props.onExit ? props.onExit : undefined,
           onComplete: () => {
-            console.log('EXIT Complete');
             setMount(false);
             currentState.current = AS.out;
+
+            props.onExited && props.onExited();
           }
         });
-        // setMount(false);
-        // currentState.current = AS.out;
       }
     }
-  }, [props.in, startAnimation]);
+  }, [
+    props.in,
+    props.onAppear,
+    props.onAppeared,
+    props.onEnter,
+    props.onEntered,
+    props.onExit,
+    props.onExited,
+    startAnimation
+  ]);
 
   if (mount) {
     return (
@@ -158,6 +164,12 @@ function AnimatedImageButton(props) {
 }
 
 AnimatedImageButton.propTypes = {
+  onExit: PropTypes.func,
+  onEnter: PropTypes.func,
+  onAppear: PropTypes.func,
+  onExited: PropTypes.func,
+  onEntered: PropTypes.func,
+  onAppeared: PropTypes.func,
   in: PropTypes.bool.isRequired,
   image: PropTypes.any.isRequired,
   onPress: PropTypes.func.isRequired,

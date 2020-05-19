@@ -38,6 +38,10 @@ function MapScreen(props) {
                 marginLeft: [0, -40]
               }
             }}
+            // onEnter={() => console.log('ON ENTER')}
+            onEntered={() => console.log('ON ENTERED')}
+            onExit={() => console.log('ON EXIT')}
+            // onExited={() => console.log('ON EXITED')}
             onPress={() => {
               console.log('Header Back');
               setHeaderStatus(MapScreenHeaderStatus.mapView);
