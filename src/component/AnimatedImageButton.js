@@ -13,7 +13,7 @@ import { AnimationState as AS } from 'global/enum';
 // hooks
 import useStateWithCallback from 'hooks/useStateWithCallback';
 
-function AnimatedButton(props) {
+function AnimatedImageButton(props) {
   // console.log('AnimatedButton props:', props);
 
   const currentState = useRef(AS.initialRender);
@@ -24,7 +24,6 @@ function AnimatedButton(props) {
   const startAnimation = useCallback(
     animType => {
       const anim = props.animationStyle[animType];
-      console.log('anim:', animType, anim);
 
       if (anim) {
         const animInit = {};
@@ -45,10 +44,6 @@ function AnimatedButton(props) {
           }
         }
 
-        console.log('animInit:', animInit);
-        console.log('animExec:', animEcex);
-        console.log('animStyle:', animStyle);
-
         setAnimationStyle(animStyle, animationStyle => {
           for (let key in animEcex) {
             if (animEcex.hasOwnProperty(key)) {
@@ -67,7 +62,6 @@ function AnimatedButton(props) {
       if (props.in === true) {
         setMount(true);
 
-        // start appear animation
         console.log('Start APPEAR animation');
 
         startAnimation('appear');
@@ -75,7 +69,8 @@ function AnimatedButton(props) {
         currentState.current = AS.in;
       } else if (props.in === false) {
         setMount(false);
-        console.log('no appear animation');
+
+        console.log('No APPEAR animation');
 
         currentState.current = AS.out;
       }
@@ -126,7 +121,7 @@ function AnimatedButton(props) {
   }
 }
 
-AnimatedButton.propTypes = {
+AnimatedImageButton.propTypes = {
   in: PropTypes.bool.isRequired,
   image: PropTypes.any.isRequired,
   onPress: PropTypes.func.isRequired,
@@ -137,4 +132,4 @@ AnimatedButton.propTypes = {
 
 const styles = StyleSheet.create({});
 
-export default AnimatedButton;
+export default AnimatedImageButton;
