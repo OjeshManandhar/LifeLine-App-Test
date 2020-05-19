@@ -4,8 +4,8 @@ import { View, Image, StyleSheet, TouchableNativeFeedback } from 'react-native';
 // components
 import Map from 'component/Map';
 import SearchBox from 'component/SearchBox';
-// import AnimatedButton from 'component/AnimatedButton';
-import TestAnimatedButton from 'component/TestAnimatedButton';
+import AnimatedButton from 'component/AnimatedButton';
+// import TestAnimatedButton from 'component/TestAnimatedButton';
 
 // global
 import ZIndex from 'global/zIndex';
@@ -24,7 +24,7 @@ function MapScreen(props) {
       {(headerStatus === MapScreenHeaderStatus.mapView ||
         headerStatus === MapScreenHeaderStatus.searching) && (
         <View style={styles.searchContainer}>
-          <TestAnimatedButton
+          <AnimatedButton
             in={headerStatus === MapScreenHeaderStatus.searching}
             image={back}
             timeout={5 * 1000}
@@ -45,50 +45,6 @@ function MapScreen(props) {
             }}
           />
 
-          {/* {headerStatus === MapScreenHeaderStatus.searching && (
-            <TouchableNativeFeedback
-              onPress={() => {
-                console.log('Header Back');
-                setHeaderStatus(MapScreenHeaderStatus.mapView);
-              }}
-            >
-              <Image source={back} style={styles.backIcon} />
-            </TouchableNativeFeedback>
-          )} */}
-
-          {/* <TouchableNativeFeedback
-            onPress={() => {
-              console.log('Header Back');
-              setHeaderStatus(MapScreenHeaderStatus.mapView);
-            }}
-          >
-            {headerStatus === MapScreenHeaderStatus.searching ? (
-              <Image source={back} style={styles.backIcon} />
-            ) : (
-              <React.Fragment />
-            )}
-          </TouchableNativeFeedback> */}
-
-          {/* <TouchableNativeFeedback
-            onPress={() => {
-              console.log('Header Back');
-              setHeaderStatus(MapScreenHeaderStatus.mapView);
-            }}
-          >
-            <Image
-              source={back}
-              style={[
-                styles.backIcon,
-                {
-                  marginLeft:
-                    headerStatus === MapScreenHeaderStatus.searching ? 0 : -40,
-                  opacity:
-                    headerStatus === MapScreenHeaderStatus.searching ? 1 : 0
-                }
-              ]}
-            />
-          </TouchableNativeFeedback> */}
-
           <SearchBox setHeaderStatus={setHeaderStatus} />
         </View>
       )}
@@ -104,7 +60,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     position: 'absolute',
-    top: '1%',
+    top: 5,
     left: '2.5%',
     right: '2.5%',
     height: 50,

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   Image,
@@ -21,52 +21,45 @@ function AnimatedButton(props) {
   const [mount, setMount] = useStateWithCallback(null);
   const [animationStyle, setAnimationStyle] = useStateWithCallback({});
 
-  const animationInit = useRef({}).current;
-  const animationExec = useRef({}).current;
-  const animationStyleList = useRef({}).current;
+  const startAnimation = useCallback(
+    animType => {
+      const anim = props.animationStyle[animType];
+      console.log('anim:', animType, anim);
 
-  // create animations
-  useEffect(() => {
-    const styles = props.animationStyle;
+      if (anim) {
+        const animInit = {};
+        const animEcex = {};
+        const animStyle = {};
 
-    for (let state in styles) {
-      if (
-        (state === 'appear' || state === 'enter' || state === 'exit') &&
-        styles.hasOwnProperty(state)
-      ) {
-        animationInit[state] = {};
-        animationExec[state] = {};
-        animationStyleList[state] = {};
+        for (let property in anim) {
+          if (anim.hasOwnProperty(property)) {
+            animInit[property] = new Animated.Value(anim[property][0]);
 
-        for (let key in styles[state]) {
-          if (styles[state].hasOwnProperty(key)) {
-            const [start, end] = styles[state][key];
+            animEcex[property] = Animated.timing(animInit[property], {
+              toValue: anim[property][1],
+              useNativeDriver: false,
+              duration: props.timeout
+            });
 
-            console.log('state, key, property =>', state, key, start, end);
-
-            animationInit[state][key] = new Animated.Value(start);
-
-            console.log('test:', animationInit[state][key]);
-
-            animationExec[state][key] = Animated.timing(
-              animationInit[state][key],
-              {
-                toValue: end,
-                useNativeDriver: true,
-                duration: props.timeout
-              }
-            );
-
-            animationStyleList[state][key] = animationInit[state][key];
+            animStyle[property] = animInit[property];
           }
         }
-      }
-    }
 
-    // console.log('animationInit:', animationInit);
-    // console.log('animationExec:', animationExec);
-    console.log('animationStyleList:', animationStyleList);
-  }, []);
+        console.log('animInit:', animInit);
+        console.log('animExec:', animEcex);
+        console.log('animStyle:', animStyle);
+
+        setAnimationStyle(animStyle, animationStyle => {
+          for (let key in animEcex) {
+            if (animEcex.hasOwnProperty(key)) {
+              animEcex[key].start();
+            }
+          }
+        });
+      }
+    },
+    [props.timeout, props.animationStyle]
+  );
 
   // handle animation state change
   useEffect(() => {
@@ -74,28 +67,10 @@ function AnimatedButton(props) {
       if (props.in === true) {
         setMount(true);
 
-        // if (animationStyleList.hasOwnProperty('appear')) {
-        //   setAnimationStyle(animationStyleList.appear);
-        // } else if (animationStyleList.hasOwnProperty('enter')) {
-        //   setAnimationStyle(animationStyleList.appear);
-        // }
-
         // start appear animation
-        console.log('start appear animation');
+        console.log('Start APPEAR animation');
 
-        // if (animationExec.hasOwnProperty('appear')) {
-        //   for (let key in animationExec.appear) {
-        //     if (animationExec.appear.hasOwnProperty(key)) {
-        //       animationExec.appear[key].start();
-        //     }
-        //   }
-        // } else if (animationExec.hasOwnProperty('enter')) {
-        //   for (let key in animationExec.enter) {
-        //     if (animationExec.enter.hasOwnProperty(key)) {
-        //       animationExec.enter[key].start();
-        //     }
-        //   }
-        // }
+        startAnimation('appear');
 
         currentState.current = AS.in;
       } else if (props.in === false) {
@@ -116,66 +91,31 @@ function AnimatedButton(props) {
       if (props.in === true && currentState.current === AS.out) {
         setMount(true, mount => {
           console.log('mount:', mount);
-          console.log('animationStyleList.enter:', animationStyleList.enter);
 
-          if (animationStyleList.hasOwnProperty('enter')) {
-            setAnimationStyle(animationStyleList.enter, animationStyle => {
-              console.log('mount:', mount);
-              console.log('animationStyle:', animationStyle);
-              console.log(
-                'marginLeft:',
-                animationStyle.marginLeft,
-                typeof animationStyle.marginLeft
-              );
+          // start enter animation
+          console.log('Start ENTER animation');
 
-              // start enter animation
-              console.log('start enter animation');
+          startAnimation('enter');
 
-              if (animationExec.hasOwnProperty('enter')) {
-                for (let key in animationExec.enter) {
-                  if (animationExec.enter.hasOwnProperty(key)) {
-                    animationExec.enter[key].start();
-                  }
-                }
-              }
-
-              currentState.current = AS.in;
-            });
-          }
+          currentState.current = AS.in;
         });
-        /*
-        if (animationStyleList.hasOwnProperty('enter')) {
-          setAnimationStyle(animationStyleList.enter);
-        }
-
-        // start enter animation
-        console.log('start enter animation');
-
-        if (animationExec.hasOwnProperty('enter')) {
-          for (let key in animationExec.enter) {
-            if (animationExec.enter.hasOwnProperty(key)) {
-              animationExec.enter[key].start();
-            }
-          }
-        }
-
-        currentState.current = AS.in;
-        */
       } else if (props.in === false && currentState.current === AS.in) {
         // start exit animation
         console.log('start exit animation');
+
+        startAnimation('exit');
 
         setMount(false);
 
         currentState.current = AS.out;
       }
     }
-  }, [props.in]);
+  }, [props.in, startAnimation]);
 
   if (mount) {
     return (
       <TouchableNativeFeedback onPress={props.onPress}>
-        <Image
+        <Animated.Image
           source={props.image}
           style={[props.imageStyle, animationStyle]}
         />
