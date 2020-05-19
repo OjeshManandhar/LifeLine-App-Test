@@ -36,8 +36,8 @@ function SearchBox(props) {
         in={keyword.length > 0}
         image={cross}
         timeout={0.25 * 1000}
-        imageStyle={styles.crossIcon}
-        animationStyle={{
+        imageStyles={styles.crossIcon}
+        animationStyles={{
           enter: {
             opacity: [0, 1]
           },

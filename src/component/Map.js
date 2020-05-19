@@ -8,6 +8,9 @@ import {
 // packages
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
+// global
+import ZIndex from 'global/zIndex';
+
 function Map() {
   async function askGPSPermissions() {
     try {
@@ -65,7 +68,8 @@ function Map() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    zIndex: ZIndex.map
   }
 });
 

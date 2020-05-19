@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { Animated, TouchableNativeFeedback } from 'react-native';
+import PropTypes from 'prop-types';
 
 // global
 import { AnimationState as AS } from 'global/enum';
@@ -16,7 +16,7 @@ function AnimatedImageButton(props) {
 
   const startAnimation = useCallback(
     ({ animType, onStart, onComplete }) => {
-      const anim = props.animationStyle[animType];
+      const anim = props.animationStyles[animType];
 
       if (anim) {
         const animInit = {};
@@ -70,7 +70,7 @@ function AnimatedImageButton(props) {
         }
       }
     },
-    [props.timeout, props.animationStyle]
+    [props.timeout, props.animationStyles]
   );
 
   useEffect(() => {
@@ -141,7 +141,7 @@ function AnimatedImageButton(props) {
       <TouchableNativeFeedback onPress={props.onPress}>
         <Animated.Image
           source={props.image}
-          style={[props.imageStyle, animationStyle]}
+          style={[props.imageStyles, animationStyle]}
         />
       </TouchableNativeFeedback>
     );
@@ -161,8 +161,8 @@ AnimatedImageButton.propTypes = {
   image: PropTypes.any.isRequired,
   onPress: PropTypes.func.isRequired,
   timeout: PropTypes.number.isRequired,
-  imageStyle: PropTypes.object.isRequired,
-  animationStyle: PropTypes.object.isRequired
+  imageStyles: PropTypes.object.isRequired,
+  animationStyles: PropTypes.object.isRequired
 };
 
 export default AnimatedImageButton;

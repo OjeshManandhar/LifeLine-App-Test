@@ -35,8 +35,8 @@ function MapScreen(props) {
             in={screenStatus === MapScreenStatus.searching}
             image={back}
             timeout={0.25 * 1000}
-            imageStyle={styles.backIcon}
-            animationStyle={{
+            imageStyles={styles.backIcon}
+            animationStyles={{
               enter: {
                 opacity: [0, 1],
                 marginLeft: [-40, 0]
@@ -59,9 +59,9 @@ function MapScreen(props) {
         </View>
       )}
 
-      <View style={styles.container}>
+      <View style={styles.bodyContainer}>
         <Map />
-        {screenStatus === MapScreenStatus.searching && <SearchList />}
+        <SearchList in={screenStatus === MapScreenStatus.searching} />
       </View>
     </View>
   );
@@ -107,6 +107,10 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 20
+  },
+  bodyContainer: {
+    flex: 1,
+    position: 'relative'
   }
 });
 
