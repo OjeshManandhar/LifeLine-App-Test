@@ -35,7 +35,7 @@ function SearchList(props) {
       }}
     >
       <ScrollView keyboardShouldPersistTaps='always'>
-        <Text>SearchList</Text>
+        <Text>{props.searchKeyword}</Text>
       </ScrollView>
     </AnimatedView>
   );

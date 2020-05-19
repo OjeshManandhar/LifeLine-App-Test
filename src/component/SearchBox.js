@@ -17,23 +17,25 @@ import { MapScreenStatus } from 'global/enum';
 import cross from './../assets/images/cross.png';
 
 function SearchBox(props) {
-  const [keyword, setKeyword] = useState('');
+  const [text, setText] = useState('');
 
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.inputBox}
         placeholder='Search here'
-        value={keyword}
+        value={text}
         returnKeyType='search'
-        onChangeText={text => setKeyword(text)}
+        onChangeText={text => {
+          setText(text);
+          props.setSearchKeyword(text);
+        }}
         onFocus={() => props.setScreenStatus(MapScreenStatus.searching)}
-        // onSubmitEditing={() => props.setKeyword(keyword)}
-        onBlur={() => props.setScreenStatus(MapScreenStatus.mapView)}
+        onSubmitEditing={() => props.setSearchKeyword(text)}
       />
 
       <AnimatedImageButton
-        in={keyword.length > 0}
+        in={text.length > 0}
         image={cross}
         timeout={0.25 * 1000}
         imageStyles={styles.crossIcon}
@@ -46,7 +48,8 @@ function SearchBox(props) {
           }
         }}
         onPress={() => {
-          setKeyword('');
+          setText('');
+          props.setSearchKeyword('');
         }}
       />
     </View>

@@ -15,6 +15,7 @@ import { MapScreenStatus } from 'global/enum';
 import back from './../assets/images/back.png';
 
 function MapScreen(props) {
+  const [searchKeyword, setSearchKeyword] = useState('');
   const [screenStatus, _setScreenStatus] = useState(MapScreenStatus.mapView);
 
   function setScreenStatus(val) {
@@ -55,13 +56,19 @@ function MapScreen(props) {
             }}
           />
 
-          <SearchBox setScreenStatus={setScreenStatus} />
+          <SearchBox
+            setScreenStatus={setScreenStatus}
+            setSearchKeyword={setSearchKeyword}
+          />
         </View>
       )}
 
       <View style={styles.bodyContainer}>
         <Map />
-        <SearchList in={screenStatus === MapScreenStatus.searching} />
+        <SearchList
+          in={screenStatus === MapScreenStatus.searching}
+          searchKeyword={searchKeyword}
+        />
       </View>
     </View>
   );

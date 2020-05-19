@@ -41,10 +41,6 @@ function AnimatedView(props) {
           }
         }
 
-        console.log('init:', animInit);
-        console.log('exec:', animEcex);
-        console.log('style:', animStyle);
-
         setAnimationStyle(animStyle, animationStyle => {
           if (onStart && typeof onStart === 'function') {
             onStart();
