@@ -11,7 +11,7 @@ import {
 import AnimatedImageButton from 'component/AnimatedImageButton';
 
 // global
-import { MapScreenHeaderStatus } from 'global/enum';
+import { MapScreenStatus } from 'global/enum';
 
 // assets
 import cross from './../assets/images/cross.png';
@@ -27,9 +27,9 @@ function SearchBox(props) {
         value={keyword}
         returnKeyType='search'
         onChangeText={text => setKeyword(text)}
-        onFocus={() => props.setHeaderStatus(MapScreenHeaderStatus.searching)}
+        onFocus={() => props.setHeaderStatus(MapScreenStatus.searching)}
         // onSubmitEditing={() => props.setKeyword(keyword)}
-        onBlur={() => props.setHeaderStatus(MapScreenHeaderStatus.mapView)}
+        onBlur={() => props.setHeaderStatus(MapScreenStatus.mapView)}
       />
 
       <AnimatedImageButton
