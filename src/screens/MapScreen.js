@@ -26,7 +26,7 @@ function MapScreen(props) {
           <AnimatedImageButton
             in={headerStatus === MapScreenHeaderStatus.searching}
             image={back}
-            timeout={0.5 * 1000}
+            timeout={0.25 * 1000}
             imageStyle={styles.backIcon}
             animationStyle={{
               enter: {

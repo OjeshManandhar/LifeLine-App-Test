@@ -7,6 +7,9 @@ import {
   TouchableNativeFeedback
 } from 'react-native';
 
+// component
+import AnimatedImageButton from 'component/AnimatedImageButton';
+
 // global
 import { MapScreenHeaderStatus } from 'global/enum';
 
@@ -29,16 +32,24 @@ function SearchBox(props) {
         onBlur={() => props.setHeaderStatus(MapScreenHeaderStatus.mapView)}
       />
 
-      {keyword.length > 0 && (
-        <TouchableNativeFeedback
-          onPress={() => {
-            console.log('Clear Back');
-            setKeyword('');
-          }}
-        >
-          <Image source={cross} style={styles.crossIcon} />
-        </TouchableNativeFeedback>
-      )}
+      <AnimatedImageButton
+        in={keyword.length > 0}
+        image={cross}
+        timeout={0.25 * 1000}
+        imageStyle={styles.crossIcon}
+        animationStyle={{
+          enter: {
+            opacity: [0, 1]
+          },
+          exit: {
+            opacity: [1, 0]
+          }
+        }}
+        onPress={() => {
+          console.log('Clear Back');
+          setKeyword('');
+        }}
+      />
     </View>
   );
 }
