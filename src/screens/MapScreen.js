@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, TouchableNativeFeedback } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 // components
 import Map from 'component/Map';

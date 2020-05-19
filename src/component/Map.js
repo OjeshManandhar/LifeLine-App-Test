@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, PermissionsAndroid } from 'react-native';
+import {
+  StyleSheet,
+  PermissionsAndroid,
+  KeyboardAvoidingView
+} from 'react-native';
 
 // packages
 import MapboxGL from '@react-native-mapbox-gl/maps';
@@ -39,7 +43,7 @@ function Map() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior='height'>
       <MapboxGL.MapView
         // A size must be provided to the MapboxGL.MapView through style prop
         style={styles.container}
@@ -54,7 +58,7 @@ function Map() {
           animationDuration={3000}
         />
       </MapboxGL.MapView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
