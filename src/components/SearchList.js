@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Text,
   View,
@@ -19,17 +19,51 @@ import ZIndex from 'global/zIndex';
 import forwardGeocoder from 'utils/forwardGeocoder';
 
 function SearchList(props) {
+  const [response, setResponse] = useState([]);
+
+  const renderResponses = useCallback(() => {
+    if (props.searchKeyword === '') return null;
+
+    if (response.length === 0) {
+      return (
+        <View style={styles.searchResultGroup}>
+          <View style={styles.blockContainer}>
+            <Text style={styles.blockText}>Sorry no results</Text>
+          </View>
+        </View>
+      );
+    }
+
+    const responseList = [];
+    for (let key in response) {
+      if (response.hasOwnProperty(key)) {
+        responseList.push(
+          <View style={styles.blockContainer}>
+            <Text key={response[key].id} style={styles.blockText}>
+              {response[key].name}
+            </Text>
+          </View>
+        );
+      }
+    }
+
+    return <View style={styles.searchResultGroup}>{responseList}</View>;
+  }, [response, props.searchKeyword]);
+
   useEffect(() => {
     if (props.searchKeyword !== '') {
       forwardGeocoder(props.searchKeyword)
         .then(result => {
-          console.log('SUCESS ', props.searchKeyword + ':', result);
+          setResponse(result);
+          // console.log('SUCESS ', props.searchKeyword + ':', result);
         })
         .catch(error => {
-          console.log('ERROR ', props.searchKeyword + ':', error);
+          // console.log('ERROR ', props.searchKeyword + ':', error);
         });
+    } else {
+      setResponse([]);
     }
-  }, [props.searchKeyword]);
+  }, [setResponse, props.searchKeyword]);
 
   return (
     <AnimatedView
@@ -51,26 +85,7 @@ function SearchList(props) {
       }}
     >
       <ScrollView keyboardShouldPersistTaps='always'>
-        <View style={styles.searchResultGroup}>
-          <View style={styles.blockContainer}>
-            <Text>{props.searchKeyword}</Text>
-          </View>
-          <View style={styles.blockContainer}>
-            <Text>{props.searchKeyword}</Text>
-          </View>
-          <View style={styles.blockContainer}>
-            <Text>{props.searchKeyword}</Text>
-          </View>
-          <View style={styles.blockContainer}>
-            <Text>{props.searchKeyword}</Text>
-          </View>
-          <View style={styles.blockContainer}>
-            <Text>{props.searchKeyword}</Text>
-          </View>
-          <View style={styles.blockContainer}>
-            <Text>{props.searchKeyword}</Text>
-          </View>
-        </View>
+        {renderResponses()}
 
         <TouchableNativeFeedback
           onPress={() => {

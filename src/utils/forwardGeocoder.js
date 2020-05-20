@@ -36,8 +36,15 @@ function forwardGeocoder(keyword) {
           resolve(parseResponse(match));
         },
         error => {
-          const match = error.body;
-          reject(match);
+          console.log('error:', error);
+          // if (err.type === 'RequestAbortedError') {
+          //   console.log('Request Aborted');
+          //   return;
+          // }
+          // console.error(error.message);
+
+          // const match = error.body;
+          reject(error);
         }
       );
   });
