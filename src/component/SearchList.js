@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
-  View,
   Text,
   ScrollView,
   StyleSheet,
@@ -13,6 +12,7 @@ import AnimatedView from 'component/AnimatedView';
 
 // global
 import ZIndex from 'global/zIndex';
+import { MapScreenStatus } from 'global/enum';
 
 function SearchList(props) {
   return (

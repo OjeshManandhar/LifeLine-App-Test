@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Keyboard, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Keyboard, StyleSheet, BackHandler } from 'react-native';
 
 // components
 import Map from 'component/Map';
@@ -18,14 +18,34 @@ function MapScreen(props) {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [screenStatus, _setScreenStatus] = useState(MapScreenStatus.mapView);
 
-  function setScreenStatus(val) {
-    if (val === MapScreenStatus.mapView || val === MapScreenStatus.picking) {
-      // Also blurs out of the Text Input
-      Keyboard.dismiss();
-    }
+  const setScreenStatus = useCallback(
+    val => {
+      if (val === MapScreenStatus.mapView || val === MapScreenStatus.picking) {
+        // Also blurs out of the Text Input
+        Keyboard.dismiss();
+      }
 
-    _setScreenStatus(val);
-  }
+      _setScreenStatus(val);
+    },
+    [_setScreenStatus]
+  );
+
+  const handleBackButton = useCallback(() => {
+    if (screenStatus === MapScreenStatus.searching) {
+      setScreenStatus(MapScreenStatus.mapView);
+      return true;
+    } else {
+      return false;
+    }
+  }, [screenStatus, setScreenStatus]);
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, [handleBackButton]);
 
   return (
     <View style={styles.container}>

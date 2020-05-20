@@ -9,9 +9,6 @@ import { AnimationState as AS } from 'global/enum';
 import useStateWithCallback from 'hooks/useStateWithCallback';
 
 function useAnimation(props) {
-  console.log('useAnimation:', props);
-
-  // console.log('AnimatedView:', props);
   const currentState = useRef(AS.initialRender);
 
   const [mount, setMount] = useStateWithCallback(null);
