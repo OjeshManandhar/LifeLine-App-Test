@@ -39,6 +39,7 @@ function MapScreen(props) {
     }
   }, [screenStatus, setScreenStatus]);
 
+  // Handling the Hardware Back button
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackButton);
 
@@ -122,12 +123,12 @@ const styles = StyleSheet.create({
 
     shadowColor: '#000000',
     shadowOffset: {
-      width: -1,
+      width: 1,
       height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 1,
-    elevation: 5
+    elevation: 3
   },
   backIcon: {
     alignSelf: 'center',

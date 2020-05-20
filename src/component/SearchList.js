@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Text,
+  View,
   ScrollView,
   StyleSheet,
-  useWindowDimensions
+  useWindowDimensions,
+  TouchableNativeFeedback
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -12,7 +14,6 @@ import AnimatedView from 'component/AnimatedView';
 
 // global
 import ZIndex from 'global/zIndex';
-import { MapScreenStatus } from 'global/enum';
 
 function SearchList(props) {
   return (
@@ -35,7 +36,38 @@ function SearchList(props) {
       }}
     >
       <ScrollView keyboardShouldPersistTaps='always'>
-        <Text>{props.searchKeyword}</Text>
+        <View style={styles.searchResultGroup}>
+          <View style={styles.blockContainer}>
+            <Text>{props.searchKeyword}</Text>
+          </View>
+          <View style={styles.blockContainer}>
+            <Text>{props.searchKeyword}</Text>
+          </View>
+          <View style={styles.blockContainer}>
+            <Text>{props.searchKeyword}</Text>
+          </View>
+          <View style={styles.blockContainer}>
+            <Text>{props.searchKeyword}</Text>
+          </View>
+          <View style={styles.blockContainer}>
+            <Text>{props.searchKeyword}</Text>
+          </View>
+          <View style={styles.blockContainer}>
+            <Text>{props.searchKeyword}</Text>
+          </View>
+        </View>
+
+        <TouchableNativeFeedback
+          onPress={() => {
+            console.log('Pick on Map');
+          }}
+        >
+          <View style={styles.searchResultGroup}>
+            <View style={styles.blockContainer}>
+              <Text style={styles.blockText}>Pick a location on map</Text>
+            </View>
+          </View>
+        </TouchableNativeFeedback>
       </ScrollView>
     </AnimatedView>
   );
@@ -51,8 +83,32 @@ const styles = StyleSheet.create({
 
     backgroundColor: '#e5e5e5',
 
-    padding: 5,
     paddingTop: 60
+  },
+  searchResultGroup: {
+    margin: 10,
+    paddingVertical: 7.5,
+    paddingHorizontal: 20,
+
+    borderRadius: 4,
+    borderWidth: 0.25,
+    borderColor: '#555555',
+    backgroundColor: '#ffffff',
+
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 1,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 1,
+    elevation: 3
+  },
+  blockContainer: {
+    padding: 10
+  },
+  blockText: {
+    fontSize: 16
   }
 });
 
