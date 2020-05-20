@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 // component
-import AnimatedImageButton from 'component/AnimatedImageButton';
+import AnimatedImageButton from 'components/AnimatedImageButton';
 
 // global
 import { MapScreenStatus } from 'global/enum';

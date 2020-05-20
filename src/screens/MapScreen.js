@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, Keyboard, StyleSheet, BackHandler } from 'react-native';
 
 // components
-import Map from 'component/Map';
-import SearchBox from 'component/SearchBox';
-import SearchList from 'component/SearchList';
-import AnimatedImageButton from 'component/AnimatedImageButton';
+import Map from 'components/Map';
+import SearchBox from 'components/SearchBox';
+import SearchList from 'components/SearchList';
+import AnimatedImageButton from 'components/AnimatedImageButton';
 
 // global
 import ZIndex from 'global/zIndex';

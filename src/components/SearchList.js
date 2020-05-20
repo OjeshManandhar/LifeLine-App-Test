@@ -10,7 +10,7 @@ import {
 import PropTypes from 'prop-types';
 
 // components
-import AnimatedView from 'component/AnimatedView';
+import AnimatedView from 'components/AnimatedView';
 
 // global
 import ZIndex from 'global/zIndex';
