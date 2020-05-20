@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useEffect } from 'react';
 import {
   Text,
   View,
@@ -15,7 +15,22 @@ import AnimatedView from 'component/AnimatedView';
 // global
 import ZIndex from 'global/zIndex';
 
+// utils
+import forwardGeocoder from 'utils/forwardGeocoder';
+
 function SearchList(props) {
+  useEffect(() => {
+    if (props.searchKeyword !== '') {
+      forwardGeocoder(props.searchKeyword)
+        .then(result => {
+          console.log('SUCESS ', props.searchKeyword + ':', result);
+        })
+        .catch(error => {
+          console.log('ERROR ', props.searchKeyword + ':', error);
+        });
+    }
+  }, [props.searchKeyword]);
+
   return (
     <AnimatedView
       in={props.in}
