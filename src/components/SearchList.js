@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 
 // components
 import AnimatedView from 'components/AnimatedView';
+import SearchResult from 'components/SearchResult';
 
 // global
 import ZIndex from 'global/zIndex';
@@ -35,13 +36,14 @@ function SearchList(props) {
     }
 
     const responseList = [];
-    for (let key in response) {
-      if (response.hasOwnProperty(key)) {
+    for (let i = 0; i < response.length; i++) {
+      if (response.hasOwnProperty(i)) {
         responseList.push(
-          <View style={styles.blockContainer}>
-            <Text key={response[key].id} style={styles.blockText}>
-              {response[key].name}
-            </Text>
+          <View
+            key={response[i].id}
+            style={[styles.blockContainer, { paddingHorizontal: 0 }]}
+          >
+            <SearchResult data={response[i]} last={i === response.length - 1} />
           </View>
         );
       }
@@ -117,9 +119,6 @@ const styles = StyleSheet.create({
   },
   searchResultGroup: {
     margin: 10,
-    paddingVertical: 7.5,
-    paddingHorizontal: 20,
-
     borderRadius: 4,
     borderWidth: 0.25,
     borderColor: '#555555',
@@ -135,10 +134,12 @@ const styles = StyleSheet.create({
     elevation: 3
   },
   blockContainer: {
-    padding: 10
+    height: 60,
+    paddingHorizontal: 20
   },
   blockText: {
-    fontSize: 16
+    fontSize: 17,
+    lineHeight: 60
   }
 });
 
