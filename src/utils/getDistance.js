@@ -26,16 +26,14 @@ function getDistance(startLocation, destination) {
         response => {
           // console.log('routes:', response);
 
-          resolve(
-            parseFloat({
-              distance: (response.body.routes[0].distance / 1000).toFixed(2),
-              route: makeLineString(
-                response.body.routes[0].geometry.coordinates
-                // polyline.decode(response.body.routes[0].geometry, 6)
-                // polyline.toGeoJSON(response.body.routes[0].geometry, 6)
-              )
-            })
-          );
+          resolve({
+            distance: response.body.routes[0].distance / 1000,
+            route: makeLineString(
+              response.body.routes[0].geometry.coordinates
+              // polyline.decode(response.body.routes[0].geometry, 6)
+              // polyline.toGeoJSON(response.body.routes[0].geometry, 6)
+            )
+          });
         },
         error => {
           console.log('Direction error:', error);

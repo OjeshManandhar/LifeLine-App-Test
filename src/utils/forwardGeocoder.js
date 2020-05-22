@@ -11,38 +11,35 @@ import { MAPBOX_API_KEY } from 'react-native-dotenv';
 const geocodingClient = mbxGeocoder({ accessToken: MAPBOX_API_KEY });
 
 function parseResponse(match) {
-  const locations = [];
-  const features = match.features;
-
-  for (let key in features) {
-    const data = {
-      id: features[key].id,
-      name: features[key].text,
-      coordinate: features[key].center,
-      location: features[key].place_name
-    };
+  return new Promise((resolve, reject) => {
+    const locations = [];
+    const distancePromiseList = [];
+    const features = match.features;
 
     Geolocation.getCurrentPosition(info => {
       const startLocation = [info.coords.longitude, info.coords.latitude];
 
-      getDistance(startLocation, features[key])
-        .then(({ distance, route }) => {
-          console.log('route:', route);
-          console.log('distance:', distance);
+      for (let key in features) {
+        const data = {
+          id: features[key].id,
+          name: features[key].text,
+          coordinate: features[key].center,
+          location: features[key].place_name
+          // distance: (await getDistance(startLocation, features[key])).distance
+        };
+        locations.push(data);
+        distancePromiseList.push(getDistance(startLocation, features[key]));
+      }
 
-          data.distance = distance;
+      Promise.all(distancePromiseList).then(values => {
+        for (let i = 0; i < values.length; i++) {
+          locations[i].distance = parseFloat(values[i].distance).toFixed(2);
+        }
 
-          console.log('data:', data);
-
-          locations.push(data);
-        })
-        .catch(error => {
-          console.log('direction error in forwardGeocoder:', error);
-        });
+        resolve(locations);
+      });
     });
-  }
-
-  return locations;
+  });
 }
 
 function forwardGeocoder(keyword) {
@@ -50,13 +47,25 @@ function forwardGeocoder(keyword) {
     geocodingClient
       .forwardGeocode({
         query: keyword,
-        countries: ['np']
+        countries: ['np'],
+        autocomplete: true
+        // types: [
+        //   'poi',
+        //   'place',
+        //   'region',
+        //   'address',
+        //   'district',
+        //   'locality',
+        //   'poi.landmark',
+        //   'neighborhood'
+        // ]
       })
       .send()
       .then(
-        response => {
+        async response => {
           const match = response.body;
-          resolve(parseResponse(match));
+
+          resolve(await parseResponse(match));
         },
         error => {
           console.log('error:', error);
