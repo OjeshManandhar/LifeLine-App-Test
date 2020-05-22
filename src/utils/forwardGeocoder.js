@@ -1,7 +1,13 @@
+// packages
+import Geolocation from '@react-native-community/geolocation';
+const mbxGeocoder = require('@mapbox/mapbox-sdk/services/geocoding');
+
+// utils
+import getDistance from 'utils/getDistance';
+
 // env
 import { MAPBOX_API_KEY } from 'react-native-dotenv';
 
-const mbxGeocoder = require('@mapbox/mapbox-sdk/services/geocoding');
 const geocodingClient = mbxGeocoder({ accessToken: MAPBOX_API_KEY });
 
 function parseResponse(match) {
@@ -16,7 +22,24 @@ function parseResponse(match) {
       location: features[key].place_name
     };
 
-    locations.push(data);
+    Geolocation.getCurrentPosition(info => {
+      const startLocation = [info.coords.longitude, info.coords.latitude];
+
+      getDistance(startLocation, features[key])
+        .then(({ distance, route }) => {
+          console.log('route:', route);
+          console.log('distance:', distance);
+
+          data.distance = distance;
+
+          console.log('data:', data);
+
+          locations.push(data);
+        })
+        .catch(error => {
+          console.log('direction error in forwardGeocoder:', error);
+        });
+    });
   }
 
   return locations;

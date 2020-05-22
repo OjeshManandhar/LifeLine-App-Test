@@ -17,7 +17,7 @@ import { MapScreenStatus } from 'global/enum';
 import cross from './../assets/images/cross.png';
 
 function SearchBox(props) {
-  const [text, setText] = useState('Kalimati');
+  const [text, setText] = useState('');
 
   return (
     <View style={styles.container}>
