@@ -26,6 +26,7 @@ function parseResponse(match) {
           id: features[key].id,
           name: features[key].text,
           coordinate: features[key].center,
+          type: features[key].place_type[0],
           location: features[key].place_name
           // distance: (await getRouteDistance(startLocation, features[key])).distance
         };
