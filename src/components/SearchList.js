@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   Text,
   View,
+  Image,
   ScrollView,
   StyleSheet,
   useWindowDimensions,
@@ -18,6 +19,9 @@ import ZIndex from 'global/zIndex';
 
 // utils
 import forwardGeocoder from 'utils/forwardGeocoder';
+
+// assets
+import searchMap from 'assets/images/search.png';
 
 function SearchList(props) {
   const [response, setResponse] = useState([]);
@@ -96,6 +100,9 @@ function SearchList(props) {
         >
           <View style={styles.searchResultGroup}>
             <View style={styles.blockContainer}>
+              <View style={styles.blockImageContainer}>
+                <Image source={searchMap} style={styles.blockImage} />
+              </View>
               <Text style={styles.blockText}>Pick a location on map</Text>
             </View>
           </View>
@@ -135,11 +142,27 @@ const styles = StyleSheet.create({
   },
   blockContainer: {
     height: 60,
-    paddingHorizontal: 20
+
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  blockImageContainer: {
+    width: 60,
+
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  blockImage: {
+    width: 20,
+    height: 20
   },
   blockText: {
     fontSize: 17,
-    lineHeight: 60
+    lineHeight: 60,
+    paddingLeft: 5,
+    paddingRight: 20
   }
 });
 

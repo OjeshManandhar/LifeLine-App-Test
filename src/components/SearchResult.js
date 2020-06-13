@@ -8,14 +8,14 @@ import {
 } from 'react-native';
 
 // assets
-import marker from 'assets/images/pin.png';
+import pin from 'assets/images/pin.png';
 
 function SearchResult({ data, last, setDestination }) {
   return (
     // <TouchableNativeFeedback onPress={() => setDestination(data)}>
     <View style={styles.container}>
       <View style={styles.distance}>
-        <Image source={marker} style={styles.distanceMarker} />
+        <Image source={pin} style={styles.distanceMarker} />
         {data.distance && (
           <Text style={styles.distanceText}>{data.distance} km</Text>
         )}
