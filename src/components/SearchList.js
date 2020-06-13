@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     height: '100%',
     zIndex: ZIndex.searchList,
 
-    backgroundColor: '#e5e5e5',
+    backgroundColor: '#eeeeee',
 
     paddingTop: 60
   },

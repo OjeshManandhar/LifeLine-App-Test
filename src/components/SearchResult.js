@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 // assets
-import marker from 'assets/images/search.png';
+import marker from 'assets/images/pin.png';
 
 function SearchResult({ data, last, setDestination }) {
   return (
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   distanceText: {
     fontSize: 12,
-    color: '#888888',
+    color: '#656565',
     lineHeight: 12
   },
   description: {
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
   placeLocation: {
     fontSize: 13,
-    color: '#888888',
+    color: '#757575',
     lineHeight: 13
   }
 });
