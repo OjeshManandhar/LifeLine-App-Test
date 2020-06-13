@@ -16,6 +16,7 @@ function parseResponse(match) {
     const locations = [];
     const distancePromiseList = [];
     const features = match.features;
+    const distancePromiseListId = [];
 
     Geolocation.getCurrentPosition(info => {
       const startLocation = [info.coords.longitude, info.coords.latitude];
@@ -44,14 +45,36 @@ function parseResponse(match) {
             distancePromiseList.push(
               getRouteDistance(startLocation, features[key])
             );
+            distancePromiseListId.push(data.id);
           }
         }
       }
 
       Promise.all(distancePromiseList).then(values => {
         for (let i = 0; i < values.length; i++) {
-          locations[i].distance = parseFloat(values[i]).toFixed(2);
+          for (let j = 0; j < locations.length; j++) {
+            if (locations[j].id === distancePromiseListId[i]) {
+              locations[j].distance = parseFloat(values[i]).toFixed(2);
+            }
+          }
         }
+
+        locations.sort((locationA, locationB) => {
+          const locA = locationA.distance;
+          const locB = locationB.distance;
+
+          if (!locA && !locB) {
+            return 0;
+          } else if (!locA) {
+            // locB smaller than locA(undefined)
+            return 1;
+          } else if (!locB) {
+            // locA smaller than locB(undefined)
+            return -1;
+          } else {
+            return locA - locB;
+          }
+        });
 
         resolve(locations);
       });

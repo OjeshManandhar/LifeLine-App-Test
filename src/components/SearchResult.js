@@ -16,9 +16,7 @@ function SearchResult({ data, last, setDestination }) {
     <View style={styles.container}>
       <View style={styles.distance}>
         <Image source={marker} style={styles.distanceMarker} />
-        {data.distance && data.distance > 50 ? (
-          <Text style={styles.distanceText}>{'>'} 50 km</Text>
-        ) : (
+        {data.distance && (
           <Text style={styles.distanceText}>{data.distance} km</Text>
         )}
       </View>
