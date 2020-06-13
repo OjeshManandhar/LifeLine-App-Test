@@ -1,4 +1,5 @@
 // packages
+import { getDistance } from 'geolib';
 import Geolocation from '@react-native-community/geolocation';
 const mbxGeocoder = require('@mapbox/mapbox-sdk/services/geocoding');
 
@@ -27,8 +28,21 @@ function parseResponse(match) {
           location: features[key].place_name
           // distance: (await getRoute(startLocation, features[key])).distance
         };
-        locations.push(data);
-        distancePromiseList.push(getRoute(startLocation, features[key]));
+
+        // Only store data of location within 500km
+        const distance = getDistance(
+          { latitude: startLocation[1], longitude: startLocation[0] },
+          { latitude: data.coordinate[1], longitude: data.coordinate[0] },
+          10
+        );
+        if (distance <= 500 * 1000) {
+          locations.push(data);
+
+          // Only find route if the location is within 50km
+          if (distance <= 50 * 1000) {
+            distancePromiseList.push(getRoute(startLocation, features[key]));
+          }
+        }
       }
 
       Promise.all(distancePromiseList).then(values => {

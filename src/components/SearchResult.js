@@ -16,8 +16,9 @@ function SearchResult({ data, last, setDestination }) {
     <View style={styles.container}>
       <View style={styles.distance}>
         <Image source={marker} style={styles.distanceMarker} />
-        {/* Dymmy Distance */}
-        <Text style={styles.distanceText}>{data.distance} km</Text>
+        {data.distance && (
+          <Text style={styles.distanceText}>{data.distance} km</Text>
+        )}
       </View>
       <View style={[styles.description, { borderBottomWidth: last ? 0 : 1 }]}>
         <Text style={styles.placeName} numberOfLines={1}>
