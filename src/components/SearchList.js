@@ -21,7 +21,7 @@ import ZIndex from 'global/zIndex';
 import forwardGeocoder from 'utils/forwardGeocoder';
 
 // assets
-import searchMap from 'assets/images/search.png';
+import pickMap from 'assets/images/pickMap.png';
 
 function SearchList(props) {
   const [response, setResponse] = useState([]);
@@ -101,7 +101,7 @@ function SearchList(props) {
           <View style={styles.searchResultGroup}>
             <View style={styles.blockContainer}>
               <View style={styles.blockImageContainer}>
-                <Image source={searchMap} style={styles.blockImage} />
+                <Image source={pickMap} style={styles.blockImage} />
               </View>
               <Text style={styles.blockText}>Pick a location on map</Text>
             </View>
@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   blockImage: {
-    width: 20,
-    height: 20
+    width: 25,
+    height: 25
   },
   blockText: {
     fontSize: 17,
