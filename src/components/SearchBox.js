@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     flex: 1,
-    padding: 5,
-    fontSize: 18
+    fontSize: 18,
+    paddingVertical: 5
   },
   crossIcon: {
     alignSelf: 'center',

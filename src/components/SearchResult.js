@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch',
 
-    paddingLeft: 5,
     paddingRight: 20,
 
     borderBottomColor: '#dddddd'

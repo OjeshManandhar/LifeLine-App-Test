@@ -32,8 +32,10 @@ function SearchList(props) {
     if (response.length === 0) {
       return (
         <View style={styles.searchResultGroup}>
-          <View style={styles.blockContainer}>
-            <Text style={styles.blockText}>Sorry no results</Text>
+          <View style={[styles.blockContainer, { paddingHorizontal: 20 }]}>
+            <Text style={[styles.blockText, { paddingHorizontal: 0 }]}>
+              Sorry no results
+            </Text>
           </View>
         </View>
       );
@@ -43,10 +45,7 @@ function SearchList(props) {
     for (let i = 0; i < response.length; i++) {
       if (response.hasOwnProperty(i)) {
         responseList.push(
-          <View
-            key={response[i].id}
-            style={[styles.blockContainer, { paddingHorizontal: 0 }]}
-          >
+          <View key={response[i].id} style={styles.blockContainer}>
             <SearchResult data={response[i]} last={i === response.length - 1} />
           </View>
         );
@@ -146,7 +145,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'center'
+    alignItems: 'stretch'
   },
   blockImageContainer: {
     width: 60,
@@ -161,7 +160,6 @@ const styles = StyleSheet.create({
   blockText: {
     fontSize: 17,
     lineHeight: 60,
-    paddingLeft: 5,
     paddingRight: 20
   }
 });
