@@ -3,7 +3,7 @@ import Geolocation from '@react-native-community/geolocation';
 const mbxGeocoder = require('@mapbox/mapbox-sdk/services/geocoding');
 
 // utils
-import getDistance from 'utils/getDistance';
+import getRoute from 'utils/getRoute';
 
 // env
 import { MAPBOX_API_KEY } from 'react-native-dotenv';
@@ -25,10 +25,10 @@ function parseResponse(match) {
           name: features[key].text,
           coordinate: features[key].center,
           location: features[key].place_name
-          // distance: (await getDistance(startLocation, features[key])).distance
+          // distance: (await getRoute(startLocation, features[key])).distance
         };
         locations.push(data);
-        distancePromiseList.push(getDistance(startLocation, features[key]));
+        distancePromiseList.push(getRoute(startLocation, features[key]));
       }
 
       Promise.all(distancePromiseList).then(values => {

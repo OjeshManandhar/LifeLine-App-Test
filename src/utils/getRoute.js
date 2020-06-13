@@ -8,7 +8,7 @@ import { MAPBOX_API_KEY } from 'react-native-dotenv';
 
 const directionsClient = mbxDirection({ accessToken: MAPBOX_API_KEY });
 
-function getDistance(startLocation, destination) {
+function getRoute(startLocation, destination) {
   return new Promise((resolve, reject) => {
     directionsClient
       .getDirections({
@@ -43,4 +43,4 @@ function getDistance(startLocation, destination) {
   });
 }
 
-export default getDistance;
+export default getRoute;
