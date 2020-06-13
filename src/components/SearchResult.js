@@ -12,24 +12,24 @@ import pin from 'assets/images/pin.png';
 
 function SearchResult({ data, last, setDestination }) {
   return (
-    // <TouchableNativeFeedback onPress={() => setDestination(data)}>
-    <View style={styles.container}>
-      <View style={styles.distance}>
-        <Image source={pin} style={styles.distanceMarker} />
-        {data.distance && (
-          <Text style={styles.distanceText}>{data.distance} km</Text>
-        )}
+    <TouchableNativeFeedback onPress={() => setDestination(data)}>
+      <View style={styles.container}>
+        <View style={styles.distance}>
+          <Image source={pin} style={styles.distanceMarker} />
+          {data.distance && (
+            <Text style={styles.distanceText}>{data.distance} km</Text>
+          )}
+        </View>
+        <View style={[styles.description, { borderBottomWidth: last ? 0 : 1 }]}>
+          <Text style={styles.placeName} numberOfLines={1}>
+            {data.name}
+          </Text>
+          <Text style={styles.placeLocation} numberOfLines={1}>
+            {data.location}
+          </Text>
+        </View>
       </View>
-      <View style={[styles.description, { borderBottomWidth: last ? 0 : 1 }]}>
-        <Text style={styles.placeName} numberOfLines={1}>
-          {data.name}
-        </Text>
-        <Text style={styles.placeLocation} numberOfLines={1}>
-          {data.location}
-        </Text>
-      </View>
-    </View>
-    // </TouchableNativeFeedback>
+    </TouchableNativeFeedback>
   );
 }
 

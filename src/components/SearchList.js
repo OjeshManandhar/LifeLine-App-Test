@@ -46,7 +46,11 @@ function SearchList(props) {
       if (response.hasOwnProperty(i)) {
         responseList.push(
           <View key={response[i].id} style={styles.blockContainer}>
-            <SearchResult data={response[i]} last={i === response.length - 1} />
+            <SearchResult
+              data={response[i]}
+              last={i === response.length - 1}
+              setDestination={props.setDestination}
+            />
           </View>
         );
       }

@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
+  Text,
+  View,
   StyleSheet,
   PermissionsAndroid,
   KeyboardAvoidingView
@@ -11,7 +13,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 // global
 import ZIndex from 'global/zIndex';
 
-function Map() {
+function Map({ destination }) {
   async function askGPSPermissions() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -35,6 +37,7 @@ function Map() {
     }
   }
 
+  // For Permission
   useEffect(() => {
     PermissionsAndroid.check(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
@@ -44,6 +47,35 @@ function Map() {
       }
     });
   }, []);
+
+  // // Handle the change in destination
+  // useEffect(() => {
+  //   console.log('destination:', destination);
+  // }, [destination]);
+
+  const renderDestination = useCallback(() => {
+    let title = destination.name;
+    if (destination.location) {
+      title += '\n\n' + destination.location;
+    }
+
+    return (
+      <MapboxGL.PointAnnotation
+        key={destination.id}
+        id={destination.id}
+        coordinate={destination.coordinate}
+        title={destination.name}
+        snippet={destination.location}
+      >
+        <MapboxGL.Callout title={title} />
+        {/* <View>
+            <Text style={{ fontSize: 17 }}>{destination.name}</Text>
+            <Text style={{ fontSize: 10 }}>{destination.location}</Text>
+          </View>
+        </MapboxGL.Callout> */}
+      </MapboxGL.PointAnnotation>
+    );
+  }, [destination]);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
@@ -57,10 +89,14 @@ function Map() {
 
         <MapboxGL.Camera
           zoomLevel={14}
-          followUserLocation={true}
+          followUserLocation={destination ? false : true}
           followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
-          animationDuration={3000}
+          animationMode={'flyTo'}
+          animationDuration={1500}
+          centerCoordinate={destination && destination.coordinate}
         />
+
+        {destination && renderDestination()}
       </MapboxGL.MapView>
     </KeyboardAvoidingView>
   );
