@@ -21,7 +21,7 @@ function MapScreen(props) {
 
   const setScreenStatus = useCallback(
     val => {
-      if (val === MapScreenStatus.mapView || val === MapScreenStatus.picking) {
+      if (val !== MapScreenStatus.searching) {
         // Also blurs out of the Text Input
         Keyboard.dismiss();
       }
@@ -51,8 +51,7 @@ function MapScreen(props) {
 
   return (
     <View style={styles.container}>
-      {(screenStatus === MapScreenStatus.mapView ||
-        screenStatus === MapScreenStatus.searching) && (
+      {screenStatus !== MapScreenStatus.picking && (
         <View style={styles.searchContainer}>
           <AnimatedImageButton
             in={screenStatus === MapScreenStatus.searching}
@@ -86,12 +85,13 @@ function MapScreen(props) {
       )}
 
       <View style={styles.bodyContainer}>
-        <Map destination={destination} />
+        <Map screenStatus={screenStatus} destination={destination} />
+
         <SearchList
           in={screenStatus === MapScreenStatus.searching}
           searchKeyword={searchKeyword}
           setDestination={data => {
-            setScreenStatus(MapScreenStatus.mapView);
+            setScreenStatus(MapScreenStatus.showDestination);
             setDestination(data);
           }}
         />

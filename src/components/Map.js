@@ -12,8 +12,9 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 
 // global
 import ZIndex from 'global/zIndex';
+import { MapScreenStatus } from 'global/enum';
 
-function Map({ destination }) {
+function Map({ destination, screenStatus }) {
   async function askGPSPermissions() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -47,11 +48,6 @@ function Map({ destination }) {
       }
     });
   }, []);
-
-  // // Handle the change in destination
-  // useEffect(() => {
-  //   console.log('destination:', destination);
-  // }, [destination]);
 
   const renderDestination = useCallback(() => {
     let title = destination.name;
@@ -89,11 +85,15 @@ function Map({ destination }) {
 
         <MapboxGL.Camera
           zoomLevel={14}
-          followUserLocation={destination ? false : true}
+          followUserLocation={screenStatus === MapScreenStatus.mapView}
           followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
           animationMode={'flyTo'}
           animationDuration={1500}
-          centerCoordinate={destination && destination.coordinate}
+          centerCoordinate={
+            screenStatus === MapScreenStatus.showDestination
+              ? destination && destination.coordinate
+              : null
+          }
         />
 
         {destination && renderDestination()}
