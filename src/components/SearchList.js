@@ -49,7 +49,7 @@ function SearchList(props) {
             <SearchResult
               data={response[i]}
               last={i === response.length - 1}
-              setDestination={props.setDestination}
+              setPickedLocation={props.setPickedLocation}
             />
           </View>
         );

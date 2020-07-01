@@ -10,9 +10,9 @@ import {
 // assets
 import pin from 'assets/images/pin.png';
 
-function SearchResult({ data, last, setDestination }) {
+function SearchResult({ data, last, setPickedLocation }) {
   return (
-    <TouchableNativeFeedback onPress={() => setDestination(data)}>
+    <TouchableNativeFeedback onPress={() => setPickedLocation(data)}>
       <View style={styles.container}>
         <View style={styles.distance}>
           <Image source={pin} style={styles.distanceMarker} />

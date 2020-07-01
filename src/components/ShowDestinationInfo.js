@@ -22,7 +22,7 @@ const containerHeight = 100;
 function ShowDestinationInfo(props) {
   const [findingRoute, setFindingRoute] = useState(true);
 
-  if (!props.destination) {
+  if (!props.location) {
     return null;
   }
 
@@ -47,17 +47,17 @@ function ShowDestinationInfo(props) {
       }}
     >
       <View style={styles.container}>
-        {/* <Text>{JSON.stringify(props.destination)}</Text> */}
+        {/* <Text>{JSON.stringify(props.location)}</Text> */}
         <View style={styles.header}>
           <Text style={styles.placeName} numberOfLines={1}>
-            {props.destination.name}
+            {props.location.name}
           </Text>
-          <TouchableNativeFeedback onPress={props.clearDestination}>
+          <TouchableNativeFeedback onPress={props.clearPickedLocation}>
             <Image source={cross} style={styles.cross} />
           </TouchableNativeFeedback>
         </View>
         <Text style={styles.placeLocation} numberOfLines={1}>
-          {props.destination.location}
+          {props.location.location}
         </Text>
         {findingRoute && <Text>Finding route...</Text>}
       </View>

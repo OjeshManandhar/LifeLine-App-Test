@@ -14,7 +14,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import ZIndex from 'global/zIndex';
 import { MapScreenStatus } from 'global/enum';
 
-function Map({ destination, screenStatus }) {
+function Map({ pickedLocation, screenStatus }) {
   async function askGPSPermissions() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -49,29 +49,29 @@ function Map({ destination, screenStatus }) {
     });
   }, []);
 
-  const renderDestination = useCallback(() => {
-    let title = destination.name;
-    if (destination.location) {
-      title += '\n\n' + destination.location;
+  const renderPickedLocation = useCallback(() => {
+    let title = pickedLocation.name;
+    if (pickedLocation.location) {
+      title += '\n\n' + pickedLocation.location;
     }
 
     return (
       <MapboxGL.PointAnnotation
-        key={destination.id}
-        id={destination.id}
-        coordinate={destination.coordinate}
-        title={destination.name}
-        snippet={destination.location}
+        key={pickedLocation.id}
+        id={pickedLocation.id}
+        coordinate={pickedLocation.coordinate}
+        title={pickedLocation.name}
+        snippet={pickedLocation.location}
       >
         <MapboxGL.Callout title={title} />
         {/* <View>
-            <Text style={{ fontSize: 17 }}>{destination.name}</Text>
-            <Text style={{ fontSize: 10 }}>{destination.location}</Text>
+            <Text style={{ fontSize: 17 }}>{pickedLocation.name}</Text>
+            <Text style={{ fontSize: 10 }}>{pickedLocation.location}</Text>
           </View>
         </MapboxGL.Callout> */}
       </MapboxGL.PointAnnotation>
     );
-  }, [destination]);
+  }, [pickedLocation]);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
@@ -91,12 +91,12 @@ function Map({ destination, screenStatus }) {
           animationDuration={1500}
           centerCoordinate={
             screenStatus === MapScreenStatus.showDestination
-              ? destination && destination.coordinate
+              ? pickedLocation && pickedLocation.coordinate
               : null
           }
         />
 
-        {destination && renderDestination()}
+        {pickedLocation && renderPickedLocation()}
       </MapboxGL.MapView>
     </KeyboardAvoidingView>
   );

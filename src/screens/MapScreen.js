@@ -18,6 +18,7 @@ import back from './../assets/images/back.png';
 function MapScreen(props) {
   const [destination, setDestination] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [pickedLocation, setPickedLocation] = useState(null);
   const [screenStatus, _setScreenStatus] = useState(MapScreenStatus.mapView);
 
   const setScreenStatus = useCallback(
@@ -33,8 +34,8 @@ function MapScreen(props) {
   );
 
   const handleBackButton = useCallback(() => {
-    if (screenStatus === MapScreenStatus.showDestination && destination) {
-      setDestination(null);
+    if (screenStatus === MapScreenStatus.showDestination && pickedLocation) {
+      setPickedLocation(null);
     }
 
     if (screenStatus !== MapScreenStatus.mapView) {
@@ -90,23 +91,27 @@ function MapScreen(props) {
       )}
 
       <View style={styles.bodyContainer}>
-        <Map screenStatus={screenStatus} destination={destination} />
+        <Map
+          screenStatus={screenStatus}
+          destination={destination}
+          pickedLocation={pickedLocation}
+        />
 
         <SearchList
           in={screenStatus === MapScreenStatus.searching}
           searchKeyword={searchKeyword}
-          setDestination={data => {
+          setPickedLocation={data => {
             setScreenStatus(MapScreenStatus.showDestination);
-            setDestination(data);
+            setPickedLocation(data);
           }}
         />
 
         <ShowDestinationInfo
           in={screenStatus === MapScreenStatus.showDestination}
-          destination={destination}
-          clearDestination={() => {
+          location={pickedLocation}
+          clearPickedLocation={() => {
             setScreenStatus(MapScreenStatus.mapView);
-            setDestination(null);
+            setPickedLocation(null);
           }}
         />
       </View>
