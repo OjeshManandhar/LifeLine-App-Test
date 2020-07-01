@@ -1,5 +1,6 @@
 export default {
   map: 1,
-  searchList: 101,
-  searchBox: 201
+  destinationInfo: 101,
+  searchList: 201,
+  searchBox: 301
 };

@@ -5,6 +5,7 @@ import { View, Keyboard, StyleSheet, BackHandler } from 'react-native';
 import Map from 'components/Map';
 import SearchBox from 'components/SearchBox';
 import SearchList from 'components/SearchList';
+import ShowDestinationInfo from 'components/ShowDestinationInfo';
 import AnimatedImageButton from 'components/AnimatedImageButton';
 
 // global
@@ -32,7 +33,7 @@ function MapScreen(props) {
   );
 
   const handleBackButton = useCallback(() => {
-    if (screenStatus === MapScreenStatus.searching) {
+    if (screenStatus !== MapScreenStatus.mapView) {
       setScreenStatus(MapScreenStatus.mapView);
       return true;
     } else {
@@ -94,6 +95,11 @@ function MapScreen(props) {
             setScreenStatus(MapScreenStatus.showDestination);
             setDestination(data);
           }}
+        />
+
+        <ShowDestinationInfo
+          in={screenStatus === MapScreenStatus.showDestination}
+          destination={destination}
         />
       </View>
     </View>

@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
   },
   placeLocation: {
     fontSize: 13,
-    color: '#757575',
-    lineHeight: 13
+    lineHeight: 13,
+    color: '#757575'
   }
 });
 
