@@ -52,11 +52,7 @@ function ShowDestinationInfo(props) {
           <Text style={styles.placeName} numberOfLines={1}>
             {props.destination.name}
           </Text>
-          <TouchableNativeFeedback
-            onPress={() => {
-              console.log('cross presseed');
-            }}
-          >
+          <TouchableNativeFeedback onPress={props.clearDestination}>
             <Image source={cross} style={styles.cross} />
           </TouchableNativeFeedback>
         </View>

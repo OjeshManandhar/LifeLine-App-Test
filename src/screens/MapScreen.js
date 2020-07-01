@@ -33,6 +33,10 @@ function MapScreen(props) {
   );
 
   const handleBackButton = useCallback(() => {
+    if (screenStatus === MapScreenStatus.showDestination && destination) {
+      setDestination(null);
+    }
+
     if (screenStatus !== MapScreenStatus.mapView) {
       setScreenStatus(MapScreenStatus.mapView);
       return true;
@@ -100,6 +104,10 @@ function MapScreen(props) {
         <ShowDestinationInfo
           in={screenStatus === MapScreenStatus.showDestination}
           destination={destination}
+          clearDestination={() => {
+            setScreenStatus(MapScreenStatus.mapView);
+            setDestination(null);
+          }}
         />
       </View>
     </View>
