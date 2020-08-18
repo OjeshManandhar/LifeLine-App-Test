@@ -19,7 +19,7 @@ import ZIndex from 'global/zIndex';
 
 const containerHeight = 100;
 
-function ShowDestinationInfo(props) {
+function ShowPickedLocationInfo(props) {
   const [findingRoute, setFindingRoute] = useState(true);
 
   if (!props.location) {
@@ -111,8 +111,8 @@ const styles = StyleSheet.create({
   }
 });
 
-ShowDestinationInfo.propTypes = {
+ShowPickedLocationInfo.propTypes = {
   in: PropTypes.bool.isRequired
 };
 
-export default ShowDestinationInfo;
+export default ShowPickedLocationInfo;

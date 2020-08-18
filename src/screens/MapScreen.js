@@ -5,7 +5,7 @@ import { View, Keyboard, StyleSheet, BackHandler } from 'react-native';
 import Map from 'components/Map';
 import SearchBox from 'components/SearchBox';
 import SearchList from 'components/SearchList';
-import ShowDestinationInfo from 'components/ShowDestinationInfo';
+import ShowPickedLocationInfo from 'components/ShowPickedLocationInfo';
 import AnimatedImageButton from 'components/AnimatedImageButton';
 
 // global
@@ -34,7 +34,7 @@ function MapScreen(props) {
   );
 
   const handleBackButton = useCallback(() => {
-    if (screenStatus === MapScreenStatus.showDestination && pickedLocation) {
+    if (screenStatus === MapScreenStatus.showPickedLocation && pickedLocation) {
       setPickedLocation(null);
     }
 
@@ -101,13 +101,13 @@ function MapScreen(props) {
           in={screenStatus === MapScreenStatus.searching}
           searchKeyword={searchKeyword}
           setPickedLocation={data => {
-            setScreenStatus(MapScreenStatus.showDestination);
+            setScreenStatus(MapScreenStatus.showPickedLocation);
             setPickedLocation(data);
           }}
         />
 
-        <ShowDestinationInfo
-          in={screenStatus === MapScreenStatus.showDestination}
+        <ShowPickedLocationInfo
+          in={screenStatus === MapScreenStatus.showPickedLocation}
           location={pickedLocation}
           clearPickedLocation={() => {
             setScreenStatus(MapScreenStatus.mapView);

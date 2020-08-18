@@ -2,7 +2,7 @@ export const MapScreenStatus = Object.freeze({
   mapView: 0,
   searching: 1,
   picking: 2,
-  showDestination: 3
+  showPickedLocation: 3
 });
 
 export const AnimationState = Object.freeze({

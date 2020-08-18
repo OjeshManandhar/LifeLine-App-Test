@@ -90,7 +90,7 @@ function Map({ pickedLocation, screenStatus }) {
           animationMode={'flyTo'}
           animationDuration={1500}
           centerCoordinate={
-            screenStatus === MapScreenStatus.showDestination
+            screenStatus === MapScreenStatus.showDestinationInfo
               ? pickedLocation && pickedLocation.coordinate
               : null
           }
