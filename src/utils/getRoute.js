@@ -8,6 +8,13 @@ import { MAPBOX_API_KEY } from 'react-native-dotenv';
 
 const directionsClient = mbxDirection({ accessToken: MAPBOX_API_KEY });
 
+function makeRoutesLineStringList(routes) {
+  console.log(
+    'routes list:',
+    routes.map(route => makeLineString(route.geometry.coordinates))
+  );
+}
+
 function getRoute(startLocation, destination) {
   return new Promise((resolve, reject) => {
     directionsClient
@@ -25,6 +32,8 @@ function getRoute(startLocation, destination) {
       .then(
         response => {
           // console.log('routes:', response);
+
+          makeRoutesLineStringList(response.body.routes);
 
           resolve({
             distance: response.body.routes[0].distance / 1000,

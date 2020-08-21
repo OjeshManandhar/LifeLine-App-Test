@@ -11,11 +11,14 @@ import PropTypes from 'prop-types';
 // components
 import AnimatedView from 'components/AnimatedView';
 
-// assets
-import cross from 'assets/images/cross.png';
-
 // global
 import ZIndex from 'global/zIndex';
+
+// utils
+import getRoute from 'utils/getRoute';
+
+// assets
+import cross from 'assets/images/cross.png';
 
 const containerHeight = 100;
 

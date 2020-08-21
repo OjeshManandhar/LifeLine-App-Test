@@ -81,7 +81,7 @@ function Map({ pickedLocation, screenStatus }) {
         styleURL={MapboxGL.StyleURL.Outdoors}
         compassViewMargins={{ x: 10, y: 90 }}
       >
-        <MapboxGL.UserLocation visible />
+        <MapboxGL.UserLocation visible showsUserHeadingIndicator />
 
         <MapboxGL.Camera
           zoomLevel={14}
