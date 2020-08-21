@@ -12,6 +12,9 @@ import AnimatedImageButton from 'components/AnimatedImageButton';
 import ZIndex from 'global/zIndex';
 import { MapScreenStatus } from 'global/enum';
 
+// utils
+import UserLocation from 'utils/userLocation';
+
 // assets
 import back from './../assets/images/back.png';
 
@@ -54,6 +57,11 @@ function MapScreen(props) {
       BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
     };
   }, [handleBackButton]);
+
+  // initialize UserLocation
+  useEffect(() => {
+    UserLocation.init();
+  }, []);
 
   return (
     <View style={styles.container}>

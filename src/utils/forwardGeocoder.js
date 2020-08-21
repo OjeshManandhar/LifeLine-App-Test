@@ -4,6 +4,7 @@ import Geolocation from '@react-native-community/geolocation';
 const mbxGeocoder = require('@mapbox/mapbox-sdk/services/geocoding');
 
 // utils
+import UserLocation from 'utils/userLocation';
 import getRouteDistance from 'utils/getRouteDistance';
 
 // env
@@ -18,67 +19,65 @@ function parseResponse(match) {
     const features = match.features;
     const distancePromiseListId = [];
 
-    Geolocation.getCurrentPosition(info => {
-      const startLocation = [info.coords.longitude, info.coords.latitude];
+    const startLocation = UserLocation.currentLocation;
 
-      for (let key in features) {
-        const data = {
-          id: features[key].id,
-          name: features[key].text,
-          coordinate: features[key].center,
-          type: features[key].place_type[0],
-          location: features[key].place_name
-          // distance: (await getRouteDistance(startLocation, features[key])).distance
-        };
+    for (let key in features) {
+      const data = {
+        id: features[key].id,
+        name: features[key].text,
+        coordinate: features[key].center,
+        type: features[key].place_type[0],
+        location: features[key].place_name
+        // distance: (await getRouteDistance(startLocation, features[key])).distance
+      };
 
-        const distance = getDistance(
-          { latitude: startLocation[1], longitude: startLocation[0] },
-          { latitude: data.coordinate[1], longitude: data.coordinate[0] },
-          10
-        );
+      const distance = getDistance(
+        { latitude: startLocation[1], longitude: startLocation[0] },
+        { latitude: data.coordinate[1], longitude: data.coordinate[0] },
+        10
+      );
 
-        // Only store data of location within 500km
-        if (distance <= 500 * 1000) {
-          locations.push(data);
+      // Only store data of location within 500km
+      if (distance <= 500 * 1000) {
+        locations.push(data);
 
-          // Only find route if the location is within 50km
-          if (distance <= 50 * 1000) {
-            distancePromiseList.push(
-              getRouteDistance(startLocation, features[key])
-            );
-            distancePromiseListId.push(data.id);
+        // Only find route if the location is within 50km
+        if (distance <= 50 * 1000) {
+          distancePromiseList.push(
+            getRouteDistance(startLocation, features[key])
+          );
+          distancePromiseListId.push(data.id);
+        }
+      }
+    }
+
+    Promise.all(distancePromiseList).then(values => {
+      for (let i = 0; i < values.length; i++) {
+        for (let j = 0; j < locations.length; j++) {
+          if (locations[j].id === distancePromiseListId[i]) {
+            locations[j].distance = parseFloat(values[i]).toFixed(2);
           }
         }
       }
 
-      Promise.all(distancePromiseList).then(values => {
-        for (let i = 0; i < values.length; i++) {
-          for (let j = 0; j < locations.length; j++) {
-            if (locations[j].id === distancePromiseListId[i]) {
-              locations[j].distance = parseFloat(values[i]).toFixed(2);
-            }
-          }
+      locations.sort((locationA, locationB) => {
+        const locA = locationA.distance;
+        const locB = locationB.distance;
+
+        if (!locA && !locB) {
+          return 0;
+        } else if (!locA) {
+          // locB smaller than locA(undefined)
+          return 1;
+        } else if (!locB) {
+          // locA smaller than locB(undefined)
+          return -1;
+        } else {
+          return locA - locB;
         }
-
-        locations.sort((locationA, locationB) => {
-          const locA = locationA.distance;
-          const locB = locationB.distance;
-
-          if (!locA && !locB) {
-            return 0;
-          } else if (!locA) {
-            // locB smaller than locA(undefined)
-            return 1;
-          } else if (!locB) {
-            // locA smaller than locB(undefined)
-            return -1;
-          } else {
-            return locA - locB;
-          }
-        });
-
-        resolve(locations);
       });
+
+      resolve(locations);
     });
   });
 }
