@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -23,15 +23,26 @@ import cross from 'assets/images/cross.png';
 const containerHeight = 100;
 
 function ShowPickedLocationInfo(props) {
+  const [routes, setRoutes] = useState([]);
   const [findingRoute, setFindingRoute] = useState(true);
 
-  if (!props.location) {
-    return null;
-  }
+  useEffect(() => {
+    if (props.location) {
+      getRoute(props.location.coordinate)
+        .then(routes => {
+          console.log('found routes:', routes.length, routes);
+          setRoutes(routes);
+          setFindingRoute(false);
+        })
+        .catch(error => {
+          console.log('No routes Found:', error);
+        });
+    }
+  }, [props.location, setRoutes, setFindingRoute]);
 
   return (
     <AnimatedView
-      in={true}
+      in={props.in}
       timeout={1 * 1000}
       viewStyles={styles.mainContainer}
       animationStyles={{
@@ -49,21 +60,37 @@ function ShowPickedLocationInfo(props) {
         }
       }}
     >
-      <View style={styles.container}>
-        {/* <Text>{JSON.stringify(props.location)}</Text> */}
-        <View style={styles.header}>
-          <Text style={styles.placeName} numberOfLines={1}>
-            {props.location.name}
+      {props.location ? (
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.placeName} numberOfLines={1}>
+              {props.location.name}
+            </Text>
+            <TouchableNativeFeedback onPress={props.clearPickedLocation}>
+              <Image source={cross} style={styles.cross} />
+            </TouchableNativeFeedback>
+          </View>
+          <Text style={styles.placeLocation} numberOfLines={1}>
+            {props.location.location}
           </Text>
-          <TouchableNativeFeedback onPress={props.clearPickedLocation}>
-            <Image source={cross} style={styles.cross} />
-          </TouchableNativeFeedback>
+          {findingRoute ? (
+            <Text>Finding route...</Text>
+          ) : (
+            <Text>Found {routes.length} routes</Text>
+          )}
         </View>
-        <Text style={styles.placeLocation} numberOfLines={1}>
-          {props.location.location}
-        </Text>
-        {findingRoute && <Text>Finding route...</Text>}
-      </View>
+      ) : (
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.placeName} numberOfLines={1}>
+              Select a Destination
+            </Text>
+            <TouchableNativeFeedback onPress={props.clearPickedLocation}>
+              <Image source={cross} style={styles.cross} />
+            </TouchableNativeFeedback>
+          </View>
+        </View>
+      )}
     </AnimatedView>
   );
 }

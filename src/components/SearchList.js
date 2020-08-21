@@ -67,7 +67,7 @@ function SearchList(props) {
           // console.log('SUCESS ', props.searchKeyword + ':', result);
         })
         .catch(error => {
-          // console.log('ERROR ', props.searchKeyword + ':', error);
+          console.log('SearchList error ', props.searchKeyword + ':', error);
         });
     } else {
       setResponse([]);

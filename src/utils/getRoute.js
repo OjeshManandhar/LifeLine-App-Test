@@ -6,22 +6,29 @@ const mbxDirection = require('@mapbox/mapbox-sdk/services/directions');
 // env
 import { MAPBOX_API_KEY } from 'react-native-dotenv';
 
+// utils
+import UserLocation from 'utils/userLocation';
+
 const directionsClient = mbxDirection({ accessToken: MAPBOX_API_KEY });
 
-function makeRoutesLineStringList(routes) {
-  console.log(
-    'routes list:',
-    routes.map(route => makeLineString(route.geometry.coordinates))
-  );
+function makeRoutesList(routes) {
+  return routes.map(route => {
+    return {
+      weight: route.weight,
+      duration: route.duration / 60 /* seconds to minutes */,
+      distance: route.distance / 1000 /* meters to kilo meters */,
+      route: makeLineString(route.geometry.coordinates)
+    };
+  });
 }
 
-function getRoute(startLocation, destination) {
+function getRoute(destination) {
   return new Promise((resolve, reject) => {
     directionsClient
       .getDirections({
         waypoints: [
-          { coordinates: startLocation },
-          { coordinates: destination.center }
+          { coordinates: UserLocation.currentLocation },
+          { coordinates: destination }
         ],
         geometries: 'geojson',
         // geometries: 'polyline6',
@@ -31,21 +38,10 @@ function getRoute(startLocation, destination) {
       .send()
       .then(
         response => {
-          // console.log('routes:', response);
-
-          makeRoutesLineStringList(response.body.routes);
-
-          resolve({
-            distance: response.body.routes[0].distance / 1000,
-            route: makeLineString(
-              response.body.routes[0].geometry.coordinates
-              // polyline.decode(response.body.routes[0].geometry, 6)
-              // polyline.toGeoJSON(response.body.routes[0].geometry, 6)
-            )
-          });
+          resolve(makeRoutesList(response.body.routes));
         },
         error => {
-          console.log('Direction error:', error);
+          console.log('getRoute error:', error);
           reject(error);
         }
       );

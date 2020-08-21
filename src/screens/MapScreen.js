@@ -119,7 +119,7 @@ function MapScreen(props) {
           location={pickedLocation}
           clearPickedLocation={() => {
             setScreenStatus(MapScreenStatus.mapView);
-            setPickedLocation(null);
+            // setPickedLocation(null);
           }}
         />
       </View>
