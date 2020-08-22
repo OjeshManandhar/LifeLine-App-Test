@@ -15,7 +15,8 @@ function getRouteDistance(startLocation, destination) {
           { coordinates: destination.center }
         ],
         geometries: 'geojson',
-        profile: 'driving-traffic'
+        profile: 'driving-traffic',
+        annotations: ['distance']
       })
       .send()
       .then(

@@ -67,7 +67,19 @@ function ShowPickedLocationInfo(props) {
           <Text style={styles.placeLocation} numberOfLines={1}>
             {props.location.location}
           </Text>
-          <Text>{getRoutesText()}</Text>
+          <View style={styles.footer}>
+            <Text style={styles.routesText}>{getRoutesText()}</Text>
+            <TouchableNativeFeedback
+              onPress={() => {
+                console.log('Directions');
+              }}
+            >
+              <View style={styles.directionsButton}>
+                <Image source={cross} style={styles.directionsIcon} />
+                <Text style={styles.directionsText}>Directions</Text>
+              </View>
+            </TouchableNativeFeedback>
+          </View>
         </View>
       ) : (
         <View style={styles.container}>
@@ -124,7 +136,43 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 13,
     color: '#757575',
-    marginBottom: 15
+    marginBottom: 7.5
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+
+    marginBottom: 5
+  },
+  directionsButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+
+    height: 35,
+    borderRadius: 20,
+    paddingVertical: 3,
+    paddingHorizontal: 20,
+
+    backgroundColor: '#1a73e8'
+  },
+  directionsIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 5
+  },
+  directionsText: {
+    color: 'white',
+    fontSize: 17.5,
+    lineHeight: 17.5,
+
+    margin: 0,
+    padding: 0
+  },
+  routesText: {
+    flex: 1,
+    fontSize: 17.5
   }
 });
 

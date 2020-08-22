@@ -119,7 +119,6 @@ function MapScreen(props) {
             setPickedLocation(data);
             getRoute(data.coordinate)
               .then(routes => {
-                console.log('found routes:', routes.length, routes);
                 setRoutesTopickedLocation(routes);
               })
               .catch(error => {
