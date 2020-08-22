@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,31 +14,15 @@ import AnimatedView from 'components/AnimatedView';
 // global
 import ZIndex from 'global/zIndex';
 
-// utils
-import getRoute from 'utils/getRoute';
-
 // assets
 import cross from 'assets/images/cross.png';
 
 const containerHeight = 100;
 
 function ShowPickedLocationInfo(props) {
-  const [routes, setRoutes] = useState([]);
-  const [findingRoute, setFindingRoute] = useState(true);
-
   useEffect(() => {
-    if (props.location) {
-      getRoute(props.location.coordinate)
-        .then(routes => {
-          console.log('found routes:', routes.length, routes);
-          setRoutes(routes);
-          setFindingRoute(false);
-        })
-        .catch(error => {
-          console.log('No routes Found:', error);
-        });
-    }
-  }, [props.location, setRoutes, setFindingRoute]);
+    console.log('ShowPickedLocationInfo:', props);
+  }, []);
 
   return (
     <AnimatedView
@@ -73,10 +57,10 @@ function ShowPickedLocationInfo(props) {
           <Text style={styles.placeLocation} numberOfLines={1}>
             {props.location.location}
           </Text>
-          {findingRoute ? (
-            <Text>Finding route...</Text>
+          {props.foundRoutes ? (
+            <Text>Found {props.foundRoutes} routes</Text>
           ) : (
-            <Text>Found {routes.length} routes</Text>
+            <Text>Finding route...</Text>
           )}
         </View>
       ) : (

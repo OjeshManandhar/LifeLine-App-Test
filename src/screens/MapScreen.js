@@ -13,6 +13,7 @@ import ZIndex from 'global/zIndex';
 import { MapScreenStatus } from 'global/enum';
 
 // utils
+import getRoute from 'utils/getRoute';
 import UserLocation from 'utils/userLocation';
 
 // assets
@@ -22,6 +23,7 @@ function MapScreen(props) {
   const [destination, setDestination] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [pickedLocation, setPickedLocation] = useState(null);
+  const [routesToPickedLocation, setRoutesTopickedLocation] = useState(null);
   const [screenStatus, _setScreenStatus] = useState(MapScreenStatus.mapView);
 
   const setScreenStatus = useCallback(
@@ -115,15 +117,27 @@ function MapScreen(props) {
           setPickedLocation={data => {
             setScreenStatus(MapScreenStatus.showPickedLocation);
             setPickedLocation(data);
+            getRoute(data.coordinate)
+              .then(routes => {
+                console.log('found routes:', routes.length, routes);
+                setRoutesTopickedLocation(routes);
+              })
+              .catch(error => {
+                console.log('No routes Found:', error);
+              });
           }}
         />
 
         <ShowPickedLocationInfo
           in={screenStatus === MapScreenStatus.showPickedLocation}
           location={pickedLocation}
+          foundRoutes={
+            routesToPickedLocation ? routesToPickedLocation.length : null
+          }
           clearPickedLocation={() => {
             setScreenStatus(MapScreenStatus.mapView);
             setPickedLocation(null);
+            setRoutesTopickedLocation(null);
           }}
         />
       </View>
