@@ -2,6 +2,7 @@ import Geolocation from '@react-native-community/geolocation';
 
 class UserLocation {
   #userLocation = null;
+  #watchId = null;
 
   init() {
     console.log('UserLocation.init()');
@@ -20,7 +21,7 @@ class UserLocation {
       }
     );
 
-    Geolocation.watchPosition(
+    this.#watchId = Geolocation.watchPosition(
       sucess => {
         this.#userLocation = [sucess.coords.longitude, sucess.coords.latitude];
       },
@@ -38,6 +39,11 @@ class UserLocation {
 
   get currentLocation() {
     return this.#userLocation;
+  }
+
+  clearWatch() {
+    console.log('watchId:', this.#watchId);
+    Geolocation.clearWatch(this.#watchId);
   }
 }
 

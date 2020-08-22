@@ -58,9 +58,13 @@ function MapScreen(props) {
     };
   }, [handleBackButton]);
 
-  // initialize UserLocation
+  // UserLocation
   useEffect(() => {
     UserLocation.init();
+
+    return () => {
+      UserLocation.clearWatch();
+    };
   }, []);
 
   return (
@@ -119,7 +123,7 @@ function MapScreen(props) {
           location={pickedLocation}
           clearPickedLocation={() => {
             setScreenStatus(MapScreenStatus.mapView);
-            // setPickedLocation(null);
+            setPickedLocation(null);
           }}
         />
       </View>
