@@ -15,8 +15,8 @@ function makeRoutesList(routes) {
   return routes.map(route => {
     return {
       weight: route.weight,
-      duration: route.duration / 60 /* seconds to minutes */,
-      distance: route.distance / 1000 /* meters to kilo meters */,
+      distance: route.distance /* meters */,
+      duration: route.duration /* seconds */,
       route: makeLineString(route.geometry.coordinates)
     };
   });

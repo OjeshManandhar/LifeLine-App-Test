@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -20,9 +20,19 @@ import cross from 'assets/images/cross.png';
 const containerHeight = 100;
 
 function ShowPickedLocationInfo(props) {
-  useEffect(() => {
-    console.log('ShowPickedLocationInfo:', props);
-  }, []);
+  useEffect(() => {}, []);
+
+  const getRoutesText = useCallback(() => {
+    if (!props.foundRoutes) {
+      return 'Searching for a route ...';
+    } else if (props.foundRoutes === 0) {
+      return "Sorry, can't find a route";
+    } else if (props.foundRoutes === 1) {
+      return 'Found a route';
+    } else {
+      return 'Found multiple routes';
+    }
+  }, [props.foundRoutes]);
 
   return (
     <AnimatedView
@@ -57,11 +67,7 @@ function ShowPickedLocationInfo(props) {
           <Text style={styles.placeLocation} numberOfLines={1}>
             {props.location.location}
           </Text>
-          {props.foundRoutes ? (
-            <Text>Found {props.foundRoutes} routes</Text>
-          ) : (
-            <Text>Finding route...</Text>
-          )}
+          <Text>{getRoutesText()}</Text>
         </View>
       ) : (
         <View style={styles.container}>
@@ -109,9 +115,6 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     fontWeight: '500',
     marginRight: 15
-
-    // borderWidth: 1,
-    // borderColor: 'black'
   },
   cross: {
     width: 20,
