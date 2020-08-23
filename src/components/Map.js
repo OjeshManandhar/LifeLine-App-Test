@@ -14,7 +14,9 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import ZIndex from 'global/zIndex';
 import { MapScreenStatus } from 'global/enum';
 
-function Map({ pickedLocation, screenStatus }) {
+function Map({ pickedLocation, screenStatus, destination }) {
+  console.log('Map destination:', destination);
+
   async function askGPSPermissions() {
     try {
       const granted = await PermissionsAndroid.request(

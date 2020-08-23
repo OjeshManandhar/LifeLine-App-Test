@@ -23,12 +23,18 @@ function MapScreen(props) {
   const [destination, setDestination] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [pickedLocation, setPickedLocation] = useState(null);
+  const [routeToDestination, setRouteToDestination] = useState(null);
   const [routesToPickedLocation, setRoutesTopickedLocation] = useState(null);
   const [screenStatus, _setScreenStatus] = useState(MapScreenStatus.mapView);
   const [
     selectedRouteToPickedLocation,
     setSelectedRouteToPickedLocation
   ] = useState(0);
+
+  const clearDestination = useCallback(() => {
+    setDestination(null);
+    setRoutesTopickedLocation(null);
+  }, [setDestination, setRoutesTopickedLocation]);
 
   const clearPickedLocationInfo = useCallback(() => {
     setPickedLocation(null);
@@ -45,10 +51,6 @@ function MapScreen(props) {
       if (val !== MapScreenStatus.searching) {
         // Also blurs out of the Text Input
         Keyboard.dismiss();
-      }
-
-      if (val !== MapScreenStatus.showPickedLocation) {
-        clearPickedLocationInfo();
       }
 
       _setScreenStatus(val);
@@ -127,6 +129,9 @@ function MapScreen(props) {
           screenStatus={screenStatus}
           destination={destination}
           pickedLocation={pickedLocation}
+          routeToDestination={routeToDestination}
+          routesToPickedLocation={routesToPickedLocation}
+          selectedRouteToPickedLocation={selectedRouteToPickedLocation}
         />
 
         <SearchList
@@ -158,6 +163,16 @@ function MapScreen(props) {
           }
           clearPickedLocation={() => {
             setScreenStatus(MapScreenStatus.mapView);
+            clearPickedLocationInfo();
+          }}
+          setDestination={() => {
+            setScreenStatus(MapScreenStatus.mapView);
+            setDestination(pickedLocation);
+            setRouteToDestination(
+              routesToPickedLocation.find(
+                route => route.id === selectedRouteToPickedLocation
+              )
+            );
           }}
         />
       </View>

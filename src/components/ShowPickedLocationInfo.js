@@ -21,8 +21,6 @@ import cross from 'assets/images/cross.png';
 const containerHeight = 100;
 
 function ShowPickedLocationInfo(props) {
-  console.log('ShowPickedLocationInfo props:', props);
-
   useEffect(() => {}, []);
 
   function distanceToString(distance) {
@@ -61,6 +59,7 @@ function ShowPickedLocationInfo(props) {
           <TouchableNativeFeedback
             onPress={() => {
               console.log('Use');
+              props.setDestination();
             }}
           >
             <View style={styles.useButton}>
@@ -72,11 +71,7 @@ function ShowPickedLocationInfo(props) {
       );
     }
 
-    return (
-      <Text style={[styles.routeText, { color: '#757575' }]}>
-        Find a route...
-      </Text>
-    );
+    return <Text style={styles.searchingText}>Searching for routes...</Text>;
   }
 
   return (
@@ -184,8 +179,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   routeText: {
-    fontSize: 19,
-    lineHeight: 19
+    fontSize: 18.5,
+    lineHeight: 18.5
   },
   useButton: {
     flexDirection: 'row',
@@ -194,13 +189,13 @@ const styles = StyleSheet.create({
 
     height: '100%',
     borderRadius: 50,
-    paddingHorizontal: 20,
+    paddingHorizontal: 17.5,
 
     backgroundColor: '#1a73e8'
   },
   useIcon: {
-    width: 20,
-    height: 20,
+    width: 18.5,
+    height: 18.5,
     marginRight: 10
   },
   useText: {
@@ -210,6 +205,11 @@ const styles = StyleSheet.create({
 
     margin: 0,
     padding: 0
+  },
+  searchingText: {
+    color: '#757575',
+    fontSize: 20,
+    lineHeight: 20
   }
 });
 
