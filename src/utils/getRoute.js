@@ -12,27 +12,35 @@ import UserLocation from 'utils/userLocation';
 const directionsClient = mbxDirection({ accessToken: MAPBOX_API_KEY });
 
 function makeRoutesList(routes) {
-  // console.log('makeRoutesList argument:', routes);
-  // console.log(
-  //   'makeRoutesList result:',
-  //   routes.map(route => {
-  //     return {
-  //       weight: route.weight,
-  //       distance: route.distance || null /* meters */,
-  //       duration: route.duration || null /* seconds */,
-  //       route: makeLineString(route.geometry.coordinates)
-  //     };
-  //   })
-  // );
+  let id = 1;
 
-  return routes.map(route => {
+  const routesList = routes.map(route => {
     return {
+      id: id++,
       weight: route.weight,
       distance: route.distance || null /* meters */,
       duration: route.duration || null /* seconds */,
       route: makeLineString(route.geometry.coordinates)
     };
   });
+
+  routesList.sort((routeA, routeB) => {
+    if (routeA.weight === routeB.weight) {
+      if (routeA.duration === routeB.duration) {
+        if (routeA.distance === routeB.distance) {
+          return 0;
+        } else {
+          return routeA.distance - routeB.distance;
+        }
+      } else {
+        return routeA.duration - routeB.duration;
+      }
+    } else {
+      return routeA.weight - routeB.weight;
+    }
+  });
+
+  return routesList;
 }
 
 function getRoute(destination) {
@@ -44,6 +52,7 @@ function getRoute(destination) {
           { coordinates: destination }
         ],
         // overview: 'full',
+        alternatives: true /* maximum 2 alternatives i.e. total 3 routes */,
         geometries: 'geojson',
         // geometries: 'polyline6',
         profile: 'driving-traffic',

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,24 +15,69 @@ import AnimatedView from 'components/AnimatedView';
 import ZIndex from 'global/zIndex';
 
 // assets
+import use from 'assets/images/use.png';
 import cross from 'assets/images/cross.png';
 
 const containerHeight = 100;
 
 function ShowPickedLocationInfo(props) {
+  console.log('ShowPickedLocationInfo props:', props);
+
   useEffect(() => {}, []);
 
-  const getRoutesText = useCallback(() => {
-    if (!props.foundRoutes) {
-      return 'Searching for a route ...';
-    } else if (props.foundRoutes === 0) {
-      return "Sorry, can't find a route";
-    } else if (props.foundRoutes === 1) {
-      return 'Found a route';
+  function distanceToString(distance) {
+    if (distance >= 1000) {
+      return `${(distance / 1000).toFixed(2)} km`;
     } else {
-      return 'Found multiple routes';
+      return `${parseInt(distance, 10)} m`;
     }
-  }, [props.foundRoutes]);
+  }
+
+  function timeToString(time) {
+    const hours = parseInt(time / 3600, 10);
+    const minutes = parseInt(time / 60 - hours * 60, 10);
+    const seconds = parseInt(time - minutes * 60 - hours * 60 * 60, 10);
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else if (minutes > 0) {
+      return `${minutes} mins`;
+    } else {
+      return `${seconds} sec`;
+    }
+  }
+
+  function routeInfo() {
+    if (props.selectedRoute) {
+      return (
+        <React.Fragment>
+          <View style={styles.routeInfo}>
+            <Text style={styles.routeText}>
+              {timeToString(props.selectedRoute.duration)} (
+              {distanceToString(props.selectedRoute.distance)})
+            </Text>
+          </View>
+
+          <TouchableNativeFeedback
+            onPress={() => {
+              console.log('Use');
+            }}
+          >
+            <View style={styles.useButton}>
+              <Image source={use} style={styles.useIcon} />
+              <Text style={styles.useText}>Use this route</Text>
+            </View>
+          </TouchableNativeFeedback>
+        </React.Fragment>
+      );
+    }
+
+    return (
+      <Text style={[styles.routeText, { color: '#757575' }]}>
+        Find a route...
+      </Text>
+    );
+  }
 
   return (
     <AnimatedView
@@ -67,19 +112,7 @@ function ShowPickedLocationInfo(props) {
           <Text style={styles.placeLocation} numberOfLines={1}>
             {props.location.location}
           </Text>
-          <View style={styles.footer}>
-            <Text style={styles.routesText}>{getRoutesText()}</Text>
-            <TouchableNativeFeedback
-              onPress={() => {
-                console.log('Directions');
-              }}
-            >
-              <View style={styles.directionsButton}>
-                <Image source={cross} style={styles.directionsIcon} />
-                <Text style={styles.directionsText}>Directions</Text>
-              </View>
-            </TouchableNativeFeedback>
-          </View>
+          <View style={styles.footer}>{routeInfo()}</View>
         </View>
       ) : (
         <View style={styles.container}>
@@ -119,7 +152,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 5
+    marginBottom: 3
   },
   placeName: {
     flex: 1,
@@ -136,43 +169,47 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 13,
     color: '#757575',
-    marginBottom: 7.5
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-
     marginBottom: 5
   },
-  directionsButton: {
+  footer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  routeInfo: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  routeText: {
+    fontSize: 19,
+    lineHeight: 19
+  },
+  useButton: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
 
-    height: 35,
-    borderRadius: 20,
-    paddingVertical: 3,
+    height: '100%',
+    borderRadius: 50,
     paddingHorizontal: 20,
 
     backgroundColor: '#1a73e8'
   },
-  directionsIcon: {
+  useIcon: {
     width: 20,
     height: 20,
-    marginRight: 5
+    marginRight: 10
   },
-  directionsText: {
+  useText: {
     color: 'white',
-    fontSize: 17.5,
-    lineHeight: 17.5,
+    fontSize: 16,
+    lineHeight: 16,
 
     margin: 0,
     padding: 0
-  },
-  routesText: {
-    flex: 1,
-    fontSize: 17.5
   }
 });
 

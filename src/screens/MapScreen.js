@@ -25,6 +25,20 @@ function MapScreen(props) {
   const [pickedLocation, setPickedLocation] = useState(null);
   const [routesToPickedLocation, setRoutesTopickedLocation] = useState(null);
   const [screenStatus, _setScreenStatus] = useState(MapScreenStatus.mapView);
+  const [
+    selectedRouteToPickedLocation,
+    setSelectedRouteToPickedLocation
+  ] = useState(0);
+
+  const clearPickedLocationInfo = useCallback(() => {
+    setPickedLocation(null);
+    setRoutesTopickedLocation(null);
+    setSelectedRouteToPickedLocation(0);
+  }, [
+    setPickedLocation,
+    setRoutesTopickedLocation,
+    setSelectedRouteToPickedLocation
+  ]);
 
   const setScreenStatus = useCallback(
     val => {
@@ -33,9 +47,13 @@ function MapScreen(props) {
         Keyboard.dismiss();
       }
 
+      if (val !== MapScreenStatus.showPickedLocation) {
+        clearPickedLocationInfo();
+      }
+
       _setScreenStatus(val);
     },
-    [_setScreenStatus]
+    [_setScreenStatus, clearPickedLocationInfo]
   );
 
   const handleBackButton = useCallback(() => {
@@ -120,6 +138,7 @@ function MapScreen(props) {
             getRoute(data.coordinate)
               .then(routes => {
                 setRoutesTopickedLocation(routes);
+                setSelectedRouteToPickedLocation(routes[0].id);
               })
               .catch(error => {
                 console.log('No routes Found:', error);
@@ -130,13 +149,15 @@ function MapScreen(props) {
         <ShowPickedLocationInfo
           in={screenStatus === MapScreenStatus.showPickedLocation}
           location={pickedLocation}
-          foundRoutes={
-            routesToPickedLocation ? routesToPickedLocation.length : null
+          selectedRoute={
+            routesToPickedLocation && selectedRouteToPickedLocation
+              ? routesToPickedLocation.find(
+                  route => route.id === selectedRouteToPickedLocation
+                )
+              : null
           }
           clearPickedLocation={() => {
             setScreenStatus(MapScreenStatus.mapView);
-            setPickedLocation(null);
-            setRoutesTopickedLocation(null);
           }}
         />
       </View>
