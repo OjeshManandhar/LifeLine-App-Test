@@ -12,11 +12,24 @@ import UserLocation from 'utils/userLocation';
 const directionsClient = mbxDirection({ accessToken: MAPBOX_API_KEY });
 
 function makeRoutesList(routes) {
+  // console.log('makeRoutesList argument:', routes);
+  // console.log(
+  //   'makeRoutesList result:',
+  //   routes.map(route => {
+  //     return {
+  //       weight: route.weight,
+  //       distance: route.distance || null /* meters */,
+  //       duration: route.duration || null /* seconds */,
+  //       route: makeLineString(route.geometry.coordinates)
+  //     };
+  //   })
+  // );
+
   return routes.map(route => {
     return {
       weight: route.weight,
-      distance: route.distance /* meters */,
-      duration: route.duration /* seconds */,
+      distance: route.distance || null /* meters */,
+      duration: route.duration || null /* seconds */,
       route: makeLineString(route.geometry.coordinates)
     };
   });
@@ -30,6 +43,7 @@ function getRoute(destination) {
           { coordinates: UserLocation.currentLocation },
           { coordinates: destination }
         ],
+        // overview: 'full',
         geometries: 'geojson',
         // geometries: 'polyline6',
         profile: 'driving-traffic',

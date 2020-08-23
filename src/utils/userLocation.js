@@ -23,6 +23,7 @@ class UserLocation {
 
     this.#watchId = Geolocation.watchPosition(
       sucess => {
+        console.log('Geolocation.watchPosition() sucess:', sucess);
         this.#userLocation = [sucess.coords.longitude, sucess.coords.latitude];
       },
       error => {
