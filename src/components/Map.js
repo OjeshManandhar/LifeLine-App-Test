@@ -11,9 +11,8 @@ import {
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 // global
-import ZIndex from 'global/zIndex';
+import ZIndex, { LayerIndex } from 'global/zIndex';
 import { MapScreenStatus } from 'global/enum';
-import { cos } from 'react-native-reanimated';
 
 function Map({
   destination,
@@ -99,7 +98,7 @@ function Map({
         shape={routeToDestination.route}
       >
         <MapboxGL.LineLayer
-          layerIndex={routeToDestination.id + 1000}
+          layerIndex={routeToDestination.id + LayerIndex.routeToDestination}
           id='routeToDestination-Layer'
           sourceID='routeToDestination-Source'
           style={layerStyles.routeToDestination}
@@ -155,7 +154,11 @@ function Map({
                 ? 'selectedRouteToPickedLocation-Layer'
                 : `routeToPickedLocation${route.id}-Layer`
             }
-            layerIndex={selected ? route.id + 200 : route.id + 100}
+            layerIndex={
+              selected
+                ? route.id + LayerIndex.selectedRouteToPickedLocation
+                : route.id + LayerIndex.routeToPickedLocation
+            }
             sourceID={id}
             style={
               selected
