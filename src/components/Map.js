@@ -59,7 +59,6 @@ function Map({
     });
   }, []);
 
-  /*
   const renderStartLocationMarker = useCallback(() => {
     return (
       <MapboxGL.PointAnnotation
@@ -73,7 +72,6 @@ function Map({
       </MapboxGL.PointAnnotation>
     );
   }, [startLocation]);
-  */
 
   const renderDestinationMarker = useCallback(() => {
     let title = destination.name;
@@ -203,8 +201,8 @@ function Map({
           routesToPickedLocation &&
           renderRoutesToPickedLocation()}
 
-        {/* {screenStatus === MapScreenStatus.usingRoute &&
-          renderStartLocationMarker()} */}
+        {screenStatus === MapScreenStatus.usingRoute &&
+          renderStartLocationMarker()}
 
         {screenStatus === MapScreenStatus.usingRoute &&
           destination &&
