@@ -166,7 +166,7 @@ function MapScreen(props) {
             clearPickedLocationInfo();
           }}
           setDestination={() => {
-            setScreenStatus(MapScreenStatus.mapView);
+            setScreenStatus(MapScreenStatus.usingRoute);
             setDestination(pickedLocation);
             setRouteToDestination(
               routesToPickedLocation.find(

@@ -14,9 +14,14 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import ZIndex from 'global/zIndex';
 import { MapScreenStatus } from 'global/enum';
 
-function Map({ pickedLocation, screenStatus, destination }) {
-  console.log('Map destination:', destination);
-
+function Map({
+  destination,
+  screenStatus,
+  pickedLocation,
+  routeToDestination,
+  routesToPickedLocation,
+  selectedRouteToPickedLocation
+}) {
   async function askGPSPermissions() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -50,6 +55,36 @@ function Map({ pickedLocation, screenStatus, destination }) {
       }
     });
   }, []);
+
+  const renderDestinationMarker = useCallback(() => {
+    let title = destination.name;
+    if (destination.location) {
+      title += '\n\n' + destination.location;
+    }
+
+    return (
+      <MapboxGL.PointAnnotation
+        key={destination.id}
+        id={destination.id}
+        coordinate={destination.coordinate}
+        title={destination.name}
+        snippet={destination.location}
+      >
+        <MapboxGL.Callout title={title} />
+      </MapboxGL.PointAnnotation>
+    );
+  }, [destination]);
+
+  const renderRouteToDestination = useCallback(() => {
+    return (
+      <MapboxGL.ShapeSource id='routeSource' shape={routeToDestination.route}>
+        <MapboxGL.LineLayer
+          id='routeFill'
+          style={layerStyles.routeToDestination}
+        />
+      </MapboxGL.ShapeSource>
+    );
+  });
 
   const renderPickedLocation = useCallback(() => {
     let title = pickedLocation.name;
@@ -98,7 +133,17 @@ function Map({ pickedLocation, screenStatus, destination }) {
           }
         />
 
-        {pickedLocation && renderPickedLocation()}
+        {screenStatus === MapScreenStatus.showPickedLocation &&
+          pickedLocation &&
+          renderPickedLocation()}
+
+        {screenStatus === MapScreenStatus.usingRoute &&
+          destination &&
+          renderDestinationMarker()}
+
+        {screenStatus === MapScreenStatus.usingRoute &&
+          routeToDestination &&
+          renderRouteToDestination()}
       </MapboxGL.MapView>
     </KeyboardAvoidingView>
   );
@@ -110,5 +155,14 @@ const styles = StyleSheet.create({
     zIndex: ZIndex.map
   }
 });
+
+const layerStyles = {
+  routeToDestination: {
+    lineColor: '#314ccd',
+    lineCap: MapboxGL.LineJoin.Round,
+    lineWidth: 5,
+    lineOpacity: 0.84
+  }
+};
 
 export default Map;
