@@ -17,6 +17,7 @@ import { MapScreenStatus } from 'global/enum';
 function Map({
   destination,
   screenStatus,
+  startLocation,
   pickedLocation,
   routeToDestination,
   routesToPickedLocation,
@@ -56,6 +57,20 @@ function Map({
     });
   }, []);
 
+  const renderStartLocationMarker = useCallback(() => {
+    return (
+      <MapboxGL.PointAnnotation
+        key={new Date().getTime()}
+        id={new Date().getTime().toString()}
+        coordinate={startLocation}
+        title='Start Location'
+        snippet='Your start location'
+      >
+        <MapboxGL.Callout title='Start location' />
+      </MapboxGL.PointAnnotation>
+    );
+  }, [startLocation]);
+
   const renderDestinationMarker = useCallback(() => {
     let title = destination.name;
     if (destination.location) {
@@ -77,9 +92,12 @@ function Map({
 
   const renderRouteToDestination = useCallback(() => {
     return (
-      <MapboxGL.ShapeSource id='routeSource' shape={routeToDestination.route}>
+      <MapboxGL.ShapeSource
+        id='routeToDestinationSource'
+        shape={routeToDestination.route}
+      >
         <MapboxGL.LineLayer
-          id='routeFill'
+          id='routeToDestinationLayer'
           style={layerStyles.routeToDestination}
         />
       </MapboxGL.ShapeSource>
@@ -136,6 +154,9 @@ function Map({
         {screenStatus === MapScreenStatus.showPickedLocation &&
           pickedLocation &&
           renderPickedLocation()}
+
+        {screenStatus === MapScreenStatus.usingRoute &&
+          renderStartLocationMarker()}
 
         {screenStatus === MapScreenStatus.usingRoute &&
           destination &&

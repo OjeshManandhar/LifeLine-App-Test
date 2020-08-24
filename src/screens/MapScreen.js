@@ -22,6 +22,7 @@ import back from './../assets/images/back.png';
 function MapScreen(props) {
   const [destination, setDestination] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [startLocation, setStartLocation] = useState(null);
   const [pickedLocation, setPickedLocation] = useState(null);
   const [routeToDestination, setRouteToDestination] = useState(null);
   const [routesToPickedLocation, setRoutesTopickedLocation] = useState(null);
@@ -128,6 +129,7 @@ function MapScreen(props) {
         <Map
           screenStatus={screenStatus}
           destination={destination}
+          startLocation={startLocation}
           pickedLocation={pickedLocation}
           routeToDestination={routeToDestination}
           routesToPickedLocation={routesToPickedLocation}
@@ -173,6 +175,7 @@ function MapScreen(props) {
                 route => route.id === selectedRouteToPickedLocation
               )
             );
+            setStartLocation(UserLocation.currentLocation);
           }}
         />
       </View>
