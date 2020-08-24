@@ -146,7 +146,6 @@ function MapScreen(props) {
           searchKeyword={searchKeyword}
           setPickedLocation={data => {
             setScreenStatus(MapScreenStatus.showPickedLocation);
-            clearDestination();
             setPickedLocation(data);
             getRoute(data.coordinate)
               .then(routes => {
@@ -170,7 +169,11 @@ function MapScreen(props) {
               : null
           }
           clearPickedLocation={() => {
-            setScreenStatus(MapScreenStatus.mapView);
+            if (destination) {
+              setScreenStatus(MapScreenStatus.usingRoute);
+            } else {
+              setScreenStatus(MapScreenStatus.mapView);
+            }
             clearPickedLocationInfo();
           }}
           setDestination={() => {
