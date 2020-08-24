@@ -134,6 +134,7 @@ function MapScreen(props) {
           routeToDestination={routeToDestination}
           routesToPickedLocation={routesToPickedLocation}
           selectedRouteToPickedLocation={selectedRouteToPickedLocation}
+          setSelectedRouteToPickedLocation={setSelectedRouteToPickedLocation}
         />
 
         <SearchList

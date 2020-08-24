@@ -13,6 +13,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 // global
 import ZIndex from 'global/zIndex';
 import { MapScreenStatus } from 'global/enum';
+import { cos } from 'react-native-reanimated';
 
 function Map({
   destination,
@@ -21,7 +22,8 @@ function Map({
   pickedLocation,
   routeToDestination,
   routesToPickedLocation,
-  selectedRouteToPickedLocation
+  selectedRouteToPickedLocation,
+  setSelectedRouteToPickedLocation
 }) {
   async function askGPSPermissions() {
     try {
@@ -57,6 +59,7 @@ function Map({
     });
   }, []);
 
+  /*
   const renderStartLocationMarker = useCallback(() => {
     return (
       <MapboxGL.PointAnnotation
@@ -70,6 +73,7 @@ function Map({
       </MapboxGL.PointAnnotation>
     );
   }, [startLocation]);
+  */
 
   const renderDestinationMarker = useCallback(() => {
     let title = destination.name;
@@ -93,11 +97,13 @@ function Map({
   const renderRouteToDestination = useCallback(() => {
     return (
       <MapboxGL.ShapeSource
-        id='routeToDestinationSource'
+        id='routeToDestination-Source'
         shape={routeToDestination.route}
       >
         <MapboxGL.LineLayer
-          id='routeToDestinationLayer'
+          layerIndex={routeToDestination.id + 1000}
+          id='routeToDestination-Layer'
+          sourceID='routeToDestination-Source'
           style={layerStyles.routeToDestination}
         />
       </MapboxGL.ShapeSource>
@@ -128,6 +134,44 @@ function Map({
     );
   }, [pickedLocation]);
 
+  const renderRoutesToPickedLocation = useCallback(() => {
+    const routes = routesToPickedLocation.map(route => {
+      const selected = route.id === selectedRouteToPickedLocation;
+      const id = selected
+        ? 'selectedRouteToPickedlocation-Source'
+        : `routeToPickedLocation${route.id}-Source`;
+
+      return (
+        <MapboxGL.ShapeSource
+          key={route.id}
+          id={id}
+          shape={route.route}
+          onPress={() => {
+            route.id !== selectedRouteToPickedLocation &&
+              setSelectedRouteToPickedLocation(route.id);
+          }}
+        >
+          <MapboxGL.LineLayer
+            id={
+              selected
+                ? 'selectedRouteToPickedLocation-Layer'
+                : `routeToPickedLocation${route.id}-Layer`
+            }
+            layerIndex={selected ? route.id + 200 : route.id + 100}
+            sourceID={id}
+            style={
+              selected
+                ? layerStyles.selectedRouteToPickedLocation
+                : layerStyles.routesToPickedLocation
+            }
+          />
+        </MapboxGL.ShapeSource>
+      );
+    });
+
+    return routes;
+  }, [routesToPickedLocation, selectedRouteToPickedLocation]);
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
       <MapboxGL.MapView
@@ -155,8 +199,12 @@ function Map({
           pickedLocation &&
           renderPickedLocation()}
 
-        {screenStatus === MapScreenStatus.usingRoute &&
-          renderStartLocationMarker()}
+        {screenStatus === MapScreenStatus.showPickedLocation &&
+          routesToPickedLocation &&
+          renderRoutesToPickedLocation()}
+
+        {/* {screenStatus === MapScreenStatus.usingRoute &&
+          renderStartLocationMarker()} */}
 
         {screenStatus === MapScreenStatus.usingRoute &&
           destination &&
@@ -179,10 +227,25 @@ const styles = StyleSheet.create({
 
 const layerStyles = {
   routeToDestination: {
-    lineColor: '#314ccd',
-    lineCap: MapboxGL.LineJoin.Round,
     lineWidth: 5,
-    lineOpacity: 0.84
+    lineOpacity: 1,
+    lineColor: '#669df6',
+    lineCap: MapboxGL.LineCap.Round,
+    lineJoin: MapboxGL.LineJoin.Round
+  },
+  routesToPickedLocation: {
+    lineWidth: 5,
+    lineOpacity: 1,
+    lineColor: '#bbbdbf',
+    lineCap: MapboxGL.LineCap.Round,
+    lineJoin: MapboxGL.LineJoin.Round
+  },
+  selectedRouteToPickedLocation: {
+    lineWidth: 5,
+    lineOpacity: 1,
+    lineColor: '#5fb671',
+    lineCap: MapboxGL.LineCap.Round,
+    lineJoin: MapboxGL.LineJoin.Round
   }
 };
 

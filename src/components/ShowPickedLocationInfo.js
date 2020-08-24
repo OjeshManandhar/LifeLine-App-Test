@@ -58,7 +58,6 @@ function ShowPickedLocationInfo(props) {
 
           <TouchableNativeFeedback
             onPress={() => {
-              console.log('Use');
               props.setDestination();
             }}
           >
