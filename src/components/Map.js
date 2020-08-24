@@ -1,7 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
 import {
-  Text,
-  View,
   StyleSheet,
   PermissionsAndroid,
   KeyboardAvoidingView

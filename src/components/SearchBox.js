@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Image,
-  TextInput,
-  StyleSheet,
-  TouchableNativeFeedback
-} from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 
 // component
 import AnimatedImageButton from 'components/AnimatedImageButton';
