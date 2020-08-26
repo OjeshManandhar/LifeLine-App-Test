@@ -2,8 +2,8 @@ export const LayerIndex = {
   routeToPickedLocation: 100,
   selectedRouteToPickedLocation: 200,
   routeToDestination: 500,
-  destinationMarker: 1000,
-  startLocationMarker: 1000
+  startLocationMarker: 900,
+  destinationMarker: 1000
 };
 
 export default {

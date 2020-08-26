@@ -6,11 +6,16 @@ import {
 } from 'react-native';
 
 // packages
+import { point } from '@turf/helpers';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 // global
-import ZIndex, { LayerIndex } from 'global/zIndex';
 import { MapScreenStatus } from 'global/enum';
+import ZIndex, { LayerIndex } from 'global/zIndex';
+
+// assets
+import startMarker from 'assets/images/startMarker.png';
+import destinationMarker from 'assets/images/destinationMarker.png';
 
 function Map({
   destination,
@@ -58,34 +63,33 @@ function Map({
 
   const renderStartLocationMarker = useCallback(() => {
     return (
-      <MapboxGL.PointAnnotation
-        key={new Date().getTime()}
-        id={new Date().getTime().toString()}
-        coordinate={startLocation}
-        title='Start Location'
-        snippet='Your start location'
+      <MapboxGL.ShapeSource
+        id='startLocationMarker-Source'
+        shape={point(startLocation)}
       >
-        <MapboxGL.Callout title='Start location' />
-      </MapboxGL.PointAnnotation>
+        <MapboxGL.SymbolLayer
+          style={layerStyles.startLocationMarker}
+          id='startLocationMarker-Layer'
+          sourceID='startLocationMarker-Source'
+          layerIndex={LayerIndex.startLocationMarker}
+        />
+      </MapboxGL.ShapeSource>
     );
   }, [startLocation]);
 
   const renderDestinationMarker = useCallback(() => {
-    let title = destination.name;
-    if (destination.location) {
-      title += '\n\n' + destination.location;
-    }
-
     return (
-      <MapboxGL.PointAnnotation
-        key={destination.id}
-        id={destination.id}
-        coordinate={destination.coordinate}
-        title={destination.name}
-        snippet={destination.location}
+      <MapboxGL.ShapeSource
+        id='destinationMarker-Source'
+        shape={point(destination.coordinate)}
       >
-        <MapboxGL.Callout title={title} />
-      </MapboxGL.PointAnnotation>
+        <MapboxGL.SymbolLayer
+          style={layerStyles.destinationMarker}
+          id='destinationMarker-Layer'
+          sourceID='destinationMarker-Source'
+          layerIndex={LayerIndex.destinationMarker}
+        />
+      </MapboxGL.ShapeSource>
     );
   }, [destination]);
 
@@ -194,6 +198,13 @@ function Map({
           }
         />
 
+        <MapboxGL.Images
+          images={{
+            startMarker: startMarker,
+            destinationMarker: destinationMarker
+          }}
+        />
+
         {screenStatus === MapScreenStatus.showPickedLocation &&
           pickedLocation &&
           renderPickedLocation()}
@@ -225,6 +236,17 @@ const styles = StyleSheet.create({
 });
 
 const layerStyles = {
+  startLocationMarker: {
+    iconSize: 0.025,
+    iconAllowOverlap: true,
+    iconImage: 'startMarker'
+  },
+  destinationMarker: {
+    iconSize: 0.075,
+    iconOffset: [0, -256],
+    iconAllowOverlap: true,
+    iconImage: 'destinationMarker'
+  },
   routeToDestination: {
     lineWidth: 5,
     lineOpacity: 1,

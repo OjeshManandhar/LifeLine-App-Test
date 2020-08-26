@@ -40,6 +40,8 @@ function makeRoutesList(routes) {
     }
   });
 
+  console.log('getRoute routes:', routesList);
+
   return routesList;
 }
 
@@ -55,7 +57,8 @@ function getRoute(destination) {
         alternatives: true /* maximum 2 alternatives i.e. total 3 routes */,
         geometries: 'geojson',
         // geometries: 'polyline6',
-        profile: 'driving-traffic',
+        profile: 'driving',
+        // profile: 'driving-traffic',
         annotations: ['speed', 'distance', 'duration']
       })
       .send()
