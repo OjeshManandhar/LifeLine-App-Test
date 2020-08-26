@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
 
 const layerStyles = {
   startLocationMarker: {
-    iconSize: 0.025,
+    iconSize: 0.035,
     iconAllowOverlap: true,
     iconImage: 'startMarker'
   },

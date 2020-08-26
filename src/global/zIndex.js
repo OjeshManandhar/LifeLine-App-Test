@@ -1,9 +1,12 @@
 export const LayerIndex = {
+  // 125 => layerIndx of the users location indicator
+  // so make other below 125
+
   routeToPickedLocation: 100,
-  selectedRouteToPickedLocation: 200,
-  routeToDestination: 500,
-  startLocationMarker: 900,
-  destinationMarker: 1000
+  selectedRouteToPickedLocation: 110,
+  routeToDestination: 120,
+  startLocationMarker: 124,
+  destinationMarker: 125
 };
 
 export default {
