@@ -64,6 +64,10 @@ function MapScreen(props) {
       setPickedLocation(null);
     }
 
+    if (screenStatus === MapScreenStatus.usingRoute) {
+      return true;
+    }
+
     if (screenStatus !== MapScreenStatus.mapView) {
       setScreenStatus(MapScreenStatus.mapView);
       return true;

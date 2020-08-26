@@ -16,6 +16,7 @@ import ZIndex, { LayerIndex } from 'global/zIndex';
 // assets
 import startMarker from 'assets/images/startMarker.png';
 import destinationMarker from 'assets/images/destinationMarker.png';
+import pickedLocationMarker from 'assets/images/pickedLocationMarker.png';
 
 function Map({
   destination,
@@ -110,26 +111,18 @@ function Map({
   });
 
   const renderPickedLocation = useCallback(() => {
-    let title = pickedLocation.name;
-    if (pickedLocation.location) {
-      title += '\n\n' + pickedLocation.location;
-    }
-
     return (
-      <MapboxGL.PointAnnotation
-        key={pickedLocation.id}
-        id={pickedLocation.id}
-        coordinate={pickedLocation.coordinate}
-        title={pickedLocation.name}
-        snippet={pickedLocation.location}
+      <MapboxGL.ShapeSource
+        id='pickedLocationMarker-Source'
+        shape={point(pickedLocation.coordinate)}
       >
-        <MapboxGL.Callout title={title} />
-        {/* <View>
-            <Text style={{ fontSize: 17 }}>{pickedLocation.name}</Text>
-            <Text style={{ fontSize: 10 }}>{pickedLocation.location}</Text>
-          </View>
-        </MapboxGL.Callout> */}
-      </MapboxGL.PointAnnotation>
+        <MapboxGL.SymbolLayer
+          style={layerStyles.pickedLocationMarker}
+          id='pickedLocationMarker-Layer'
+          sourceID='pickedLocationMarker-Source'
+          layerIndex={LayerIndex.pickedLocationMarker}
+        />
+      </MapboxGL.ShapeSource>
     );
   }, [pickedLocation]);
 
@@ -201,7 +194,8 @@ function Map({
         <MapboxGL.Images
           images={{
             startMarker: startMarker,
-            destinationMarker: destinationMarker
+            destinationMarker: destinationMarker,
+            pickedLocationMarker: pickedLocationMarker
           }}
         />
 
@@ -246,6 +240,12 @@ const layerStyles = {
     iconOffset: [0, -256],
     iconAllowOverlap: true,
     iconImage: 'destinationMarker'
+  },
+  pickedLocationMarker: {
+    iconSize: 0.065,
+    iconOffset: [0, -256],
+    iconAllowOverlap: true,
+    iconImage: 'pickedLocationMarker'
   },
   routeToDestination: {
     lineWidth: 5,
