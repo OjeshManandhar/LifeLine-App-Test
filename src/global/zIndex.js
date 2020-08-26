@@ -1,5 +1,5 @@
 export const LayerIndex = {
-  // 125 => layerIndx of the users location indicator
+  // 125 => layerIndex of the users location indicator
   // so make other below 125
 
   routeToPickedLocation: 100,
