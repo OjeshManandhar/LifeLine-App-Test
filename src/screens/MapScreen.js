@@ -25,7 +25,7 @@ function MapScreen(props) {
   const [startLocation, setStartLocation] = useState(null);
   const [pickedLocation, setPickedLocation] = useState(null);
   const [routeToDestination, setRouteToDestination] = useState(null);
-  const [routesToPickedLocation, setRoutesTopickedLocation] = useState(null);
+  const [routesToPickedLocation, setRoutesToPickedLocation] = useState(null);
   const [screenStatus, _setScreenStatus] = useState(MapScreenStatus.mapView);
   const [
     selectedRouteToPickedLocation,
@@ -34,16 +34,16 @@ function MapScreen(props) {
 
   const clearDestination = useCallback(() => {
     setDestination(null);
-    setRoutesTopickedLocation(null);
-  }, [setDestination, setRoutesTopickedLocation]);
+    setRoutesToPickedLocation(null);
+  }, [setDestination, setRoutesToPickedLocation]);
 
   const clearPickedLocationInfo = useCallback(() => {
     setPickedLocation(null);
-    setRoutesTopickedLocation(null);
+    setRoutesToPickedLocation(null);
     setSelectedRouteToPickedLocation(0);
   }, [
     setPickedLocation,
-    setRoutesTopickedLocation,
+    setRoutesToPickedLocation,
     setSelectedRouteToPickedLocation
   ]);
 
@@ -153,7 +153,7 @@ function MapScreen(props) {
             setPickedLocation(data);
             getRoute(data.coordinate)
               .then(routes => {
-                setRoutesTopickedLocation(routes);
+                setRoutesToPickedLocation(routes);
                 setSelectedRouteToPickedLocation(routes[0].id);
               })
               .catch(error => {
