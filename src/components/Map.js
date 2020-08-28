@@ -13,6 +13,9 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import ZIndex, { LayerIndex } from 'global/zIndex';
 import { MapStatus, MapScreenStatus } from 'global/enum';
 
+// utils
+import UserLocation from 'utils/userLocation';
+
 // assets
 import startMarker from 'assets/images/startMarker.png';
 import destinationMarker from 'assets/images/destinationMarker.png';
@@ -121,7 +124,7 @@ function Map({
         />
       </MapboxGL.ShapeSource>
     );
-  });
+  }, [routeToDestination]);
 
   const renderPickedLocation = useCallback(() => {
     return (
@@ -193,14 +196,15 @@ function Map({
 
         <MapboxGL.Camera
           zoomLevel={14}
-          followUserLocation={mapScreenStatus === MapScreenStatus.mapView}
+          followUserLocation={mapStatus === MapStatus.routToDestination}
           followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
-          animationMode={'flyTo'}
-          animationDuration={1500}
+          followZoomLevel={15}
+          animationMode={'easeTo'}
+          animationDuration={1.5 * 1000}
           centerCoordinate={
-            mapScreenStatus === MapScreenStatus.showRouteInfo
+            mapStatus === MapStatus.routesToPickedLocation
               ? pickedLocation && pickedLocation.coordinate
-              : null
+              : UserLocation.currentLocation
           }
         />
 
