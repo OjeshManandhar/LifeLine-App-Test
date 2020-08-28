@@ -24,6 +24,7 @@ function Map({
   startLocation,
   pickedLocation,
   mapScreenStatus,
+  setMapScreenStatus,
   routeToDestination,
   routesToPickedLocation,
   selectedRouteToPickedLocation,
@@ -52,6 +53,14 @@ function Map({
     }
   }
 
+  function toggleMapScreenStatus() {
+    if (mapScreenStatus === MapScreenStatus.mapView) {
+      setMapScreenStatus(MapScreenStatus.showRouteInfo);
+    } else if (mapScreenStatus === MapScreenStatus.showRouteInfo) {
+      setMapScreenStatus(MapScreenStatus.mapView);
+    }
+  }
+
   // For Permission
   useEffect(() => {
     PermissionsAndroid.check(
@@ -68,6 +77,7 @@ function Map({
       <MapboxGL.ShapeSource
         id='startLocationMarker-Source'
         shape={point(startLocation)}
+        onPress={toggleMapScreenStatus}
       >
         <MapboxGL.SymbolLayer
           style={layerStyles.startLocationMarker}
@@ -84,6 +94,7 @@ function Map({
       <MapboxGL.ShapeSource
         id='destinationMarker-Source'
         shape={point(destination.coordinate)}
+        onPress={toggleMapScreenStatus}
       >
         <MapboxGL.SymbolLayer
           style={layerStyles.destinationMarker}
@@ -100,6 +111,7 @@ function Map({
       <MapboxGL.ShapeSource
         id='routeToDestination-Source'
         shape={routeToDestination.route}
+        onPress={toggleMapScreenStatus}
       >
         <MapboxGL.LineLayer
           layerIndex={routeToDestination.id + LayerIndex.routeToDestination}

@@ -150,6 +150,7 @@ function MapScreen(props) {
           startLocation={startLocation}
           pickedLocation={pickedLocation}
           mapScreenStatus={mapScreenStatus}
+          setMapScreenStatus={setMapScreenStatus}
           routeToDestination={routeToDestination}
           routesToPickedLocation={routesToPickedLocation}
           selectedRouteToPickedLocation={selectedRouteToPickedLocation}
