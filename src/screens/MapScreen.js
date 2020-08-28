@@ -5,18 +5,20 @@ import { View, Keyboard, StyleSheet, BackHandler } from 'react-native';
 import Map from 'components/Map';
 import SearchBox from 'components/SearchBox';
 import SearchList from 'components/SearchList';
-import ShowPickedLocationInfo from 'components/ShowPickedLocationInfo';
+import ShowRouteInfo from 'components/ShowRouteInfo';
 import AnimatedImageButton from 'components/AnimatedImageButton';
 
 // global
 import ZIndex from 'global/zIndex';
-import { MapScreenStatus } from 'global/enum';
+import { MapStatus, MapScreenStatus } from 'global/enum';
 
 // utils
 import getRoute from 'utils/getRoute';
 import UserLocation from 'utils/userLocation';
 
 // assets
+import use from 'assets/images/use.png';
+import finish from 'assets/images/finish.png';
 import back from './../assets/images/back.png';
 
 function MapScreen(props) {
@@ -24,9 +26,12 @@ function MapScreen(props) {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [startLocation, setStartLocation] = useState(null);
   const [pickedLocation, setPickedLocation] = useState(null);
+  const [mapStatus, setMapStatus] = useState(MapStatus.clear);
   const [routeToDestination, setRouteToDestination] = useState(null);
   const [routesToPickedLocation, setRoutesToPickedLocation] = useState(null);
-  const [screenStatus, _setScreenStatus] = useState(MapScreenStatus.mapView);
+  const [mapScreenStatus, _setMapScreenStatus] = useState(
+    MapScreenStatus.mapView
+  );
   const [
     selectedRouteToPickedLocation,
     setSelectedRouteToPickedLocation
@@ -34,8 +39,9 @@ function MapScreen(props) {
 
   const clearDestination = useCallback(() => {
     setDestination(null);
+    setStartLocation(null);
     setRoutesToPickedLocation(null);
-  }, [setDestination, setRoutesToPickedLocation]);
+  }, [setDestination, setStartLocation, setRoutesToPickedLocation]);
 
   const clearPickedLocationInfo = useCallback(() => {
     setPickedLocation(null);
@@ -47,34 +53,38 @@ function MapScreen(props) {
     setSelectedRouteToPickedLocation
   ]);
 
-  const setScreenStatus = useCallback(
+  const setMapScreenStatus = useCallback(
     val => {
       if (val !== MapScreenStatus.searching) {
         // Also blurs out of the Text Input
         Keyboard.dismiss();
       }
 
-      _setScreenStatus(val);
+      _setMapScreenStatus(val);
     },
-    [_setScreenStatus, clearPickedLocationInfo]
+    [_setMapScreenStatus, clearPickedLocationInfo]
   );
 
   const handleBackButton = useCallback(() => {
-    if (screenStatus === MapScreenStatus.showPickedLocation && pickedLocation) {
-      setPickedLocation(null);
-    }
-
-    if (screenStatus === MapScreenStatus.usingRoute) {
-      return true;
-    }
-
-    if (screenStatus !== MapScreenStatus.mapView) {
-      setScreenStatus(MapScreenStatus.mapView);
+    if (mapScreenStatus === MapScreenStatus.mapView) {
+      return false;
+    } else if (mapScreenStatus === MapScreenStatus.showRouteInfo) {
+      if (mapStatus === MapStatus.routesToPickedLocations) {
+        clearPickedLocationInfo();
+        setMapStatus(MapStatus.clear);
+      }
+      setMapScreenStatus(MapScreenStatus.mapView);
       return true;
     } else {
-      return false;
+      return true;
     }
-  }, [screenStatus, setScreenStatus]);
+  }, [
+    mapStatus,
+    setMapStatus,
+    mapScreenStatus,
+    setMapScreenStatus,
+    clearPickedLocationInfo
+  ]);
 
   // Handling the Hardware Back button
   useEffect(() => {
@@ -96,10 +106,10 @@ function MapScreen(props) {
 
   return (
     <View style={styles.container}>
-      {screenStatus !== MapScreenStatus.picking && (
+      {mapScreenStatus !== MapScreenStatus.picking && (
         <View style={styles.searchContainer}>
           <AnimatedImageButton
-            in={screenStatus === MapScreenStatus.searching}
+            in={mapScreenStatus === MapScreenStatus.searching}
             image={back}
             timeout={0.25 * 1000}
             imageStyles={styles.backIcon}
@@ -119,15 +129,15 @@ function MapScreen(props) {
             // onExited={() => console.log('ON EXITED')}
             onPress={() => {
               if (destination) {
-                setScreenStatus(MapScreenStatus.usingRoute);
+                setMapScreenStatus(MapScreenStatus.usingRoute);
               } else {
-                setScreenStatus(MapScreenStatus.mapView);
+                setMapScreenStatus(MapScreenStatus.mapView);
               }
             }}
           />
 
           <SearchBox
-            setScreenStatus={setScreenStatus}
+            setMapScreenStatus={setMapScreenStatus}
             setSearchKeyword={setSearchKeyword}
           />
         </View>
@@ -135,10 +145,11 @@ function MapScreen(props) {
 
       <View style={styles.bodyContainer}>
         <Map
-          screenStatus={screenStatus}
+          mapStatus={mapStatus}
           destination={destination}
           startLocation={startLocation}
           pickedLocation={pickedLocation}
+          mapScreenStatus={mapScreenStatus}
           routeToDestination={routeToDestination}
           routesToPickedLocation={routesToPickedLocation}
           selectedRouteToPickedLocation={selectedRouteToPickedLocation}
@@ -146,10 +157,12 @@ function MapScreen(props) {
         />
 
         <SearchList
-          in={screenStatus === MapScreenStatus.searching}
+          in={mapScreenStatus === MapScreenStatus.searching}
           searchKeyword={searchKeyword}
           setPickedLocation={data => {
-            setScreenStatus(MapScreenStatus.showPickedLocation);
+            setMapStatus(MapStatus.routesToPickedLocations);
+            setMapScreenStatus(MapScreenStatus.showRouteInfo);
+
             setPickedLocation(data);
             getRoute(data.coordinate)
               .then(routes => {
@@ -162,34 +175,66 @@ function MapScreen(props) {
           }}
         />
 
-        <ShowPickedLocationInfo
-          in={screenStatus === MapScreenStatus.showPickedLocation}
-          location={pickedLocation}
-          selectedRoute={
-            routesToPickedLocation && selectedRouteToPickedLocation
-              ? routesToPickedLocation.find(
-                  route => route.id === selectedRouteToPickedLocation
-                )
+        <ShowRouteInfo
+          in={mapScreenStatus === MapScreenStatus.showRouteInfo}
+          location={(function() {
+            if (mapStatus === MapStatus.routeToDestination) {
+              return destination;
+            } else if (mapStatus === MapStatus.routesToPickedLocations) {
+              return pickedLocation;
+            }
+          })()}
+          useButton={(function() {
+            if (mapStatus === MapStatus.routeToDestination) {
+              return { image: finish, text: 'Close this route' };
+            } else if (mapStatus === MapStatus.routesToPickedLocations) {
+              return { image: use, text: 'Use this route' };
+            }
+          })()}
+          routeInfo={
+            mapStatus === MapScreenStatus.routesToPickedLocation
+              ? routesToPickedLocation && selectedRouteToPickedLocation
+                ? routesToPickedLocation.find(
+                    route => route.id === selectedRouteToPickedLocation
+                  )
+                : null
+              : mapStatus === MapScreenStatus.routeToDestination
+              ? destination
               : null
           }
-          clearPickedLocation={() => {
-            if (destination) {
-              setScreenStatus(MapScreenStatus.usingRoute);
-            } else {
-              setScreenStatus(MapScreenStatus.mapView);
+          onClose={() => {
+            if (mapStatus === MapStatus.routesToPickedLocations) {
+              clearPickedLocationInfo();
+
+              destination
+                ? setMapStatus(MapStatus.routeToDestination)
+                : setMapStatus(MapStatus.clear);
             }
-            clearPickedLocationInfo();
+
+            setMapScreenStatus(MapScreenStatus.mapView);
           }}
-          setDestination={() => {
-            setScreenStatus(MapScreenStatus.usingRoute);
-            setDestination(pickedLocation);
-            setRouteToDestination(
-              routesToPickedLocation.find(
-                route => route.id === selectedRouteToPickedLocation
-              )
-            );
-            setStartLocation(UserLocation.currentLocation);
-            clearPickedLocationInfo();
+          onUse={() => {
+            if (mapStatus === MapStatus.routesToPickedLocations) {
+              // Set Destination
+
+              setDestination(pickedLocation);
+              setRouteToDestination(
+                routesToPickedLocation.find(
+                  route => route.id === selectedRouteToPickedLocation
+                )
+              );
+              setStartLocation(UserLocation.currentLocation);
+              clearPickedLocationInfo();
+
+              setMapStatus(MapStatus.routeToDestination);
+            } else if (mapStatus === MapStatus.routeToDestination) {
+              // Clear Destination
+
+              clearDestination();
+
+              setMapStatus(MapStatus.clear);
+              setMapScreenStatus(MapScreenStatus.mapView);
+            }
           }}
         />
       </View>

@@ -10,8 +10,8 @@ import { point } from '@turf/helpers';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 // global
-import { MapScreenStatus } from 'global/enum';
 import ZIndex, { LayerIndex } from 'global/zIndex';
+import { MapStatus, MapScreenStatus } from 'global/enum';
 
 // assets
 import startMarker from 'assets/images/startMarker.png';
@@ -19,10 +19,11 @@ import destinationMarker from 'assets/images/destinationMarker.png';
 import pickedLocationMarker from 'assets/images/pickedLocationMarker.png';
 
 function Map({
+  mapStatus,
   destination,
-  screenStatus,
   startLocation,
   pickedLocation,
+  mapScreenStatus,
   routeToDestination,
   routesToPickedLocation,
   selectedRouteToPickedLocation,
@@ -180,12 +181,12 @@ function Map({
 
         <MapboxGL.Camera
           zoomLevel={14}
-          followUserLocation={screenStatus === MapScreenStatus.mapView}
+          followUserLocation={mapScreenStatus === MapScreenStatus.mapView}
           followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
           animationMode={'flyTo'}
           animationDuration={1500}
           centerCoordinate={
-            screenStatus === MapScreenStatus.showDestinationInfo
+            mapScreenStatus === MapScreenStatus.showRouteInfo
               ? pickedLocation && pickedLocation.coordinate
               : null
           }
@@ -199,22 +200,27 @@ function Map({
           }}
         />
 
-        {screenStatus === MapScreenStatus.showPickedLocation &&
+        {mapScreenStatus === MapScreenStatus.mapView &&
+          mapStatus === MapStatus.routesToPickedLocations &&
           pickedLocation &&
           renderPickedLocation()}
 
-        {screenStatus === MapScreenStatus.showPickedLocation &&
+        {mapScreenStatus === MapScreenStatus.mapView &&
+          mapStatus === MapStatus.routesToPickedLocations &&
           routesToPickedLocation &&
           renderRoutesToPickedLocation()}
 
-        {screenStatus === MapScreenStatus.usingRoute &&
+        {mapScreenStatus === MapScreenStatus.mapView &&
+          mapStatus === MapStatus.routeToDestination &&
           renderStartLocationMarker()}
 
-        {screenStatus === MapScreenStatus.usingRoute &&
+        {mapScreenStatus === MapScreenStatus.mapView &&
+          mapStatus === MapStatus.routeToDestination &&
           destination &&
           renderDestinationMarker()}
 
-        {screenStatus === MapScreenStatus.usingRoute &&
+        {mapScreenStatus === MapScreenStatus.mapView &&
+          mapStatus === MapStatus.routeToDestination &&
           routeToDestination &&
           renderRouteToDestination()}
       </MapboxGL.MapView>

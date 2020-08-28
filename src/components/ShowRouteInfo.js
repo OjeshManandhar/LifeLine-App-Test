@@ -14,13 +14,9 @@ import AnimatedView from 'components/AnimatedView';
 // global
 import ZIndex from 'global/zIndex';
 
-// assets
-import use from 'assets/images/use.png';
-import cross from 'assets/images/cross.png';
-
 const containerHeight = 100;
 
-function ShowPickedLocationInfo(props) {
+function ShowRouteInfo(props) {
   useEffect(() => {}, []);
 
   function distanceToString(distance) {
@@ -45,25 +41,25 @@ function ShowPickedLocationInfo(props) {
     }
   }
 
-  function routeInfo() {
-    if (props.selectedRoute) {
+  function renderRouteInfo() {
+    if (props.routeInfo) {
       return (
         <React.Fragment>
           <View style={styles.routeInfo}>
             <Text style={styles.routeText}>
-              {timeToString(props.selectedRoute.duration)} (
-              {distanceToString(props.selectedRoute.distance)})
+              {timeToString(props.routeInfo.duration)} (
+              {distanceToString(props.routeInfo.distance)})
             </Text>
           </View>
 
           <TouchableNativeFeedback
             onPress={() => {
-              props.setDestination();
+              props.onUse();
             }}
           >
             <View style={styles.useButton}>
-              <Image source={use} style={styles.useIcon} />
-              <Text style={styles.useText}>Use this route</Text>
+              <Image source={props.useButton.image} style={styles.useIcon} />
+              <Text style={styles.useText}>{props.useButton.text}</Text>
             </View>
           </TouchableNativeFeedback>
         </React.Fragment>
@@ -99,14 +95,14 @@ function ShowPickedLocationInfo(props) {
             <Text style={styles.placeName} numberOfLines={1}>
               {props.location.name}
             </Text>
-            <TouchableNativeFeedback onPress={props.clearPickedLocation}>
+            <TouchableNativeFeedback onPress={props.onClose}>
               <Image source={cross} style={styles.cross} />
             </TouchableNativeFeedback>
           </View>
           <Text style={styles.placeLocation} numberOfLines={1}>
             {props.location.location}
           </Text>
-          <View style={styles.footer}>{routeInfo()}</View>
+          <View style={styles.footer}>{renderRouteInfo()}</View>
         </View>
       ) : (
         <View style={styles.container}>
@@ -114,7 +110,7 @@ function ShowPickedLocationInfo(props) {
             <Text style={styles.placeName} numberOfLines={1}>
               Select a Destination
             </Text>
-            <TouchableNativeFeedback onPress={props.clearPickedLocation}>
+            <TouchableNativeFeedback onPress={props.onClose}>
               <Image source={cross} style={styles.cross} />
             </TouchableNativeFeedback>
           </View>
@@ -212,8 +208,8 @@ const styles = StyleSheet.create({
   }
 });
 
-ShowPickedLocationInfo.propTypes = {
+ShowRouteInfo.propTypes = {
   in: PropTypes.bool.isRequired
 };
 
-export default ShowPickedLocationInfo;
+export default ShowRouteInfo;
