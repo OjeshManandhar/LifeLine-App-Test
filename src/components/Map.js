@@ -29,15 +29,6 @@ function Map({
   selectedRouteToPickedLocation,
   setSelectedRouteToPickedLocation
 }) {
-  console.log('Map mapStatus:', mapStatus);
-  console.log('Map mapScreenStatus:', mapScreenStatus);
-  console.log('Map pickedLocation:', pickedLocation);
-  console.log('Map routesToPickedLocation:', routesToPickedLocation);
-  console.log(
-    'Map selectedRouteToPickedLocation:',
-    selectedRouteToPickedLocation
-  );
-
   async function askGPSPermissions() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -210,12 +201,12 @@ function Map({
         />
 
         {mapScreenStatus === MapScreenStatus.showRouteInfo &&
-          mapStatus === MapStatus.routesToPickedLocations &&
+          mapStatus === MapStatus.routesToPickedLocation &&
           pickedLocation &&
           renderPickedLocation()}
 
         {mapScreenStatus === MapScreenStatus.showRouteInfo &&
-          mapStatus === MapStatus.routesToPickedLocations &&
+          mapStatus === MapStatus.routesToPickedLocation &&
           routesToPickedLocation &&
           renderRoutesToPickedLocation()}
 

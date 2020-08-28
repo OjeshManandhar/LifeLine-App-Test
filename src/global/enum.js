@@ -1,7 +1,7 @@
 export const MapStatus = Object.freeze({
   clear: 0,
   routToDestination: 1,
-  routesToPickedLocations: 2
+  routesToPickedLocation: 2
 });
 
 export const MapScreenStatus = Object.freeze({

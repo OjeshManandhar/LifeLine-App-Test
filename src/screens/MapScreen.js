@@ -69,7 +69,7 @@ function MapScreen(props) {
     if (mapScreenStatus === MapScreenStatus.mapView) {
       return false;
     } else if (mapScreenStatus === MapScreenStatus.showRouteInfo) {
-      if (mapStatus === MapStatus.routesToPickedLocations) {
+      if (mapStatus === MapStatus.routesToPickedLocation) {
         clearPickedLocationInfo();
         setMapStatus(MapStatus.clear);
       }
@@ -160,7 +160,7 @@ function MapScreen(props) {
           in={mapScreenStatus === MapScreenStatus.searching}
           searchKeyword={searchKeyword}
           setPickedLocation={data => {
-            setMapStatus(MapStatus.routesToPickedLocations);
+            setMapStatus(MapStatus.routesToPickedLocation);
             setMapScreenStatus(MapScreenStatus.showRouteInfo);
 
             setPickedLocation(data);
@@ -180,30 +180,30 @@ function MapScreen(props) {
           location={(function() {
             if (mapStatus === MapStatus.routeToDestination) {
               return destination;
-            } else if (mapStatus === MapStatus.routesToPickedLocations) {
+            } else if (mapStatus === MapStatus.routesToPickedLocation) {
               return pickedLocation;
             }
           })()}
           useButton={(function() {
             if (mapStatus === MapStatus.routeToDestination) {
               return { image: finish, text: 'Close this route' };
-            } else if (mapStatus === MapStatus.routesToPickedLocations) {
+            } else if (mapStatus === MapStatus.routesToPickedLocation) {
               return { image: use, text: 'Use this route' };
             }
           })()}
           routeInfo={
-            mapStatus === MapScreenStatus.routesToPickedLocation
+            mapStatus === MapStatus.routeToDestination
+              ? routeToDestination
+              : mapStatus === MapStatus.routesToPickedLocation
               ? routesToPickedLocation && selectedRouteToPickedLocation
                 ? routesToPickedLocation.find(
                     route => route.id === selectedRouteToPickedLocation
                   )
                 : null
-              : mapStatus === MapScreenStatus.routeToDestination
-              ? destination
               : null
           }
           onClose={() => {
-            if (mapStatus === MapStatus.routesToPickedLocations) {
+            if (mapStatus === MapStatus.routesToPickedLocation) {
               clearPickedLocationInfo();
 
               destination
@@ -214,7 +214,7 @@ function MapScreen(props) {
             setMapScreenStatus(MapScreenStatus.mapView);
           }}
           onUse={() => {
-            if (mapStatus === MapStatus.routesToPickedLocations) {
+            if (mapStatus === MapStatus.routesToPickedLocation) {
               // Set Destination
 
               setDestination(pickedLocation);
