@@ -14,6 +14,9 @@ import AnimatedView from 'components/AnimatedView';
 // global
 import ZIndex from 'global/zIndex';
 
+// assets
+import cross from 'assets/images/cross.png';
+
 const containerHeight = 100;
 
 function ShowRouteInfo(props) {

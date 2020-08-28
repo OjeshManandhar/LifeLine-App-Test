@@ -24,7 +24,7 @@ function SearchBox(props) {
           setText(text);
           props.setSearchKeyword(text);
         }}
-        onFocus={() => props.setScreenStatus(MapScreenStatus.searching)}
+        onFocus={() => props.setMapScreenStatus(MapScreenStatus.searching)}
         onSubmitEditing={() => props.setSearchKeyword(text)}
       />
 
