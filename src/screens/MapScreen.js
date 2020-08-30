@@ -48,6 +48,7 @@ function MapScreen(props) {
     setRoutesToPickedLocation(null);
     setSelectedRouteToPickedLocation(0);
   }, [
+    setStartLocation,
     setPickedLocation,
     setRoutesToPickedLocation,
     setSelectedRouteToPickedLocation
@@ -62,7 +63,7 @@ function MapScreen(props) {
 
       _setMapScreenStatus(val);
     },
-    [_setMapScreenStatus, clearPickedLocationInfo]
+    [mapScreenStatus, _setMapScreenStatus]
   );
 
   const handleBackButton = useCallback(() => {
@@ -128,11 +129,7 @@ function MapScreen(props) {
             // onExit={() => console.log('ON EXIT')}
             // onExited={() => console.log('ON EXITED')}
             onPress={() => {
-              if (destination) {
-                setMapScreenStatus(MapScreenStatus.usingRoute);
-              } else {
-                setMapScreenStatus(MapScreenStatus.mapView);
-              }
+              setMapScreenStatus(MapScreenStatus.mapView);
             }}
           />
 
@@ -185,7 +182,7 @@ function MapScreen(props) {
               return pickedLocation;
             }
           })()}
-          useButton={(function() {
+          useButton={(() => {
             if (mapStatus === MapStatus.routeToDestination) {
               return { image: finish, text: 'Close this route' };
             } else if (mapStatus === MapStatus.routesToPickedLocation) {
@@ -204,37 +201,36 @@ function MapScreen(props) {
               : null
           }
           onClose={() => {
+            setMapScreenStatus(MapScreenStatus.mapView);
+
             if (mapStatus === MapStatus.routesToPickedLocation) {
-              clearPickedLocationInfo();
+              setMapScreenStatus(MapScreenStatus.mapView);
 
               destination
                 ? setMapStatus(MapStatus.routeToDestination)
                 : setMapStatus(MapStatus.clear);
             }
-
-            setMapScreenStatus(MapScreenStatus.mapView);
           }}
           onUse={() => {
             if (mapStatus === MapStatus.routesToPickedLocation) {
               // Set Destination
-
+              setStartLocation(UserLocation.currentLocation);
               setDestination(pickedLocation);
               setRouteToDestination(
                 routesToPickedLocation.find(
                   route => route.id === selectedRouteToPickedLocation
                 )
               );
-              setStartLocation(UserLocation.currentLocation);
               clearPickedLocationInfo();
 
               setMapStatus(MapStatus.routeToDestination);
             } else if (mapStatus === MapStatus.routeToDestination) {
-              // Clear Destination
+              setMapScreenStatus(MapScreenStatus.mapView);
 
+              // Clear Destination
               clearDestination();
 
               setMapStatus(MapStatus.clear);
-              setMapScreenStatus(MapScreenStatus.mapView);
             }
           }}
         />

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   PermissionsAndroid,
@@ -33,6 +33,8 @@ function Map({
   selectedRouteToPickedLocation,
   setSelectedRouteToPickedLocation
 }) {
+  const cameraRef = useRef(null);
+
   async function askGPSPermissions() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -56,14 +58,6 @@ function Map({
     }
   }
 
-  function toggleMapScreenStatus() {
-    if (mapScreenStatus === MapScreenStatus.mapView) {
-      setMapScreenStatus(MapScreenStatus.showRouteInfo);
-    } else if (mapScreenStatus === MapScreenStatus.showRouteInfo) {
-      setMapScreenStatus(MapScreenStatus.mapView);
-    }
-  }
-
   // For Permission
   useEffect(() => {
     PermissionsAndroid.check(
@@ -74,6 +68,14 @@ function Map({
       }
     });
   }, []);
+
+  const toggleMapScreenStatus = useCallback(() => {
+    if (mapScreenStatus === MapScreenStatus.mapView) {
+      setMapScreenStatus(MapScreenStatus.showRouteInfo);
+    } else if (mapScreenStatus === MapScreenStatus.showRouteInfo) {
+      setMapScreenStatus(MapScreenStatus.mapView);
+    }
+  }, [mapScreenStatus, setMapScreenStatus]);
 
   const renderStartLocationMarker = useCallback(() => {
     return (
@@ -90,7 +92,7 @@ function Map({
         />
       </MapboxGL.ShapeSource>
     );
-  }, [startLocation]);
+  }, [startLocation, toggleMapScreenStatus]);
 
   const renderDestinationMarker = useCallback(() => {
     return (
@@ -107,7 +109,7 @@ function Map({
         />
       </MapboxGL.ShapeSource>
     );
-  }, [destination]);
+  }, [destination, toggleMapScreenStatus]);
 
   const renderRouteToDestination = useCallback(() => {
     return (
@@ -124,7 +126,7 @@ function Map({
         />
       </MapboxGL.ShapeSource>
     );
-  }, [routeToDestination]);
+  }, [routeToDestination, toggleMapScreenStatus]);
 
   const renderPickedLocation = useCallback(() => {
     return (
@@ -184,6 +186,36 @@ function Map({
     return routes;
   }, [routesToPickedLocation, selectedRouteToPickedLocation]);
 
+  const getBounds = useCallback(() => {
+    const longitudes = [],
+      latitudes = [];
+
+    routesToPickedLocation.forEach(route => {
+      route.route.geometry.coordinates.forEach(coordinate => {
+        longitudes.push(coordinate[0]);
+        latitudes.push(coordinate[1]);
+      });
+    });
+
+    const north = Math.max(...longitudes),
+      south = Math.min(...longitudes),
+      east = Math.max(...latitudes),
+      west = Math.min(...latitudes);
+
+    // for arguments to MapboxGl.Camera
+    // return {
+    //   ne: [north, east],
+    //   sw: [south, west],
+    //   paddingLeft: 15,
+    //   paddingRight: 15,
+    //   paddingTop: 15,
+    //   paddingBottom: 15
+    // };
+
+    // for MapboxGl.Camera.fitBounds
+    return [[north, east], [south, west], 15];
+  }, [routesToPickedLocation]);
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
       <MapboxGL.MapView
@@ -195,17 +227,23 @@ function Map({
         <MapboxGL.UserLocation visible showsUserHeadingIndicator />
 
         <MapboxGL.Camera
-          zoomLevel={14}
-          followUserLocation={mapStatus === MapStatus.routToDestination}
+          ref={cameraRef}
+          followUserLocation={mapStatus !== MapStatus.routesToPickedLocation}
           followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
-          followZoomLevel={15}
+          followZoomLevel={mapStatus === MapStatus.routeToDestination ? 15 : 14}
           animationMode={'easeTo'}
           animationDuration={1.5 * 1000}
           centerCoordinate={
-            mapStatus === MapStatus.routesToPickedLocation
-              ? pickedLocation && pickedLocation.coordinate
-              : UserLocation.currentLocation
+            mapStatus !== MapStatus.routeToPickedLocation
+              ? UserLocation.currentLocation
+              : null
           }
+          // bounds={
+          //   routesToPickedLocation &&
+          //   mapStatus === MapStatus.routesToPickedLocation
+          //     ? getBounds()
+          //     : undefined
+          // }
         />
 
         <MapboxGL.Images
@@ -215,6 +253,13 @@ function Map({
             pickedLocationMarker: pickedLocationMarker
           }}
         />
+
+        {mapStatus === MapStatus.clear &&
+          cameraRef.current &&
+          cameraRef.current.setCamera({
+            centerCoordinate: UserLocation.currentLocation,
+            zoomLevel: 14
+          })}
 
         {mapScreenStatus === MapScreenStatus.showRouteInfo &&
           mapStatus === MapStatus.routesToPickedLocation &&
@@ -227,6 +272,12 @@ function Map({
           renderRoutesToPickedLocation()}
 
         {mapScreenStatus === MapScreenStatus.showRouteInfo &&
+          mapStatus === MapStatus.routesToPickedLocation &&
+          routesToPickedLocation &&
+          cameraRef.current.fitBounds(...getBounds())}
+
+        {(mapScreenStatus === MapScreenStatus.mapView ||
+          mapScreenStatus === MapScreenStatus.showRouteInfo) &&
           mapStatus === MapStatus.routeToDestination &&
           renderStartLocationMarker()}
 
@@ -255,24 +306,24 @@ const styles = StyleSheet.create({
 
 const layerStyles = {
   startLocationMarker: {
-    iconSize: 0.035,
+    iconSize: 0.04,
     iconAllowOverlap: true,
     iconImage: 'startMarker'
   },
   destinationMarker: {
-    iconSize: 0.075,
+    iconSize: 0.08,
     iconOffset: [0, -256],
     iconAllowOverlap: true,
     iconImage: 'destinationMarker'
   },
   pickedLocationMarker: {
-    iconSize: 0.065,
+    iconSize: 0.07,
     iconOffset: [0, -256],
     iconAllowOverlap: true,
     iconImage: 'pickedLocationMarker'
   },
   routeToDestination: {
-    lineWidth: 5,
+    lineWidth: 6,
     lineOpacity: 1,
     lineColor: '#669df6',
     lineCap: MapboxGL.LineCap.Round,

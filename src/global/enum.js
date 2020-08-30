@@ -1,6 +1,6 @@
 export const MapStatus = Object.freeze({
   clear: 0,
-  routToDestination: 1,
+  routeToDestination: 1,
   routesToPickedLocation: 2
 });
 
