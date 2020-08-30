@@ -187,6 +187,8 @@ function Map({
   }, [routesToPickedLocation, selectedRouteToPickedLocation]);
 
   const getBounds = useCallback(() => {
+    if (!routesToPickedLocation) return null;
+
     const longitudes = [],
       latitudes = [];
 
@@ -209,12 +211,31 @@ function Map({
     //   paddingLeft: 15,
     //   paddingRight: 15,
     //   paddingTop: 15,
-    //   paddingBottom: 15
+    //   paddingBottom: 15,
+    //   animationDuration: 1.5 * 1000
     // };
 
     // for MapboxGl.Camera.fitBounds
-    return [[north, east], [south, west], 15];
+    return [[north, east], [south, west], 15, 1.5 * 1000];
   }, [routesToPickedLocation]);
+
+  const updateCamera = useCallback(() => {
+    const cam = cameraRef.current;
+
+    if (!cam) return null;
+
+    if (mapStatus === MapStatus.clear) {
+      cam.setCamera({
+        centerCoordinate: UserLocation.currentLocation
+      });
+    } else if (mapStatus === MapStatus.routeToDestination) {
+      cam.setCamera({
+        centerCoordinate: UserLocation.currentLocation
+      });
+    } else if (mapStatus === MapStatus.routesToPickedLocation && getBounds()) {
+      cam.fitBounds(...getBounds());
+    }
+  }, [cameraRef.current, mapStatus, getBounds]);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
@@ -228,16 +249,27 @@ function Map({
 
         <MapboxGL.Camera
           ref={cameraRef}
-          followUserLocation={mapStatus !== MapStatus.routesToPickedLocation}
-          followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
-          followZoomLevel={mapStatus === MapStatus.routeToDestination ? 15 : 14}
           animationMode={'easeTo'}
           animationDuration={1.5 * 1000}
-          centerCoordinate={
-            mapStatus !== MapStatus.routeToPickedLocation
-              ? UserLocation.currentLocation
-              : null
+          followUserLocation={mapStatus !== MapStatus.routesToPickedLocation}
+          followUserMode={
+            mapStatus === MapStatus.routeToDestination
+              ? MapboxGL.UserTrackingModes.FollowWithHeading
+              : MapboxGL.UserTrackingModes.FollowWithCourse
           }
+          followZoomLevel={mapStatus === MapStatus.routeToDestination ? 16 : 14}
+
+          // {...(() => {
+          //   if (
+          //     routesToPickedLocation &&
+          //     mapStatus === MapStatus.routesToPickedLocation &&
+          //     getBounds()
+          //   )
+          //     return {
+          //       bounds: getBounds()
+          //     };
+          // })()}
+
           // bounds={
           //   routesToPickedLocation &&
           //   mapStatus === MapStatus.routesToPickedLocation
@@ -254,12 +286,7 @@ function Map({
           }}
         />
 
-        {mapStatus === MapStatus.clear &&
-          cameraRef.current &&
-          cameraRef.current.setCamera({
-            centerCoordinate: UserLocation.currentLocation,
-            zoomLevel: 14
-          })}
+        {cameraRef.current && updateCamera()}
 
         {mapScreenStatus === MapScreenStatus.showRouteInfo &&
           mapStatus === MapStatus.routesToPickedLocation &&
@@ -271,25 +298,15 @@ function Map({
           routesToPickedLocation &&
           renderRoutesToPickedLocation()}
 
-        {mapScreenStatus === MapScreenStatus.showRouteInfo &&
-          mapStatus === MapStatus.routesToPickedLocation &&
-          routesToPickedLocation &&
-          cameraRef.current.fitBounds(...getBounds())}
-
-        {(mapScreenStatus === MapScreenStatus.mapView ||
-          mapScreenStatus === MapScreenStatus.showRouteInfo) &&
-          mapStatus === MapStatus.routeToDestination &&
+        {mapStatus === MapStatus.routeToDestination &&
+          startLocation &&
           renderStartLocationMarker()}
 
-        {(mapScreenStatus === MapScreenStatus.mapView ||
-          mapScreenStatus === MapScreenStatus.showRouteInfo) &&
-          mapStatus === MapStatus.routeToDestination &&
+        {mapStatus === MapStatus.routeToDestination &&
           destination &&
           renderDestinationMarker()}
 
-        {(mapScreenStatus === MapScreenStatus.mapView ||
-          mapScreenStatus === MapScreenStatus.showRouteInfo) &&
-          mapStatus === MapStatus.routeToDestination &&
+        {mapStatus === MapStatus.routeToDestination &&
           routeToDestination &&
           renderRouteToDestination()}
       </MapboxGL.MapView>

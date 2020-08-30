@@ -75,7 +75,7 @@ function ShowRouteInfo(props) {
   return (
     <AnimatedView
       in={props.in}
-      timeout={1 * 1000}
+      timeout={0.5 * 1000}
       viewStyles={styles.mainContainer}
       animationStyles={{
         appear: {
