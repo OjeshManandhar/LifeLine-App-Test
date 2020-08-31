@@ -157,6 +157,7 @@ function MapScreen(props) {
         startLocation={startLocation}
         pickedLocation={pickedLocation}
         mapScreenStatus={mapScreenStatus}
+        pickedCoordinate={pickedCoordinate}
         setMapScreenStatus={setMapScreenStatus}
         routeToDestination={routeToDestination}
         setPickedCoordintate={setPickedCoordintate}

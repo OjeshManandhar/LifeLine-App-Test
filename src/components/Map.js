@@ -27,6 +27,7 @@ function Map({
   startLocation,
   pickedLocation,
   mapScreenStatus,
+  pickedCoordinate,
   setMapScreenStatus,
   routeToDestination,
   setPickedCoordintate,
@@ -35,9 +36,6 @@ function Map({
   setSelectedRouteToPickedLocation
 }) {
   const cameraRef = useRef(null);
-  const pointAnnotationRef = useRef(null);
-
-  const [pointAnnotationCoord, _setPointAnnotationCoord] = useState(null);
 
   async function askGPSPermissions() {
     try {
@@ -73,28 +71,19 @@ function Map({
     });
   }, []);
 
-  const setPointAnnotationCoord = useCallback(
-    coordinate => {
-      setPickedCoordintate(coordinate);
-      _setPointAnnotationCoord(coordinate);
-    },
-    [setPickedCoordintate, _setPointAnnotationCoord]
-  );
-
   const renderPickMarker = useCallback(() => {
-    if (!pointAnnotationCoord) return null;
+    if (!pickedCoordinate) return null;
 
     return (
       <MapboxGL.PointAnnotation
-        ref={pointAnnotationRef}
         id='user-picked-location'
         title='Picked Destination'
-        coordinate={pointAnnotationCoord}
+        coordinate={pickedCoordinate}
         draggable={true}
-        onDragEnd={data => setPointAnnotationCoord(data.geometry.coordinates)}
+        onDragEnd={data => setPickedCoordintate(data.geometry.coordinates)}
       />
     );
-  }, [pointAnnotationCoord, setPointAnnotationCoord]);
+  }, [pickedCoordinate, setPickedCoordintate]);
 
   const toggleMapScreenStatus = useCallback(() => {
     if (mapScreenStatus === MapScreenStatus.mapView) {
@@ -270,7 +259,7 @@ function Map({
         onPress={
           mapScreenStatus === MapScreenStatus.picking &&
           mapStatus === MapStatus.pickingLocation
-            ? data => setPointAnnotationCoord(data.geometry.coordinates)
+            ? data => setPickedCoordintate(data.geometry.coordinates)
             : undefined
         }
       >
@@ -319,7 +308,7 @@ function Map({
 
         {mapScreenStatus === MapScreenStatus.picking &&
           mapStatus === MapStatus.pickingLocation &&
-          pointAnnotationCoord &&
+          pickedCoordinate &&
           renderPickMarker()}
 
         {mapScreenStatus === MapScreenStatus.showRouteInfo &&

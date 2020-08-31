@@ -28,6 +28,7 @@ function ShowPickedLocationName(props) {
 
   useEffect(() => {
     console.log('ShowPickedLocationName:', props);
+
     setFindingInfo(true);
 
     //reverseGeocode
