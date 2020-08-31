@@ -37,7 +37,7 @@ function Map({
   const cameraRef = useRef(null);
   const pointAnnotationRef = useRef(null);
 
-  const [pointAnnotationCoord, setPointAnnotationCoord] = useState(null);
+  const [pointAnnotationCoord, _setPointAnnotationCoord] = useState(null);
 
   async function askGPSPermissions() {
     try {
@@ -72,6 +72,14 @@ function Map({
       }
     });
   }, []);
+
+  const setPointAnnotationCoord = useCallback(
+    coordinate => {
+      setPickedCoordintate(coordinate);
+      _setPointAnnotationCoord(coordinate);
+    },
+    [setPickedCoordintate, _setPointAnnotationCoord]
+  );
 
   const renderPickMarker = useCallback(() => {
     if (!pointAnnotationCoord) return null;

@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     left: 5,
     right: 5,
     height: containerHeight,
-    zIndex: ZIndex.routeInfoBox,
+    zIndex: ZIndex.bottomInfoBox,
 
     backgroundColor: '#ffffff',
     borderRadius: 5,

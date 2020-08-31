@@ -7,6 +7,7 @@ import SearchBox from 'components/SearchBox';
 import SearchList from 'components/SearchList';
 import ShowRouteInfo from 'components/ShowRouteInfo';
 import AnimatedImageButton from 'components/AnimatedImageButton';
+import ShowPickedLocationName from 'components/ShowPickedLocationName';
 
 // global
 import ZIndex from 'global/zIndex';
@@ -131,7 +132,10 @@ function MapScreen(props) {
           // onEntered={() => console.log('ON ENTERED')}
           // onExit={() => console.log('ON EXIT')}
           // onExited={() => console.log('ON EXITED')}
-          onPress={() => setMapScreenStatus(MapScreenStatus.mapView)}
+          onPress={() => {
+            setPickedCoordintate(null);
+            setMapScreenStatus(MapScreenStatus.mapView);
+          }}
         />
 
         {mapScreenStatus === MapScreenStatus.picking ? (
@@ -155,7 +159,7 @@ function MapScreen(props) {
         mapScreenStatus={mapScreenStatus}
         setMapScreenStatus={setMapScreenStatus}
         routeToDestination={routeToDestination}
-        setPickedCoordintate={setPickedLocation}
+        setPickedCoordintate={setPickedCoordintate}
         routesToPickedLocation={routesToPickedLocation}
         selectedRouteToPickedLocation={selectedRouteToPickedLocation}
         setSelectedRouteToPickedLocation={setSelectedRouteToPickedLocation}
@@ -243,6 +247,28 @@ function MapScreen(props) {
 
             setMapStatus(MapStatus.clear);
           }
+        }}
+      />
+
+      <ShowPickedLocationName
+        in={
+          pickedCoordinate != null &&
+          mapScreenStatus === MapScreenStatus.picking
+        }
+        pickedCoordinate={pickedCoordinate}
+        setPickedLocation={data => {
+          setMapStatus(MapStatus.routesToPickedLocation);
+          setMapScreenStatus(MapScreenStatus.showRouteInfo);
+
+          setPickedLocation(data);
+          getRoute(data.coordinate)
+            .then(routes => {
+              setRoutesToPickedLocation(routes);
+              setSelectedRouteToPickedLocation(routes[0].id);
+            })
+            .catch(error => {
+              console.log('No routes Found:', error);
+            });
         }}
       />
     </View>
