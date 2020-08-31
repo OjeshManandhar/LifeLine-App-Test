@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  Text,
-  Button,
-  Keyboard,
-  StyleSheet,
-  BackHandler
-} from 'react-native';
+import { View, Text, Keyboard, StyleSheet, BackHandler } from 'react-native';
 
 // components
 import Map from 'components/Map';
@@ -34,6 +27,7 @@ function MapScreen(props) {
   const [startLocation, setStartLocation] = useState(null);
   const [pickedLocation, setPickedLocation] = useState(null);
   const [mapStatus, setMapStatus] = useState(MapStatus.clear);
+  const [pickedCoordinate, setPickedCoordintate] = useState(null);
   const [routeToDestination, setRouteToDestination] = useState(null);
   const [routesToPickedLocation, setRoutesToPickedLocation] = useState(null);
   const [mapScreenStatus, _setMapScreenStatus] = useState(
@@ -137,24 +131,18 @@ function MapScreen(props) {
           // onEntered={() => console.log('ON ENTERED')}
           // onExit={() => console.log('ON EXIT')}
           // onExited={() => console.log('ON EXITED')}
-          onPress={() => {
-            setMapScreenStatus(MapScreenStatus.mapView);
-          }}
+          onPress={() => setMapScreenStatus(MapScreenStatus.mapView)}
         />
 
         {mapScreenStatus === MapScreenStatus.picking ? (
           <View style={styles.pickContainer}>
-            <Text style={styles.pickText}>Pick a location</Text>
-            <Button
-              title='OK'
-              style={styles.pickButton}
-              onPress={() => console.log('Picked Location:', pickedLocation)}
-            />
+            <Text style={styles.pickText}>Tap to pick a location</Text>
           </View>
         ) : (
           <SearchBox
-            setMapScreenStatus={setMapScreenStatus}
+            searchKeyword={searchKeyword}
             setSearchKeyword={setSearchKeyword}
+            setMapScreenStatus={setMapScreenStatus}
           />
         )}
       </View>
@@ -167,6 +155,7 @@ function MapScreen(props) {
         mapScreenStatus={mapScreenStatus}
         setMapScreenStatus={setMapScreenStatus}
         routeToDestination={routeToDestination}
+        setPickedCoordintate={setPickedLocation}
         routesToPickedLocation={routesToPickedLocation}
         selectedRouteToPickedLocation={selectedRouteToPickedLocation}
         setSelectedRouteToPickedLocation={setSelectedRouteToPickedLocation}
@@ -306,22 +295,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'stretch',
-
-    borderWidth: 1,
-    borderColor: 'black'
+    alignItems: 'center'
   },
   pickText: {
-    flex: 1,
-
-    borderWidth: 1,
-    borderColor: 'black'
-  },
-  pickButton: {
-    padding: 5,
-
-    borderWidth: 1,
-    borderColor: 'black'
+    fontSize: 18
   }
 });
 

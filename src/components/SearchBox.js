@@ -11,7 +11,7 @@ import { MapScreenStatus } from 'global/enum';
 import cross from './../assets/images/cross.png';
 
 function SearchBox(props) {
-  const [text, setText] = useState('');
+  const [text, setText] = useState(props.searchKeyword);
 
   return (
     <View style={styles.container}>

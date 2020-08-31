@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   PermissionsAndroid,
@@ -29,11 +29,15 @@ function Map({
   mapScreenStatus,
   setMapScreenStatus,
   routeToDestination,
+  setPickedCoordintate,
   routesToPickedLocation,
   selectedRouteToPickedLocation,
   setSelectedRouteToPickedLocation
 }) {
   const cameraRef = useRef(null);
+  const pointAnnotationRef = useRef(null);
+
+  const [pointAnnotationCoord, setPointAnnotationCoord] = useState(null);
 
   async function askGPSPermissions() {
     try {
@@ -68,6 +72,21 @@ function Map({
       }
     });
   }, []);
+
+  const renderPickMarker = useCallback(() => {
+    if (!pointAnnotationCoord) return null;
+
+    return (
+      <MapboxGL.PointAnnotation
+        ref={pointAnnotationRef}
+        id='user-picked-location'
+        title='Picked Destination'
+        coordinate={pointAnnotationCoord}
+        draggable={true}
+        onDragEnd={data => setPointAnnotationCoord(data.geometry.coordinates)}
+      />
+    );
+  }, [pointAnnotationCoord, setPointAnnotationCoord]);
 
   const toggleMapScreenStatus = useCallback(() => {
     if (mapScreenStatus === MapScreenStatus.mapView) {
@@ -240,6 +259,12 @@ function Map({
         style={styles.container}
         styleURL={MapboxGL.StyleURL.Outdoors}
         compassViewMargins={{ x: 10, y: 90 }}
+        onPress={
+          mapScreenStatus === MapScreenStatus.picking &&
+          mapStatus === MapStatus.pickingLocation
+            ? data => setPointAnnotationCoord(data.geometry.coordinates)
+            : undefined
+        }
       >
         <MapboxGL.UserLocation visible showsUserHeadingIndicator />
 
@@ -283,6 +308,11 @@ function Map({
         />
 
         {cameraRef.current && updateCamera()}
+
+        {mapScreenStatus === MapScreenStatus.picking &&
+          mapStatus === MapStatus.pickingLocation &&
+          pointAnnotationCoord &&
+          renderPickMarker()}
 
         {mapScreenStatus === MapScreenStatus.showRouteInfo &&
           mapStatus === MapStatus.routesToPickedLocation &&
