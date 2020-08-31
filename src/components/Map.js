@@ -208,10 +208,10 @@ function Map({
     // return {
     //   ne: [north, east],
     //   sw: [south, west],
-    //   paddingLeft: 10,
-    //   paddingRight: 10,
     //   paddingTop: 10,
+    //   paddingLeft: 10,
     //   paddingBottom: 10,
+    //   paddingRight: 10,
     //   animationDuration: 1.5 * 1000
     // };
 
@@ -224,18 +224,12 @@ function Map({
 
     if (!cam) return null;
 
-    if (mapStatus === MapStatus.clear) {
-      cam.setCamera({
-        centerCoordinate: UserLocation.currentLocation
-        // zoomLevel: 14
-      });
-    } else if (mapStatus === MapStatus.routeToDestination) {
-      cam.setCamera({
-        centerCoordinate: UserLocation.currentLocation
-        // zoomLevel: 15
-      });
-    } else if (mapStatus === MapStatus.routesToPickedLocation && getBounds()) {
+    if (mapStatus === MapStatus.routesToPickedLocation && getBounds()) {
       cam.fitBounds(...getBounds());
+    } else {
+      cam.setCamera({
+        centerCoordinate: UserLocation.currentLocation
+      });
     }
   }, [cameraRef.current, mapStatus, getBounds]);
 

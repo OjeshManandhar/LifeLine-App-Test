@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Keyboard, StyleSheet, BackHandler } from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  Keyboard,
+  StyleSheet,
+  BackHandler
+} from 'react-native';
 
 // components
 import Map from 'components/Map';
@@ -107,143 +114,158 @@ function MapScreen(props) {
 
   return (
     <View style={styles.container}>
-      {mapScreenStatus !== MapScreenStatus.picking && (
-        <View style={styles.searchContainer}>
-          <AnimatedImageButton
-            in={mapScreenStatus === MapScreenStatus.searching}
-            image={back}
-            timeout={0.25 * 1000}
-            imageStyles={styles.backIcon}
-            animationStyles={{
-              enter: {
-                opacity: [0, 1],
-                marginLeft: [-40, 0]
-              },
-              exit: {
-                opacity: [1, 0],
-                marginLeft: [0, -40]
-              }
-            }}
-            // onEnter={() => console.log('ON ENTER')}
-            // onEntered={() => console.log('ON ENTERED')}
-            // onExit={() => console.log('ON EXIT')}
-            // onExited={() => console.log('ON EXITED')}
-            onPress={() => {
-              setMapScreenStatus(MapScreenStatus.mapView);
-            }}
-          />
+      <View style={styles.topContainer}>
+        <AnimatedImageButton
+          in={
+            mapScreenStatus === MapScreenStatus.searching ||
+            mapScreenStatus === MapScreenStatus.picking
+          }
+          image={back}
+          timeout={0.25 * 1000}
+          imageStyles={styles.backIcon}
+          animationStyles={{
+            enter: {
+              opacity: [0, 1],
+              marginLeft: [-40, 0]
+            },
+            exit: {
+              opacity: [1, 0],
+              marginLeft: [0, -40]
+            }
+          }}
+          // onEnter={() => console.log('ON ENTER')}
+          // onEntered={() => console.log('ON ENTERED')}
+          // onExit={() => console.log('ON EXIT')}
+          // onExited={() => console.log('ON EXITED')}
+          onPress={() => {
+            setMapScreenStatus(MapScreenStatus.mapView);
+          }}
+        />
 
+        {mapScreenStatus === MapScreenStatus.picking ? (
+          <View style={styles.pickContainer}>
+            <Text style={styles.pickText}>Pick a location</Text>
+            <Button
+              title='OK'
+              style={styles.pickButton}
+              onPress={() => console.log('Picked Location:', pickedLocation)}
+            />
+          </View>
+        ) : (
           <SearchBox
             setMapScreenStatus={setMapScreenStatus}
             setSearchKeyword={setSearchKeyword}
           />
-        </View>
-      )}
+        )}
+      </View>
 
-      <View style={styles.bodyContainer}>
-        <Map
-          mapStatus={mapStatus}
-          destination={destination}
-          startLocation={startLocation}
-          pickedLocation={pickedLocation}
-          mapScreenStatus={mapScreenStatus}
-          setMapScreenStatus={setMapScreenStatus}
-          routeToDestination={routeToDestination}
-          routesToPickedLocation={routesToPickedLocation}
-          selectedRouteToPickedLocation={selectedRouteToPickedLocation}
-          setSelectedRouteToPickedLocation={setSelectedRouteToPickedLocation}
-        />
+      <Map
+        mapStatus={mapStatus}
+        destination={destination}
+        startLocation={startLocation}
+        pickedLocation={pickedLocation}
+        mapScreenStatus={mapScreenStatus}
+        setMapScreenStatus={setMapScreenStatus}
+        routeToDestination={routeToDestination}
+        routesToPickedLocation={routesToPickedLocation}
+        selectedRouteToPickedLocation={selectedRouteToPickedLocation}
+        setSelectedRouteToPickedLocation={setSelectedRouteToPickedLocation}
+      />
 
-        <SearchList
-          in={mapScreenStatus === MapScreenStatus.searching}
-          searchKeyword={searchKeyword}
-          setPickedLocation={data => {
-            setMapStatus(MapStatus.routesToPickedLocation);
-            setMapScreenStatus(MapScreenStatus.showRouteInfo);
+      <SearchList
+        in={mapScreenStatus === MapScreenStatus.searching}
+        searchKeyword={searchKeyword}
+        setPickedLocation={data => {
+          setMapStatus(MapStatus.routesToPickedLocation);
+          setMapScreenStatus(MapScreenStatus.showRouteInfo);
 
-            setPickedLocation(data);
-            getRoute(data.coordinate)
-              .then(routes => {
-                setRoutesToPickedLocation(routes);
-                setSelectedRouteToPickedLocation(routes[0].id);
-              })
-              .catch(error => {
-                console.log('No routes Found:', error);
-              });
-          }}
-        />
+          setPickedLocation(data);
+          getRoute(data.coordinate)
+            .then(routes => {
+              setRoutesToPickedLocation(routes);
+              setSelectedRouteToPickedLocation(routes[0].id);
+            })
+            .catch(error => {
+              console.log('No routes Found:', error);
+            });
+        }}
+        switchToPicking={() => {
+          setMapStatus(MapStatus.pickingLocation);
+          setMapScreenStatus(MapScreenStatus.picking);
+        }}
+      />
 
-        <ShowRouteInfo
-          in={mapScreenStatus === MapScreenStatus.showRouteInfo}
-          location={(function() {
-            if (mapStatus === MapStatus.routeToDestination) {
-              return destination;
-            } else if (mapStatus === MapStatus.routesToPickedLocation) {
-              return pickedLocation;
-            }
-          })()}
-          useButton={(() => {
-            if (mapStatus === MapStatus.routeToDestination) {
-              return { image: finish, text: 'Close this route' };
-            } else if (mapStatus === MapStatus.routesToPickedLocation) {
-              return { image: use, text: 'Use this route' };
-            }
-          })()}
-          routeInfo={
-            mapStatus === MapStatus.routeToDestination
-              ? routeToDestination
-              : mapStatus === MapStatus.routesToPickedLocation
-              ? routesToPickedLocation && selectedRouteToPickedLocation
-                ? routesToPickedLocation.find(
-                    route => route.id === selectedRouteToPickedLocation
-                  )
-                : null
-              : null
+      <ShowRouteInfo
+        in={mapScreenStatus === MapScreenStatus.showRouteInfo}
+        location={(function() {
+          if (mapStatus === MapStatus.routeToDestination) {
+            return destination;
+          } else if (mapStatus === MapStatus.routesToPickedLocation) {
+            return pickedLocation;
           }
-          onClose={() => {
-            setMapScreenStatus(MapScreenStatus.mapView);
-
-            if (mapStatus === MapStatus.routesToPickedLocation) {
-              setMapScreenStatus(MapScreenStatus.mapView);
-
-              destination
-                ? setMapStatus(MapStatus.routeToDestination)
-                : setMapStatus(MapStatus.clear);
-            }
-          }}
-          onUse={() => {
-            if (mapStatus === MapStatus.routesToPickedLocation) {
-              // Set Destination
-              setStartLocation(UserLocation.currentLocation);
-              setDestination(pickedLocation);
-              setRouteToDestination(
-                routesToPickedLocation.find(
+        })()}
+        useButton={(() => {
+          if (mapStatus === MapStatus.routeToDestination) {
+            return { image: finish, text: 'Close this route' };
+          } else if (mapStatus === MapStatus.routesToPickedLocation) {
+            return { image: use, text: 'Use this route' };
+          }
+        })()}
+        routeInfo={
+          mapStatus === MapStatus.routeToDestination
+            ? routeToDestination
+            : mapStatus === MapStatus.routesToPickedLocation
+            ? routesToPickedLocation && selectedRouteToPickedLocation
+              ? routesToPickedLocation.find(
                   route => route.id === selectedRouteToPickedLocation
                 )
-              );
-              clearPickedLocationInfo();
+              : null
+            : null
+        }
+        onClose={() => {
+          setMapScreenStatus(MapScreenStatus.mapView);
 
-              setMapStatus(MapStatus.routeToDestination);
-            } else if (mapStatus === MapStatus.routeToDestination) {
-              setMapScreenStatus(MapScreenStatus.mapView);
+          if (mapStatus === MapStatus.routesToPickedLocation) {
+            setMapScreenStatus(MapScreenStatus.mapView);
 
-              // Clear Destination
-              clearDestination();
+            destination
+              ? setMapStatus(MapStatus.routeToDestination)
+              : setMapStatus(MapStatus.clear);
+          }
+        }}
+        onUse={() => {
+          if (mapStatus === MapStatus.routesToPickedLocation) {
+            // Set Destination
+            setStartLocation(UserLocation.currentLocation);
+            setDestination(pickedLocation);
+            setRouteToDestination(
+              routesToPickedLocation.find(
+                route => route.id === selectedRouteToPickedLocation
+              )
+            );
+            clearPickedLocationInfo();
 
-              setMapStatus(MapStatus.clear);
-            }
-          }}
-        />
-      </View>
+            setMapStatus(MapStatus.routeToDestination);
+          } else if (mapStatus === MapStatus.routeToDestination) {
+            setMapScreenStatus(MapScreenStatus.mapView);
+
+            // Clear Destination
+            clearDestination();
+
+            setMapStatus(MapStatus.clear);
+          }
+        }}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    position: 'relative'
   },
-  searchContainer: {
+  topContainer: {
     position: 'absolute',
     top: 5,
     left: 10,
@@ -280,9 +302,26 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: 20
   },
-  bodyContainer: {
+  pickContainer: {
     flex: 1,
-    position: 'relative'
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+
+    borderWidth: 1,
+    borderColor: 'black'
+  },
+  pickText: {
+    flex: 1,
+
+    borderWidth: 1,
+    borderColor: 'black'
+  },
+  pickButton: {
+    padding: 5,
+
+    borderWidth: 1,
+    borderColor: 'black'
   }
 });
 

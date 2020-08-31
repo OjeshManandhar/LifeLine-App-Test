@@ -96,11 +96,7 @@ function SearchList(props) {
       <ScrollView keyboardShouldPersistTaps='always'>
         {renderResponses()}
 
-        <TouchableNativeFeedback
-          onPress={() => {
-            console.log('Pick on Map');
-          }}
-        >
+        <TouchableNativeFeedback onPress={props.switchToPicking}>
           <View style={styles.searchResultGroup}>
             <View style={styles.blockContainer}>
               <View style={styles.blockImageContainer}>
