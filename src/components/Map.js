@@ -247,7 +247,7 @@ function Map({
         centerCoordinate: UserLocation.currentLocation
       });
     }
-  }, [cameraRef.current, mapStatus, getBounds]);
+  }, [cameraRef.current, mapStatus]);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
@@ -276,7 +276,6 @@ function Map({
               : MapboxGL.UserTrackingModes.FollowWithCourse
           }
           followZoomLevel={mapStatus === MapStatus.routeToDestination ? 15 : 14}
-
           // {...(() => {
           //   if (
           //     routesToPickedLocation &&

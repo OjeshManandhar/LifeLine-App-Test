@@ -19,6 +19,7 @@ import reverseGeocoder from 'utils/reverseGeocoder';
 
 // assets
 import finish from 'assets/images/finish.png';
+import pick from '@mapbox/mapbox-sdk/services/service-helpers/pick';
 
 const containerHeight = 60;
 
@@ -27,11 +28,17 @@ function ShowPickedLocationName(props) {
   const [pickedLocation, setPickedLocation] = useState(null);
 
   useEffect(() => {
-    console.log('ShowPickedLocationName:', props);
-
+    setPickedLocation(null);
     setFindingInfo(true);
 
     //reverseGeocode
+    props.pickedCoordinate &&
+      reverseGeocoder(props.pickedCoordinate)
+        .then(result => {
+          setPickedLocation(result);
+          setFindingInfo(false);
+        })
+        .catch(error => console.log('error:', error));
   }, [setFindingInfo, setPickedLocation, props.pickedCoordinate]);
 
   return (
@@ -54,17 +61,25 @@ function ShowPickedLocationName(props) {
         }
       }}
     >
-      {!findingInfo ? (
+      {findingInfo && pickedLocation == null ? (
         <View style={styles.container}>
-          <Text style={styles.loading}>Loading ...</Text>
+          <Text style={styles.loading} numberOfLines={1}>
+            Loading ...
+          </Text>
         </View>
       ) : (
         <View style={styles.container}>
           <View style={styles.placeInfo}>
-            <Text style={styles.placeName}>Name</Text>
-            <Text style={styles.placeLocation}>Location</Text>
+            <Text style={styles.placeName} numberOfLines={1}>
+              {pickedLocation.name}
+            </Text>
+            <Text style={styles.placeLocation} numberOfLines={1}>
+              {pickedLocation.location}
+            </Text>
           </View>
-          <TouchableNativeFeedback onPress={() => console.log('Pick Location')}>
+          <TouchableNativeFeedback
+            onPress={() => props.setPickedLocation(pickedLocation)}
+          >
             <View style={styles.pickButton}>
               <Image source={finish} style={styles.pickIcon} />
               <Text style={styles.pickText}>Pick</Text>
@@ -105,10 +120,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'stretch',
-    marginRight: 7.5,
-
-    borderWidth: 1,
-    borderColor: 'black'
+    marginRight: 7.5
   },
   placeName: {
     fontSize: 23,

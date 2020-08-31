@@ -78,7 +78,14 @@ function MapScreen(props) {
       }
       setMapScreenStatus(MapScreenStatus.mapView);
       return true;
+    } else if (mapScreenStatus === MapScreenStatus.picking) {
+      setPickedCoordintate(null);
+      setMapStatus(MapStatus.clear);
+      setMapScreenStatus(MapScreenStatus.mapView);
+      return true;
     } else {
+      setMapStatus(MapStatus.clear);
+      setMapScreenStatus(MapScreenStatus.mapView);
       return true;
     }
   }, [
@@ -270,6 +277,8 @@ function MapScreen(props) {
             .catch(error => {
               console.log('No routes Found:', error);
             });
+
+          setPickedCoordintate(null);
         }}
       />
     </View>
