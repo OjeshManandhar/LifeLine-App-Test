@@ -1,6 +1,5 @@
 // packages
 import { getDistance } from 'geolib';
-import Geolocation from '@react-native-community/geolocation';
 const mbxGeocoder = require('@mapbox/mapbox-sdk/services/geocoding');
 
 // utils
@@ -88,6 +87,7 @@ function forwardGeocoder(keyword) {
       .forwardGeocode({
         query: keyword,
         countries: ['np'],
+        limit: 10,
         autocomplete: true
         // types: [
         //   'poi',
