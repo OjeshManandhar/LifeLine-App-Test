@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   PermissionsAndroid,
@@ -224,15 +224,15 @@ function Map({
     // return {
     //   ne: [north, east],
     //   sw: [south, west],
-    //   paddingTop: 10,
-    //   paddingLeft: 10,
-    //   paddingBottom: 10,
-    //   paddingRight: 10,
+    //   // paddingTop: 10,
+    //   // paddingLeft: 10,
+    //   // paddingBottom: 10,
+    //   // paddingRight: 10,
     //   animationDuration: 1.5 * 1000
     // };
 
     // for MapboxGl.Camera.fitBounds
-    return [[north, east], [south, west], 10, 1.5 * 1000];
+    return [[north, east], [south, west], 0, 1.5 * 1000];
   }, [routesToPickedLocation]);
 
   const updateCamera = useCallback(() => {
@@ -247,7 +247,7 @@ function Map({
         centerCoordinate: UserLocation.currentLocation
       });
     }
-  }, [cameraRef.current, mapStatus]);
+  }, [cameraRef.current, mapStatus, getBounds]);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
@@ -257,8 +257,8 @@ function Map({
         styleURL={MapboxGL.StyleURL.Outdoors}
         compassViewMargins={{ x: 10, y: 90 }}
         onPress={
-          mapScreenStatus === MapScreenStatus.picking &&
-          mapStatus === MapStatus.pickingLocation
+          mapStatus === MapStatus.pickingLocation &&
+          mapScreenStatus === MapScreenStatus.picking
             ? data => setPickedCoordintate(data.geometry.coordinates)
             : undefined
         }

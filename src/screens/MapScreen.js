@@ -83,8 +83,8 @@ function MapScreen(props) {
       setMapStatus(MapStatus.clear);
       setMapScreenStatus(MapScreenStatus.mapView);
       return true;
-    } else {
-      setMapStatus(MapStatus.clear);
+    } else if (mapScreenStatus === MapScreenStatus.searching) {
+      clearPickedLocationInfo();
       setMapScreenStatus(MapScreenStatus.mapView);
       return true;
     }
@@ -140,6 +140,7 @@ function MapScreen(props) {
           // onExit={() => console.log('ON EXIT')}
           // onExited={() => console.log('ON EXITED')}
           onPress={() => {
+            clearPickedLocationInfo();
             setPickedCoordintate(null);
             setMapScreenStatus(MapScreenStatus.mapView);
           }}
@@ -191,6 +192,7 @@ function MapScreen(props) {
             });
         }}
         switchToPicking={() => {
+          setPickedCoordintate(null);
           setMapStatus(MapStatus.pickingLocation);
           setMapScreenStatus(MapScreenStatus.picking);
         }}
@@ -227,8 +229,6 @@ function MapScreen(props) {
           setMapScreenStatus(MapScreenStatus.mapView);
 
           if (mapStatus === MapStatus.routesToPickedLocation) {
-            setMapScreenStatus(MapScreenStatus.mapView);
-
             destination
               ? setMapStatus(MapStatus.routeToDestination)
               : setMapStatus(MapStatus.clear);
@@ -248,12 +248,11 @@ function MapScreen(props) {
 
             setMapStatus(MapStatus.routeToDestination);
           } else if (mapStatus === MapStatus.routeToDestination) {
+            setMapStatus(MapStatus.clear);
             setMapScreenStatus(MapScreenStatus.mapView);
 
             // Clear Destination
             clearDestination();
-
-            setMapStatus(MapStatus.clear);
           }
         }}
       />
