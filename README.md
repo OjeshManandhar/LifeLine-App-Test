@@ -25,3 +25,12 @@ Testing codes for LifeLine app (MAJOR PROJECT)
 + **changeUI**
   - Making a more Google Maps app like UI
   - Adding small animation
+
+## Issues
++ **on Android 5.1.1**
+  - MapboxGl.Camera.setCamera() doesn't always work
+  - MapboxGL.Camera.fitBounds() zooms out every time it is called eventually causing error
+  - MapboxGl.MapView.onPress() is not fired after ShowRouteInfo is rendered i.e. only it is only fired once
+
+## License
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.

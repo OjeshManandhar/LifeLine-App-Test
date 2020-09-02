@@ -1,43 +1,39 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Image,
-  TextInput,
-  StyleSheet,
-  TouchableNativeFeedback
-} from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 
 // component
-import AnimatedImageButton from 'component/AnimatedImageButton';
+import AnimatedImageButton from 'components/AnimatedImageButton';
 
 // global
-import { MapScreenHeaderStatus } from 'global/enum';
+import { MapScreenStatus } from 'global/enum';
 
 // assets
 import cross from './../assets/images/cross.png';
 
 function SearchBox(props) {
-  const [keyword, setKeyword] = useState('');
+  const [text, setText] = useState(props.searchKeyword);
 
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.inputBox}
         placeholder='Search here'
-        value={keyword}
+        value={text}
         returnKeyType='search'
-        onChangeText={text => setKeyword(text)}
-        onFocus={() => props.setHeaderStatus(MapScreenHeaderStatus.searching)}
-        // onSubmitEditing={() => props.setKeyword(keyword)}
-        onBlur={() => props.setHeaderStatus(MapScreenHeaderStatus.mapView)}
+        onChangeText={text => {
+          setText(text);
+          props.setSearchKeyword(text);
+        }}
+        onFocus={() => props.setMapScreenStatus(MapScreenStatus.searching)}
+        onSubmitEditing={() => props.setSearchKeyword(text)}
       />
 
       <AnimatedImageButton
-        in={keyword.length > 0}
+        in={text.length > 0}
         image={cross}
         timeout={0.25 * 1000}
-        imageStyle={styles.crossIcon}
-        animationStyle={{
+        imageStyles={styles.crossIcon}
+        animationStyles={{
           enter: {
             opacity: [0, 1]
           },
@@ -46,8 +42,8 @@ function SearchBox(props) {
           }
         }}
         onPress={() => {
-          console.log('Clear Back');
-          setKeyword('');
+          setText('');
+          props.setSearchKeyword('');
         }}
       />
     </View>
@@ -61,8 +57,8 @@ const styles = StyleSheet.create({
   },
   inputBox: {
     flex: 1,
-    padding: 5,
-    fontSize: 18
+    fontSize: 18,
+    paddingVertical: 5
   },
   crossIcon: {
     alignSelf: 'center',

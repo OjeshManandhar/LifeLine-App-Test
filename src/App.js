@@ -24,7 +24,7 @@ const AppNavigator = createStackNavigator(
     Map: { screen: MapScreen }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Map',
     defaultNavigationOptions: {
       headerShown: false
     }

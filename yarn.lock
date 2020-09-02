@@ -1034,9 +1034,9 @@
   integrity sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ==
 
 "@react-native-mapbox-gl/maps@^8.1.0-beta.1":
-  version "8.1.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@react-native-mapbox-gl/maps/-/maps-8.1.0-beta.1.tgz#e19ec6230c560763de71027932fc46cc80ae243d"
-  integrity sha512-NF9pJkI33BsqGYqghs24xvU6dhutNlMK1oh7ifoyi8AU712MBYS3wpbQ1M7RKULXfeP5iPS8qukCWLlWxcUUTQ==
+  version "8.1.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@react-native-mapbox-gl/maps/-/maps-8.1.0-rc.2.tgz#09c8ecdfca900a861e0135d53f6cab20e6256294"
+  integrity sha512-gjU5YSjlxqWZ5flMxiEoKUsu9DjLy3aqntivJGbqooRT8d1wILtErXDG2TDyprWGrUpFUl/D27TjLLSIhVmyOw==
   dependencies:
     "@mapbox/geo-viewport" ">= 0.4.0"
     "@turf/along" ">= 4.0.0 <7.0.0"
@@ -3144,6 +3144,11 @@ geojson-rbush@3.x:
     "@turf/helpers" "6.x"
     "@turf/meta" "6.x"
     rbush "^2.0.0"
+
+geolib@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/geolib/-/geolib-3.3.1.tgz#f144a53b6a6858e81111ff71d137318389927611"
+  integrity sha512-sfahBXFcgELdpumDZV5b3KWiINkZxC5myAkLk067UUcTmTXaiE9SWmxMEHztn/Eus4JX6kesHxaIuZlniYgUtg==
 
 get-caller-file@^1.0.1:
   version "1.0.3"

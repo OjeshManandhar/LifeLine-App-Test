@@ -1,11 +1,6 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
+import { Animated } from 'react-native';
 import PropTypes from 'prop-types';
-import {
-  Image,
-  Animated,
-  StyleSheet,
-  TouchableNativeFeedback
-} from 'react-native';
 
 // global
 import { AnimationState as AS } from 'global/enum';
@@ -13,7 +8,7 @@ import { AnimationState as AS } from 'global/enum';
 // hooks
 import useStateWithCallback from 'hooks/useStateWithCallback';
 
-function AnimatedImageButton(props) {
+function useAnimation(props) {
   const currentState = useRef(AS.initialRender);
 
   const [mount, setMount] = useStateWithCallback(null);
@@ -21,7 +16,7 @@ function AnimatedImageButton(props) {
 
   const startAnimation = useCallback(
     ({ animType, onStart, onComplete }) => {
-      const anim = props.animationStyle[animType];
+      const anim = props.animationStyles[animType];
 
       if (anim) {
         const animInit = {};
@@ -75,7 +70,7 @@ function AnimatedImageButton(props) {
         }
       }
     },
-    [props.timeout, props.animationStyle]
+    [props.timeout, props.animationStyles]
   );
 
   useEffect(() => {
@@ -102,6 +97,7 @@ function AnimatedImageButton(props) {
         (props.in === true && currentState.current === AS.in) ||
         (props.in === false && currentState.current === AS.out)
       ) {
+        // Happens on development due to fast reload
         // Don't execute ENTER/EXIT animation
         // No change in animation state
       }
@@ -141,21 +137,10 @@ function AnimatedImageButton(props) {
     startAnimation
   ]);
 
-  if (mount) {
-    return (
-      <TouchableNativeFeedback onPress={props.onPress}>
-        <Animated.Image
-          source={props.image}
-          style={[props.imageStyle, animationStyle]}
-        />
-      </TouchableNativeFeedback>
-    );
-  } else {
-    return null;
-  }
+  return [mount, animationStyle];
 }
 
-AnimatedImageButton.propTypes = {
+useAnimation.propTypes = {
   onExit: PropTypes.func,
   onEnter: PropTypes.func,
   onAppear: PropTypes.func,
@@ -163,13 +148,8 @@ AnimatedImageButton.propTypes = {
   onEntered: PropTypes.func,
   onAppeared: PropTypes.func,
   in: PropTypes.bool.isRequired,
-  image: PropTypes.any.isRequired,
-  onPress: PropTypes.func.isRequired,
   timeout: PropTypes.number.isRequired,
-  imageStyle: PropTypes.object.isRequired,
-  animationStyle: PropTypes.object.isRequired
+  animationStyles: PropTypes.object.isRequired
 };
 
-const styles = StyleSheet.create({});
-
-export default AnimatedImageButton;
+export default useAnimation;
