@@ -21,12 +21,15 @@ Testing codes for LifeLine app (MAJOR PROJECT)
   - Searching for locations using [Mapbox SDK JS](https://github.com/mapbox/mapbox-sdk-js)
   - Trace route from user current location to the selected destination
 + **pickLocation**
-  - Allowing the user to pick a location on Map and trace a route to that location.
+  - Allowing the user to pick a location on Map and trace a route to that location
 + **changeUI**
   - Making a more Google Maps app like UI
   - Adding small animation
++ **addObstruction**
+  - Add, update and remove certain marker on map along with small description of that marker
 
 ## Issues
+Tested on **ANDROID** only
 + **on Android 5.1.1**
   - MapboxGl.Camera.setCamera() doesn't always work
   - MapboxGL.Camera.fitBounds() zooms out every time it is called eventually causing error
