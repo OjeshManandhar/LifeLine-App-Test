@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, Keyboard, StyleSheet, BackHandler } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Keyboard,
+  StyleSheet,
+  BackHandler,
+  TouchableNativeFeedback
+} from 'react-native';
 
 // components
 import Map from 'components/Map';
@@ -18,9 +26,10 @@ import getRoute from 'utils/getRoute';
 import UserLocation from 'utils/userLocation';
 
 // assets
+import add from 'assets/images/add.png';
 import use from 'assets/images/use.png';
+import back from 'assets/images/back.png';
 import finish from 'assets/images/finish.png';
-import back from './../assets/images/back.png';
 
 function MapScreen() {
   const [destination, setDestination] = useState(null);
@@ -172,6 +181,27 @@ function MapScreen() {
         routesToPickedLocation={routesToPickedLocation}
         selectedRouteToPickedLocation={selectedRouteToPickedLocation}
         setSelectedRouteToPickedLocation={setSelectedRouteToPickedLocation}
+      />
+
+      <AnimatedImageButton
+        in={
+          mapStatus === MapStatus.clear &&
+          mapScreenStatus === MapScreenStatus.mapView
+        }
+        image={add}
+        timeout={0.25 * 1000}
+        imageStyles={styles.addIcon}
+        animationStyles={{
+          enter: {
+            opacity: [0, 1]
+          },
+          exit: {
+            opacity: [1, 0]
+          }
+        }}
+        onPress={() => {
+          console.log('Add icon onPress');
+        }}
       />
 
       <SearchList
@@ -334,6 +364,15 @@ const styles = StyleSheet.create({
   },
   pickText: {
     fontSize: 18
+  },
+  addIcon: {
+    position: 'absolute',
+    right: 10,
+    bottom: 10,
+    zIndex: ZIndex.bottomInfoBox,
+
+    width: 55,
+    height: 55
   }
 });
 
