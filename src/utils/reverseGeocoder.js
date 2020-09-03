@@ -10,13 +10,13 @@ import { MAPBOX_API_KEY } from 'react-native-dotenv';
 
 const geocodingClient = mbxGeocoder({ accessToken: MAPBOX_API_KEY });
 
-function parseResponse(feature) {
+function parseResponse(coordinate, feature) {
   const startLocation = UserLocation.currentLocation;
 
   return {
     id: feature.id,
     name: feature.text,
-    coordinate: feature.center,
+    coordinate: coordinate,
     type: feature.place_type[0],
     location: feature.place_name,
     distance: getDistance(
@@ -27,11 +27,11 @@ function parseResponse(feature) {
   };
 }
 
-function reverseGeocoder(coordinates) {
+function reverseGeocoder(coordinate) {
   return new Promise((resolve, reject) => {
     geocodingClient
       .reverseGeocode({
-        query: coordinates,
+        query: coordinate,
         countries: ['np'],
         limit: 1,
         types: [
@@ -48,7 +48,7 @@ function reverseGeocoder(coordinates) {
       .send()
       .then(
         response => {
-          resolve(parseResponse(response.body.features[0]));
+          resolve(parseResponse(coordinate, response.body.features[0]));
         },
         error => {
           console.log('reverseGeocoder error:', error);

@@ -22,7 +22,7 @@ import use from 'assets/images/use.png';
 import finish from 'assets/images/finish.png';
 import back from './../assets/images/back.png';
 
-function MapScreen(props) {
+function MapScreen() {
   const [destination, setDestination] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [startLocation, setStartLocation] = useState(null);

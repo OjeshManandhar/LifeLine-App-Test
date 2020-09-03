@@ -19,7 +19,6 @@ import reverseGeocoder from 'utils/reverseGeocoder';
 
 // assets
 import finish from 'assets/images/finish.png';
-import pick from '@mapbox/mapbox-sdk/services/service-helpers/pick';
 
 const containerHeight = 60;
 
