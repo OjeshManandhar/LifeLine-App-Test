@@ -87,7 +87,7 @@ function MapScreen() {
       }
       setMapScreenStatus(MapScreenStatus.mapView);
       return true;
-    } else if (mapScreenStatus === MapScreenStatus.picking) {
+    } else if (mapScreenStatus === MapScreenStatus.pickingDestinaion) {
       setPickedCoordintate(null);
       setMapStatus(MapStatus.clear);
       setMapScreenStatus(MapScreenStatus.mapView);
@@ -129,7 +129,7 @@ function MapScreen() {
         <AnimatedImageButton
           in={
             mapScreenStatus === MapScreenStatus.searching ||
-            mapScreenStatus === MapScreenStatus.picking
+            mapScreenStatus === MapScreenStatus.pickingDestinaion
           }
           image={back}
           timeout={0.25 * 1000}
@@ -155,7 +155,7 @@ function MapScreen() {
           }}
         />
 
-        {mapScreenStatus === MapScreenStatus.picking ? (
+        {mapScreenStatus === MapScreenStatus.pickingDestinaion ? (
           <View style={styles.pickContainer}>
             <Text style={styles.pickText}>Tap to pick a location</Text>
           </View>
@@ -224,7 +224,7 @@ function MapScreen() {
         switchToPicking={() => {
           setPickedCoordintate(null);
           setMapStatus(MapStatus.pickingLocation);
-          setMapScreenStatus(MapScreenStatus.picking);
+          setMapScreenStatus(MapScreenStatus.pickingDestinaion);
         }}
       />
 
@@ -290,7 +290,7 @@ function MapScreen() {
       <ShowPickedLocationName
         in={
           pickedCoordinate != null &&
-          mapScreenStatus === MapScreenStatus.picking
+          mapScreenStatus === MapScreenStatus.pickingDestinaion
         }
         pickedCoordinate={pickedCoordinate}
         setPickedLocation={data => {
