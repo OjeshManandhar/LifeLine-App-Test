@@ -258,7 +258,8 @@ function Map({
         compassViewMargins={{ x: 10, y: 90 }}
         onPress={
           mapStatus === MapStatus.pickingLocation &&
-          mapScreenStatus === MapScreenStatus.pickingDestinaion
+          (mapScreenStatus === MapScreenStatus.pickingDestinaion ||
+            mapScreenStatus === MapScreenStatus.addingObstruction)
             ? data => setPickedCoordintate(data.geometry.coordinates)
             : undefined
         }
@@ -305,7 +306,8 @@ function Map({
 
         {cameraRef.current && updateCamera()}
 
-        {mapScreenStatus === MapScreenStatus.pickingDestinaion &&
+        {(mapScreenStatus === MapScreenStatus.pickingDestinaion ||
+          mapScreenStatus === MapScreenStatus.addingObstruction) &&
           mapStatus === MapStatus.pickingLocation &&
           pickedCoordinate &&
           renderPickMarker()}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, TouchableNativeFeedback } from 'react-native';
+import { View, Animated, TouchableWithoutFeedback } from 'react-native';
 import PropTypes from 'prop-types';
 
 // hooks
@@ -10,9 +10,24 @@ function AnimatedImageButton({ image, imageStyles, onPress, ...props }) {
 
   if (mount) {
     return (
-      <TouchableNativeFeedback onPress={onPress}>
-        <Animated.Image source={image} style={[imageStyles, animationStyle]} />
-      </TouchableNativeFeedback>
+      <TouchableWithoutFeedback onPress={onPress}>
+        {props.useViewContainer ? (
+          <View
+            {...props.viewProps}
+            {...(() => props.viewStyles && { style: props.viewStyles })()}
+          >
+            <Animated.Image
+              source={image}
+              style={[imageStyles, animationStyle]}
+            />
+          </View>
+        ) : (
+          <Animated.Image
+            source={image}
+            style={[imageStyles, animationStyle]}
+          />
+        )}
+      </TouchableWithoutFeedback>
     );
   } else {
     return null;
@@ -26,8 +41,11 @@ AnimatedImageButton.propTypes = {
   onExited: PropTypes.func,
   onEntered: PropTypes.func,
   onAppeared: PropTypes.func,
+  viewProps: PropTypes.object,
+  viewStyles: PropTypes.object,
   in: PropTypes.bool.isRequired,
   image: PropTypes.any.isRequired,
+  useViewContainer: PropTypes.bool,
   onPress: PropTypes.func.isRequired,
   timeout: PropTypes.number.isRequired,
   imageStyles: PropTypes.object.isRequired,

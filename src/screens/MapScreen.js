@@ -30,6 +30,7 @@ import add from 'assets/images/add.png';
 import use from 'assets/images/use.png';
 import back from 'assets/images/back.png';
 import finish from 'assets/images/finish.png';
+import addButton from 'assets/images/addButton.png';
 
 function MapScreen() {
   const [destination, setDestination] = useState(null);
@@ -129,7 +130,8 @@ function MapScreen() {
         <AnimatedImageButton
           in={
             mapScreenStatus === MapScreenStatus.searching ||
-            mapScreenStatus === MapScreenStatus.pickingDestinaion
+            mapScreenStatus === MapScreenStatus.pickingDestinaion ||
+            mapScreenStatus === MapScreenStatus.addingObstruction
           }
           image={back}
           timeout={0.25 * 1000}
@@ -151,13 +153,18 @@ function MapScreen() {
           onPress={() => {
             clearPickedLocationInfo();
             setPickedCoordintate(null);
+
+            if (mapScreenStatus === MapScreenStatus.addingObstruction) {
+              setMapStatus(MapStatus.clear);
+            }
             setMapScreenStatus(MapScreenStatus.mapView);
           }}
         />
 
-        {mapScreenStatus === MapScreenStatus.pickingDestinaion ? (
-          <View style={styles.pickContainer}>
-            <Text style={styles.pickText}>Tap to pick a location</Text>
+        {mapScreenStatus === MapScreenStatus.pickingDestinaion ||
+        mapScreenStatus === MapScreenStatus.addingObstruction ? (
+          <View style={styles.topTextContainer}>
+            <Text style={styles.topText}>Tap to pick a location</Text>
           </View>
         ) : (
           <SearchBox
@@ -188,9 +195,12 @@ function MapScreen() {
           mapStatus === MapStatus.clear &&
           mapScreenStatus === MapScreenStatus.mapView
         }
-        image={add}
+        image={addButton}
         timeout={0.25 * 1000}
-        imageStyles={styles.addIcon}
+        useViewContainer={true}
+        viewProps={{ pointerEvents: 'auto' }}
+        viewStyles={styles.addIconView}
+        imageStyles={styles.addIconImage}
         animationStyles={{
           enter: {
             opacity: [0, 1]
@@ -201,6 +211,9 @@ function MapScreen() {
         }}
         onPress={() => {
           console.log('Add icon onPress');
+          setPickedCoordintate(null);
+          setMapStatus(MapStatus.pickingLocation);
+          setMapScreenStatus(MapScreenStatus.addingObstruction);
         }}
       />
 
@@ -290,24 +303,38 @@ function MapScreen() {
       <ShowPickedLocationName
         in={
           pickedCoordinate != null &&
-          mapScreenStatus === MapScreenStatus.pickingDestinaion
+          (mapScreenStatus === MapScreenStatus.pickingDestinaion ||
+            mapScreenStatus === MapScreenStatus.addingObstruction)
         }
         pickedCoordinate={pickedCoordinate}
-        setPickedLocation={data => {
-          setMapStatus(MapStatus.routesToPickedLocation);
-          setMapScreenStatus(MapScreenStatus.showRouteInfo);
+        useButton={(() => {
+          if (mapScreenStatus === MapScreenStatus.pickingDestinaion) {
+            return { image: finish, text: 'Pick' };
+          } else if (mapScreenStatus === MapScreenStatus.addingObstruction) {
+            return { image: add, text: 'Add' };
+          }
+        })()}
+        onUse={data => {
+          if (mapScreenStatus === MapScreenStatus.pickedCoordinate) {
+            setMapStatus(MapStatus.routesToPickedLocation);
+            setMapScreenStatus(MapScreenStatus.showRouteInfo);
 
-          setPickedLocation(data);
-          getRoute(data.coordinate)
-            .then(routes => {
-              setRoutesToPickedLocation(routes);
-              setSelectedRouteToPickedLocation(routes[0].id);
-            })
-            .catch(error => {
-              console.log('No routes Found:', error);
-            });
+            setPickedLocation(data);
+            getRoute(data.coordinate)
+              .then(routes => {
+                setRoutesToPickedLocation(routes);
+                setSelectedRouteToPickedLocation(routes[0].id);
+              })
+              .catch(error => {
+                console.log('No routes Found:', error);
+              });
 
-          setPickedCoordintate(null);
+            setPickedCoordintate(null);
+          } else if (mapScreenStatus === MapScreenStatus.addingObstruction) {
+            setPickedCoordintate(null);
+            setMapStatus(MapStatus.clear);
+            setMapScreenStatus(MapScreenStatus.mapView);
+          }
         }}
       />
     </View>
@@ -356,16 +383,16 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: 20
   },
-  pickContainer: {
+  topTextContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center'
   },
-  pickText: {
+  topText: {
     fontSize: 18
   },
-  addIcon: {
+  addIconView: {
     position: 'absolute',
     right: 10,
     bottom: 10,
@@ -373,6 +400,10 @@ const styles = StyleSheet.create({
 
     width: 55,
     height: 55
+  },
+  addIconImage: {
+    width: '100%',
+    height: '100%'
   }
 });
 

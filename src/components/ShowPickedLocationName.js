@@ -17,9 +17,6 @@ import ZIndex from 'global/zIndex';
 // utils
 import reverseGeocoder from 'utils/reverseGeocoder';
 
-// assets
-import finish from 'assets/images/finish.png';
-
 const containerHeight = 60;
 
 function ShowPickedLocationName(props) {
@@ -76,12 +73,10 @@ function ShowPickedLocationName(props) {
               {pickedLocation.location}
             </Text>
           </View>
-          <TouchableNativeFeedback
-            onPress={() => props.setPickedLocation(pickedLocation)}
-          >
+          <TouchableNativeFeedback onPress={() => props.onUse(pickedLocation)}>
             <View style={styles.pickButton}>
-              <Image source={finish} style={styles.pickIcon} />
-              <Text style={styles.pickText}>Pick</Text>
+              <Image source={props.useButton.image} style={styles.pickIcon} />
+              <Text style={styles.pickText}>{props.useButton.text}</Text>
             </View>
           </TouchableNativeFeedback>
         </View>
