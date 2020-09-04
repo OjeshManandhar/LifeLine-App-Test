@@ -20,6 +20,8 @@ import reverseGeocoder from 'utils/reverseGeocoder';
 const containerHeight = 60;
 
 function ShowPickedLocationName(props) {
+  console.log('ShowPickedLocationName:', props);
+
   const [findingInfo, setFindingInfo] = useState(true);
   const [pickedLocation, setPickedLocation] = useState(null);
 
@@ -57,28 +59,38 @@ function ShowPickedLocationName(props) {
         }
       }}
     >
-      {findingInfo && pickedLocation == null ? (
-        <View style={styles.container}>
-          <Text style={styles.loading} numberOfLines={1}>
-            Loading ...
-          </Text>
-        </View>
-      ) : (
-        <View style={styles.container}>
-          <View style={styles.placeInfo}>
-            <Text style={styles.placeName} numberOfLines={1}>
-              {pickedLocation.name}
-            </Text>
-            <Text style={styles.placeLocation} numberOfLines={1}>
-              {pickedLocation.location}
+      {props.pickedCoordinate ? (
+        findingInfo && !pickedLocation ? (
+          <View style={styles.container}>
+            <Text style={styles.loading} numberOfLines={1}>
+              Loading ...
             </Text>
           </View>
-          <TouchableNativeFeedback onPress={() => props.onUse(pickedLocation)}>
-            <View style={styles.pickButton}>
-              <Image source={props.useButton.image} style={styles.pickIcon} />
-              <Text style={styles.pickText}>{props.useButton.text}</Text>
+        ) : (
+          <View style={styles.container}>
+            <View style={styles.placeInfo}>
+              <Text style={styles.placeName} numberOfLines={1}>
+                {pickedLocation.name}
+              </Text>
+              <Text style={styles.placeLocation} numberOfLines={1}>
+                {pickedLocation.location}
+              </Text>
             </View>
-          </TouchableNativeFeedback>
+            <TouchableNativeFeedback
+              onPress={() => props.onUse(pickedLocation)}
+            >
+              <View style={styles.pickButton}>
+                <Image source={props.useButton.image} style={styles.pickIcon} />
+                <Text style={styles.pickText}>{props.useButton.text}</Text>
+              </View>
+            </TouchableNativeFeedback>
+          </View>
+        )
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.loading} numberOfLines={1}>
+            Pick a location ...
+          </Text>
         </View>
       )}
     </AnimatedView>

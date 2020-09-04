@@ -315,7 +315,7 @@ function MapScreen() {
           }
         })()}
         onUse={data => {
-          if (mapScreenStatus === MapScreenStatus.pickedCoordinate) {
+          if (mapScreenStatus === MapScreenStatus.pickingDestinaion) {
             setMapStatus(MapStatus.routesToPickedLocation);
             setMapScreenStatus(MapScreenStatus.showRouteInfo);
 
