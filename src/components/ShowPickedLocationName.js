@@ -20,8 +20,6 @@ import reverseGeocoder from 'utils/reverseGeocoder';
 const containerHeight = 60;
 
 function ShowPickedLocationName(props) {
-  console.log('ShowPickedLocationName:', props);
-
   const [findingInfo, setFindingInfo] = useState(true);
   const [pickedLocation, setPickedLocation] = useState(null);
 

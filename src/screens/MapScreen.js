@@ -38,6 +38,7 @@ function MapScreen() {
   const [startLocation, setStartLocation] = useState(null);
   const [pickedLocation, setPickedLocation] = useState(null);
   const [mapStatus, setMapStatus] = useState(MapStatus.clear);
+  const [obstructionsList, setObstructionsList] = useState([]);
   const [pickedCoordinate, setPickedCoordintate] = useState(null);
   const [routeToDestination, setRouteToDestination] = useState(null);
   const [routesToPickedLocation, setRoutesToPickedLocation] = useState(null);
@@ -210,7 +211,6 @@ function MapScreen() {
           }
         }}
         onPress={() => {
-          console.log('Add icon onPress');
           setPickedCoordintate(null);
           setMapStatus(MapStatus.pickingLocation);
           setMapScreenStatus(MapScreenStatus.addingObstruction);
@@ -331,6 +331,10 @@ function MapScreen() {
 
             setPickedCoordintate(null);
           } else if (mapScreenStatus === MapScreenStatus.addingObstruction) {
+            setObstructionsList(currentList =>
+              currentList.push({ ...data, id: currentList.length })
+            );
+
             setPickedCoordintate(null);
             setMapStatus(MapStatus.clear);
             setMapScreenStatus(MapScreenStatus.mapView);
