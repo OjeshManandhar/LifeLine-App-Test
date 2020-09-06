@@ -19,6 +19,7 @@ import UserLocation from 'utils/userLocation';
 // assets
 import startMarker from 'assets/images/startMarker.png';
 import destinationMarker from 'assets/images/destinationMarker.png';
+import obstructionMarker from 'assets/images/obstructionMarker.png';
 import pickedLocationMarker from 'assets/images/pickedLocationMarker.png';
 
 function Map({
@@ -27,6 +28,7 @@ function Map({
   startLocation,
   pickedLocation,
   mapScreenStatus,
+  obstructionsList,
   pickedCoordinate,
   setMapScreenStatus,
   routeToDestination,
@@ -79,11 +81,40 @@ function Map({
         id='user-picked-location'
         title='Picked Destination'
         coordinate={pickedCoordinate}
-        draggable={true}
         onDragEnd={data => setPickedCoordintate(data.geometry.coordinates)}
       />
     );
   }, [pickedCoordinate, setPickedCoordintate]);
+
+  const renderObstructionMarkers = useCallback(() => {
+    const listOfFeatures = [];
+
+    obstructionsList.forEach(obstruction => {
+      const temp = { ...obstruction };
+      delete temp.coordinate;
+
+      listOfFeatures.push(point(obstruction.coordinate, temp));
+    });
+
+    const features = { type: 'FeatureCollection', features: listOfFeatures };
+
+    return (
+      <MapboxGL.ShapeSource
+        id='obstructionMarkers-Source'
+        shape={features}
+        onPress={data =>
+          console.log('ShapeSource onPress:', data.features[0].properties)
+        }
+      >
+        <MapboxGL.SymbolLayer
+          style={layerStyles.obstructionMarker}
+          id='obstructionMarker-Layer'
+          sourceID='obstructionMarkers-Source'
+          layerIndex={LayerIndex.obstructionMarker}
+        />
+      </MapboxGL.ShapeSource>
+    );
+  }, [obstructionsList]);
 
   const toggleMapScreenStatus = useCallback(() => {
     if (mapScreenStatus === MapScreenStatus.mapView) {
@@ -300,11 +331,14 @@ function Map({
           images={{
             startMarker: startMarker,
             destinationMarker: destinationMarker,
+            obstructionMarker: obstructionMarker,
             pickedLocationMarker: pickedLocationMarker
           }}
         />
 
         {cameraRef.current && updateCamera()}
+
+        {obstructionsList.length !== 0 && renderObstructionMarkers()}
 
         {(mapScreenStatus === MapScreenStatus.pickingDestinaion ||
           mapScreenStatus === MapScreenStatus.addingObstruction) &&
@@ -362,6 +396,12 @@ const layerStyles = {
     iconOffset: [0, -256],
     iconAllowOverlap: true,
     iconImage: 'pickedLocationMarker'
+  },
+  obstructionMarker: {
+    iconSize: 0.08,
+    iconOffset: [0, -256],
+    iconAllowOverlap: true,
+    iconImage: 'obstructionMarker'
   },
   routeToDestination: {
     lineWidth: 6,

@@ -182,6 +182,7 @@ function MapScreen() {
         startLocation={startLocation}
         pickedLocation={pickedLocation}
         mapScreenStatus={mapScreenStatus}
+        obstructionsList={obstructionsList}
         pickedCoordinate={pickedCoordinate}
         setMapScreenStatus={setMapScreenStatus}
         routeToDestination={routeToDestination}
@@ -331,9 +332,12 @@ function MapScreen() {
 
             setPickedCoordintate(null);
           } else if (mapScreenStatus === MapScreenStatus.addingObstruction) {
-            setObstructionsList(currentList =>
-              currentList.push({ ...data, id: currentList.length })
-            );
+            setObstructionsList(currentList => {
+              const newList = currentList;
+              newList.push({ ...data, id: currentList.length });
+
+              return newList;
+            });
 
             setPickedCoordintate(null);
             setMapStatus(MapStatus.clear);

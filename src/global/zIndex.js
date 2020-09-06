@@ -3,7 +3,8 @@ export const LayerIndex = {
   // so make other below 125
 
   routeToPickedLocation: 100,
-  selectedRouteToPickedLocation: 110,
+  selectedRouteToPickedLocation: 105,
+  obstructionMarker: 110,
   routeToDestination: 120,
   startLocationMarker: 124,
   destinationMarker: 125
