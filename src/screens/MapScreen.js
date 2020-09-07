@@ -81,30 +81,44 @@ function MapScreen() {
   );
 
   const handleBackButton = useCallback(() => {
-    if (mapScreenStatus === MapScreenStatus.mapView) {
-      return false;
-    } else if (mapScreenStatus === MapScreenStatus.showRouteInfo) {
-      if (mapStatus === MapStatus.routesToPickedLocation) {
+    switch (mapScreenStatus) {
+      case MapScreenStatus.mapView:
+        return false;
+      case MapScreenStatus.searching:
         clearPickedLocationInfo();
+        setMapScreenStatus(MapScreenStatus.mapView);
+        return true;
+      case MapScreenStatus.pickingDestinaion:
+        setPickedCoordintate(null);
         setMapStatus(MapStatus.clear);
-      }
-      setMapScreenStatus(MapScreenStatus.mapView);
-      return true;
-    } else if (mapScreenStatus === MapScreenStatus.pickingDestinaion) {
-      setPickedCoordintate(null);
-      setMapStatus(MapStatus.clear);
-      setMapScreenStatus(MapScreenStatus.mapView);
-      return true;
-    } else if (mapScreenStatus === MapScreenStatus.searching) {
-      clearPickedLocationInfo();
-      setMapScreenStatus(MapScreenStatus.mapView);
-      return true;
+        setMapScreenStatus(MapScreenStatus.mapView);
+        return true;
+      case MapScreenStatus.showRouteInfo:
+        if (mapStatus === MapStatus.routesToPickedLocation) {
+          clearPickedLocationInfo();
+          setMapStatus(MapStatus.clear);
+        }
+        setMapScreenStatus(MapScreenStatus.mapView);
+        return true;
+      case MapScreenStatus.addingObstruction:
+        setPickedCoordintate(null);
+        setMapStatus(MapStatus.clear);
+        setMapScreenStatus(MapScreenStatus.mapView);
+        return true;
+      case MapScreenStatus.showObstructionInfo:
+        setMapStatus(MapStatus.clear);
+        setMapScreenStatus(MapScreenStatus.mapView);
+        return true;
+      default:
+        setMapScreenStatus(MapScreenStatus.mapView);
+        return true;
     }
   }, [
     mapStatus,
     setMapStatus,
     mapScreenStatus,
     setMapScreenStatus,
+    setPickedCoordintate,
     clearPickedLocationInfo
   ]);
 

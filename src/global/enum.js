@@ -11,7 +11,7 @@ export const MapScreenStatus = Object.freeze({
   pickingDestinaion: 2,
   showRouteInfo: 3,
   addingObstruction: 4,
-  showObstructionForm: 5
+  showObstructionInfo: 5
 });
 
 export const AnimationState = Object.freeze({
