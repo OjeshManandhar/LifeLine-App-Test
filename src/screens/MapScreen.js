@@ -320,7 +320,8 @@ function MapScreen() {
         in={
           pickedCoordinate != null &&
           (mapScreenStatus === MapScreenStatus.pickingDestinaion ||
-            mapScreenStatus === MapScreenStatus.addingObstruction)
+            mapScreenStatus === MapScreenStatus.addingObstruction ||
+            mapScreenStatus === MapScreenStatus.showObstructionInfo)
         }
         pickedCoordinate={pickedCoordinate}
         useButton={(() => {
@@ -328,6 +329,8 @@ function MapScreen() {
             return { image: finish, text: 'Pick' };
           } else if (mapScreenStatus === MapScreenStatus.addingObstruction) {
             return { image: add, text: 'Add' };
+          } else if (mapScreenStatus === MapScreenStatus.showObstructionInfo) {
+            return { image: trash, text: 'Delete' };
           }
         })()}
         onUse={data => {
@@ -355,6 +358,10 @@ function MapScreen() {
             });
 
             setPickedCoordintate(null);
+            setMapStatus(MapStatus.clear);
+            setMapScreenStatus(MapScreenStatus.mapView);
+          } else if (mapScreenStatus === MapScreenStatus.showObstructionInfo) {
+            console.log('delete obstruction:', data.id);
             setMapStatus(MapStatus.clear);
             setMapScreenStatus(MapScreenStatus.mapView);
           }
