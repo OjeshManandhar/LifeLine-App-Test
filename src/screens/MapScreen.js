@@ -29,6 +29,7 @@ import UserLocation from 'utils/userLocation';
 import add from 'assets/images/add.png';
 import use from 'assets/images/use.png';
 import back from 'assets/images/back.png';
+import trash from 'assets/images/trash.png';
 import finish from 'assets/images/finish.png';
 import addButton from 'assets/images/addButton.png';
 
