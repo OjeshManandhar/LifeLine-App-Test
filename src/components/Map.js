@@ -109,10 +109,18 @@ function Map({
       <MapboxGL.ShapeSource
         id='obstructionMarkers-Source'
         shape={features}
-        onPress={data => {
-          toggleObstructionInfo();
-          setSelectedObstruction(data.features[0].properties);
-        }}
+        onPress={data =>
+          setSelectedObstruction(currentObstruction => {
+            if (
+              !currentObstruction ||
+              currentObstruction.id === data.features[0].properties.id
+            ) {
+              toggleObstructionInfo();
+            }
+
+            setSelectedObstruction(data.features[0].properties);
+          })
+        }
       >
         <MapboxGL.SymbolLayer
           style={layerStyles.obstructionMarker}
