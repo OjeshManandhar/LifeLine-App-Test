@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,29 +14,12 @@ import AnimatedView from 'components/AnimatedView';
 // global
 import ZIndex from 'global/zIndex';
 
-// utils
-import reverseGeocoder from 'utils/reverseGeocoder';
+// assets
+import trash from 'assets/images/trash.png';
 
 const containerHeight = 60;
 
-function ShowPickedLocationName(props) {
-  const [findingInfo, setFindingInfo] = useState(true);
-  const [pickedLocation, setPickedLocation] = useState(null);
-
-  useEffect(() => {
-    setPickedLocation(null);
-    setFindingInfo(true);
-
-    //reverseGeocode
-    props.pickedCoordinate &&
-      reverseGeocoder(props.pickedCoordinate)
-        .then(result => {
-          setPickedLocation(result);
-          setFindingInfo(false);
-        })
-        .catch(error => console.log('error:', error));
-  }, [setFindingInfo, setPickedLocation, props.pickedCoordinate]);
-
+function ShowObstructionInfo(props) {
   return (
     <AnimatedView
       in={props.in}
@@ -57,37 +40,27 @@ function ShowPickedLocationName(props) {
         }
       }}
     >
-      {props.pickedCoordinate ? (
-        findingInfo && !pickedLocation ? (
-          <View style={styles.container}>
-            <Text style={styles.loading} numberOfLines={1}>
-              Loading ...
+      {props.selectedObstruction ? (
+        <View style={styles.container}>
+          <View style={styles.placeInfo}>
+            <Text style={styles.placeName} numberOfLines={1}>
+              {props.selectedObstruction.name}
+            </Text>
+            <Text style={styles.placeLocation} numberOfLines={1}>
+              {props.selectedObstruction.location}
             </Text>
           </View>
-        ) : (
-          <View style={styles.container}>
-            <View style={styles.placeInfo}>
-              <Text style={styles.placeName} numberOfLines={1}>
-                {pickedLocation.name}
-              </Text>
-              <Text style={styles.placeLocation} numberOfLines={1}>
-                {pickedLocation.location}
-              </Text>
+          <TouchableNativeFeedback onPress={props.deleteObstruction}>
+            <View style={styles.deleteButton}>
+              <Image source={trash} style={styles.deleteIcon} />
+              <Text style={styles.deleteText}>Delete</Text>
             </View>
-            <TouchableNativeFeedback
-              onPress={() => props.onUse(pickedLocation)}
-            >
-              <View style={styles.pickButton}>
-                <Image source={props.useButton.image} style={styles.pickIcon} />
-                <Text style={styles.pickText}>{props.useButton.text}</Text>
-              </View>
-            </TouchableNativeFeedback>
-          </View>
-        )
+          </TouchableNativeFeedback>
+        </View>
       ) : (
         <View style={styles.container}>
-          <Text style={styles.loading} numberOfLines={1}>
-            Pick a location ...
+          <Text style={styles.placeName} numberOfLines={1}>
+            Select an obstruction
           </Text>
         </View>
       )}
@@ -114,11 +87,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'stretch'
   },
-  loading: {
-    alignSelf: 'center',
-
-    fontSize: 20
-  },
   placeInfo: {
     flex: 1,
     flexDirection: 'column',
@@ -136,7 +104,7 @@ const styles = StyleSheet.create({
     lineHeight: 13,
     color: '#757575'
   },
-  pickButton: {
+  deleteButton: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -147,19 +115,19 @@ const styles = StyleSheet.create({
 
     backgroundColor: '#1a73e8'
   },
-  pickIcon: {
+  deleteIcon: {
     width: 18.5,
     height: 18.5,
     marginRight: 10
   },
-  pickText: {
+  deleteText: {
     color: 'white',
     fontSize: 16
   }
 });
 
-ShowPickedLocationName.propTypes = {
+ShowObstructionInfo.propTypes = {
   in: PropTypes.bool.isRequired
 };
 
-export default ShowPickedLocationName;
+export default ShowObstructionInfo;

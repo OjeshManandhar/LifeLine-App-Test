@@ -8,8 +8,10 @@ export const MapStatus = Object.freeze({
 export const MapScreenStatus = Object.freeze({
   mapView: 0,
   searching: 1,
-  picking: 2,
-  showRouteInfo: 3
+  pickingDestinaion: 2,
+  showRouteInfo: 3,
+  addingObstruction: 4,
+  showObstructionInfo: 5
 });
 
 export const AnimationState = Object.freeze({
