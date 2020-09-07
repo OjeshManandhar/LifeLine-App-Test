@@ -108,6 +108,7 @@ function MapScreen() {
         return true;
       case MapScreenStatus.showObstructionInfo:
         setMapStatus(MapStatus.clear);
+        setSelectedObstruction(null);
         setMapScreenStatus(MapScreenStatus.mapView);
         return true;
       default:
