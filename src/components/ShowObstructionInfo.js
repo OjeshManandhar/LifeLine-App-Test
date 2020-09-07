@@ -40,19 +40,17 @@ function ShowObstructionInfo(props) {
         }
       }}
     >
-      {props.obstructionInfo ? (
+      {props.selectedObstruction ? (
         <View style={styles.container}>
           <View style={styles.placeInfo}>
             <Text style={styles.placeName} numberOfLines={1}>
-              {pickedLocation.name}
+              {props.selectedObstruction.name}
             </Text>
             <Text style={styles.placeLocation} numberOfLines={1}>
-              {pickedLocation.location}
+              {props.selectedObstruction.location}
             </Text>
           </View>
-          <TouchableNativeFeedback
-            onPress={() => console.log('Delete Obstruction')}
-          >
+          <TouchableNativeFeedback onPress={props.deleteObstruction}>
             <View style={styles.deleteButton}>
               <Image source={trash} style={styles.deleteIcon} />
               <Text style={styles.deleteText}>Delete</Text>
@@ -61,7 +59,7 @@ function ShowObstructionInfo(props) {
         </View>
       ) : (
         <View style={styles.container}>
-          <Text style={styles.loading} numberOfLines={1}>
+          <Text style={styles.placeName} numberOfLines={1}>
             Select an obstruction
           </Text>
         </View>

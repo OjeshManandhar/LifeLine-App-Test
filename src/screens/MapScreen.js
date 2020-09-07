@@ -15,6 +15,7 @@ import SearchBox from 'components/SearchBox';
 import SearchList from 'components/SearchList';
 import ShowRouteInfo from 'components/ShowRouteInfo';
 import AnimatedImageButton from 'components/AnimatedImageButton';
+import ShowObstructionInfo from 'components/ShowObstructionInfo';
 import ShowPickedLocationName from 'components/ShowPickedLocationName';
 
 // global
@@ -29,7 +30,6 @@ import UserLocation from 'utils/userLocation';
 import add from 'assets/images/add.png';
 import use from 'assets/images/use.png';
 import back from 'assets/images/back.png';
-import trash from 'assets/images/trash.png';
 import finish from 'assets/images/finish.png';
 import addButton from 'assets/images/addButton.png';
 
@@ -42,6 +42,7 @@ function MapScreen() {
   const [obstructionsList, setObstructionsList] = useState([]);
   const [pickedCoordinate, setPickedCoordintate] = useState(null);
   const [routeToDestination, setRouteToDestination] = useState(null);
+  const [selectedObstruction, setSelectedObstruction] = useState(null);
   const [routesToPickedLocation, setRoutesToPickedLocation] = useState(null);
   const [mapScreenStatus, _setMapScreenStatus] = useState(
     MapScreenStatus.mapView
@@ -203,6 +204,7 @@ function MapScreen() {
         routeToDestination={routeToDestination}
         setPickedCoordintate={setPickedCoordintate}
         routesToPickedLocation={routesToPickedLocation}
+        setSelectedObstruction={setSelectedObstruction}
         selectedRouteToPickedLocation={selectedRouteToPickedLocation}
         setSelectedRouteToPickedLocation={setSelectedRouteToPickedLocation}
       />
@@ -320,8 +322,7 @@ function MapScreen() {
         in={
           pickedCoordinate != null &&
           (mapScreenStatus === MapScreenStatus.pickingDestinaion ||
-            mapScreenStatus === MapScreenStatus.addingObstruction ||
-            mapScreenStatus === MapScreenStatus.showObstructionInfo)
+            mapScreenStatus === MapScreenStatus.addingObstruction)
         }
         pickedCoordinate={pickedCoordinate}
         useButton={(() => {
@@ -329,8 +330,6 @@ function MapScreen() {
             return { image: finish, text: 'Pick' };
           } else if (mapScreenStatus === MapScreenStatus.addingObstruction) {
             return { image: add, text: 'Add' };
-          } else if (mapScreenStatus === MapScreenStatus.showObstructionInfo) {
-            return { image: trash, text: 'Delete' };
           }
         })()}
         onUse={data => {
@@ -360,11 +359,27 @@ function MapScreen() {
             setPickedCoordintate(null);
             setMapStatus(MapStatus.clear);
             setMapScreenStatus(MapScreenStatus.mapView);
-          } else if (mapScreenStatus === MapScreenStatus.showObstructionInfo) {
-            console.log('delete obstruction:', data.id);
-            setMapStatus(MapStatus.clear);
-            setMapScreenStatus(MapScreenStatus.mapView);
           }
+        }}
+      />
+
+      <ShowObstructionInfo
+        in={
+          obstructionsList != null &&
+          selectedObstruction != null &&
+          mapScreenStatus === MapScreenStatus.showObstructionInfo
+        }
+        selectedObstruction={selectedObstruction}
+        deleteObstruction={() => {
+          const obstructionToDelete = selectedObstruction.id;
+
+          setObstructionsList(currentList =>
+            currentList.filter(
+              obstruction => obstruction.id !== obstructionToDelete
+            )
+          );
+          setSelectedObstruction(null);
+          setMapScreenStatus(MapScreenStatus.mapView);
         }}
       />
     </View>
