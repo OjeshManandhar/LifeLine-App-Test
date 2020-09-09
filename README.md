@@ -26,7 +26,22 @@ Testing codes for LifeLine app (MAJOR PROJECT)
   - Making a more Google Maps app like UI
   - Adding small animation
 + **addObstruction**
-  - Add, update and remove certain marker on map along with small description of that marker
+  - Add and remove obstruction marker on map
+
+## Attribution
++ *[add](src/assets/images/add.png)* (edited) - Icons made by [dmitri13](https://www.flaticon.com/free-icon/add_992651?term=add&page=1&position=1) from [www.flaticon.com](https://www.flaticon.com/)
++ *[addButton](src/assets/images/addButton.png)* (edited) - Icons made by [Pixel perfect](https://icon54.com/) from [www.flaticon.com](https://www.flaticon.com/)
++ *[back](src/assets/images/back.png)* - Icons made by [Roundicons](https://www.flaticon.com/authors/roundicons) from [www.flaticon.com](https://www.flaticon.com/)
++ *[cross](src/assets/images/cross.png)* - Icons made by [Those Icons](https://www.flaticon.com/free-icon/close_2089733) from [www.flaticon.com](https://www.flaticon.com/)
++ *[finish](src/assets/images/finish.png)* (edited) - Icons made by [Kiranshastry](https://www.flaticon.com/authors/kiranshastry) from [www.flaticon.com](https://www.flaticon.com/)
++ *[pickMap](src/assets/images/pickMap.png)* (edited) - Icons made by [Good Ware](https://www.flaticon.com/authors/good-ware) from [www.flaticon.com](https://www.flaticon.com/)
++ *[pin](src/assets/images/pin.png)* (edited) - Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/)
++ *[search](src/assets/images/search.png)* - Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/)
++ *[trash](src/assets/images/trash.png)* (edited) - Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/)
++ *[use](src/assets/images/use.png)* (edited) - Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/)
++ *marker* (edited) used in [destinationMarker](src/assets/images/destinationMarker.png), [obstructionMarker](src/assets/images/obstructionMarker.png) and [pickedLocationMarker](src/assets/images/pickedLocationMarker.png) - Icons made by [Those Icons](https://www.flaticon.com/free-icon/pin_484167?term=pin&page=1&position=3) from [www.flaticon.com](https://www.flaticon.com/)
++ *block* (edited) used in [obstructionMarker](src/assets/images/obstructionMarker.png) - Icons made by [DinosoftLabs](https://www.flaticon.com/authors/dinosoftlabs) from [www.flaticon.com](https://www.flaticon.com/)
++ *flag* used in [destinationMarker](src/assets/images/destinationMarker.png)- Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/)
 
 ## Issues
 Tested on **ANDROID** only
