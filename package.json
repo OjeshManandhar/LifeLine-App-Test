@@ -42,6 +42,7 @@
     "preset": "react-native"
   },
   "resolutions": {
-    "logkitty": "^0.7.1"
+    "logkitty": "^0.7.1",
+    "node-fetch": "^2.6.1"
   }
 }
